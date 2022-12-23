@@ -9,57 +9,55 @@ import java.util.ListIterator;
 public class Person {
     public LocalDateTime startDates;
     public LocalDateTime endDates;
-    public int sumHour;
-    private int sumhour;
+    public int sumHours;
+    private static User users;
+    private static double totalPays;
+    private List<TimeRecord> timeRecords;
 
-    public Person(User user, List<TimeRecord> timeRecords, LocalDateTime startDate, LocalDateTime endDate) {
-        this.user = user;
-        this.timerecords = timeRecords;
+    public Person(User user, List<TimeRecord> timeRecord, LocalDateTime startDate, LocalDateTime endDate) {
+        this.users = user;
+        this.timeRecords = timeRecord;
         this.startDates = startDate;
         this.endDates = endDate;
     }
 
     public User getUser() {
-        return user;
+        return users;
     }
 
     public void setUser(User user) {
-        this.user = user;
+        this.users = user;
     }
 
-    private static User user;
-
-    public double getTotalpay() {
-        return totalpay;
+    public double getTotalPay() {
+        return totalPays;
     }
 
-    public void setTotalpay(double totalpay) {
-        this.totalpay = totalpay;
+    public void setTotalPay(double totalPay) {
+        this.totalPays = totalPays;
     }
 
-    private static double totalpay;
-
-    public List<TimeRecord> getTimerecords() {
-        return timerecords;
+    public List<TimeRecord> getTimeRecord() {
+        return timeRecords;
     }
 
-    public void setTimerecords(List<TimeRecord> timerecords) {
-        this.timerecords = timerecords;
+    public void setTimeRecord(List<TimeRecord> timeRecord) {
+        this.timeRecords = timeRecord;
     }
 
-    private List<TimeRecord> timerecords;
+
 
     public void printRepPerson(){
-        System.out.println("Отчет по сотруднику [" + user.getName() + user.getUserRole() + "за период с " + startDates.toString()
+        System.out.println("Отчет по сотруднику [" + users.getName() + users.getUserRole() + "за период с " + startDates.toString()
                 + "по" + endDates.toString());
-        for (TimeRecord item:timerecords) {
+        for (TimeRecord item:timeRecords) {
           //  if((item.getDate() >= startdates) && (item.getDate() <= enddates)){
             //  TODO realise
 
            // }
-if(user.getName()== item.getName()){
+    if(users.getName()== item.getName()){
     System.out.println(item.getDate().toString() + item.getHours() + item.getMessage());
-    sumhour+=item.getHours();
+    sumHours += item.getHours();
 }
         }
     }
