@@ -21,8 +21,9 @@ public boolean Equals(Object x, Object y)
 
 public int GetHashCode(Object obj)
         {
-        int hCode = obj.Date ^ obj.Hours ^ obj.Message.Length ^ obj.Name.Length;
-
-        return hCode.GetHashCode();
+        int hCode;
+        //TODO - int это костыль
+        hCode = (int)((TimeRecord)obj).getMillisecs() ^   ((TimeRecord)obj).getMessage().length() ^ ((TimeRecord)obj).getName().length();
+        return hCode ;
         }
-        }
+}

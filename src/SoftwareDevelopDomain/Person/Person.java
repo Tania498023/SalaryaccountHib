@@ -10,6 +10,7 @@ public class Person {
     public LocalDateTime startDates;
     public LocalDateTime endDates;
     public int sumHour;
+    private int sumhour;
 
     public Person(User user, List<TimeRecord> timeRecords, LocalDateTime startDate, LocalDateTime endDate) {
         this.user = user;
@@ -49,10 +50,11 @@ public class Person {
     private List<TimeRecord> timerecords;
 
     public void printRepPerson(){
-        System.out.println("Отчет по сотруднику [" + user.getName() + user.getUserRole() + "за период с " + startdates.toString()
-                + "по" + enddates.toString());
+        System.out.println("Отчет по сотруднику [" + user.getName() + user.getUserRole() + "за период с " + startDates.toString()
+                + "по" + endDates.toString());
         for (TimeRecord item:timerecords) {
-          //  if((item.getDate() >= startdates) && (item.getDate() <= enddates)){TODO
+          //  if((item.getDate() >= startdates) && (item.getDate() <= enddates)){
+            //  TODO realise
 
            // }
 if(user.getName()== item.getName()){
