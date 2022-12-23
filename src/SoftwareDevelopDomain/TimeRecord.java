@@ -23,6 +23,9 @@ public class TimeRecord {
     public LocalDateTime getDate() {
         return dates;
     }
+    public long getMillisecs() {
+        return Helpers.getMillisecFromDate(dates);
+    }
     public void setDate(LocalDateTime date) {
         this.dates = date;
     }
