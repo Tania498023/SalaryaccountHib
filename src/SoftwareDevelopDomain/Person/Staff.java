@@ -17,10 +17,10 @@ public class Staff extends Person {
     }
 
 
-    public Staff(double monthSalar, User user, List<TimeRecord> timeRecord, LocalDateTime startDate, LocalDateTime endDate,double bonus) {
+    public Staff(double monthSalary, User user, List<TimeRecord> timeRecord, LocalDateTime startDate, LocalDateTime endDate,double bonus) {
         super(user, timeRecord, startDate, endDate);
         bonuses = bonus;
-        monthSalarys = monthSalar;
+        monthSalarys = monthSalary;
         raschetTotalPay(user.getName(),timeRecord, startDate,endDate);
     }
     private void raschetTotalPay(String name, List<TimeRecord> timeRecord,LocalDateTime startDate, LocalDateTime endDate)
@@ -34,7 +34,7 @@ public class Staff extends Person {
         for (var timeRecordses: timeRecord)
         {
 if(name.equals(timeRecordses.getName())) // перепроверить equals(==)!!!!!!!!!!!!!
-   // if (timeRecord.getDate()>=starDate&&timeRecord.getDate()<=endDate) TO DO !!!!!!!!!!!!!
+   // if (timeRecord.getDate()>=starDate&&timeRecord.getDate()<=endDate) TODO !!!!!!!!!!!!!
     if(timeRecordses.getHours()<=Settings.WORKHOURSINDAY)
     {
         totalPay +=payPerHour*timeRecordses.getHours();

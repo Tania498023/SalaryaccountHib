@@ -10,9 +10,18 @@ public class Manager extends Staff {
 
     public static int stavka = 200000;
 
+    public double getMonthBonuses() {
+        return monthBonuses;
+    }
 
-    public Manager(double monthSalar, User user, List<TimeRecord> timeRecord, LocalDateTime startDate, LocalDateTime endDate, double bonus, double monthBonuses) {
-        super(monthSalar, user, timeRecord, startDate, endDate, bonus);
+    public void setMonthBonuses(double monthBonuses) {
         this.monthBonuses = monthBonuses;
+    }
+
+
+
+    public Manager(double monthSalary, User user, List<TimeRecord> timeRecord, LocalDateTime startDate, LocalDateTime endDate, double bonus, double monthBonus) {
+        super(monthSalary, user, timeRecord, startDate, endDate, bonus);
+        this.monthBonuses = monthBonus;
     }
 }
