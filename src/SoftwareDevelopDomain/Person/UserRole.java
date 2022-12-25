@@ -1,9 +1,15 @@
 package SoftwareDevelopDomain.Person;
 
 public enum UserRole {
-    MANAGER,
-    EMPLOYEE,
-    FREELANCER
+    MANAGER("Manager"),
+    EMPLOYEE("Employee"),
+    FREELANCER("Freelancer");
+    private String value;
+
+    private UserRole(String value) {
+        this.value = value;
+
+
+    }
 
 }
- 
