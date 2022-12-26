@@ -3,6 +3,7 @@ package SoftwareDevelopDomain.Person;
 public class User {
     private String names;
     private UserRole userRoles;
+
     public User() {
     }
     public User(String name, UserRole userRole) {

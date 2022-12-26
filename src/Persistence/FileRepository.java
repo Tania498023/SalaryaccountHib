@@ -5,6 +5,7 @@ import SoftwareDevelopDomain.Person.User;
 import SoftwareDevelopDomain.Person.UserRole;
 import SoftwareDevelopDomain.TimeRecord;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.management.StringValueExp;
@@ -211,10 +212,7 @@ public class FileRepository {
             enddate = LocalDateTime.now();
         }
 
-        //    //берем каждую запись из коллекции records и сравниваем ее с переменной, которая передана в метод.
-        //    //если условие выполняется, то кладем элемент в ToList(). Where- аналог foreach с if/else. x- виртуальная переменная
-        //    // коллекции records- аналог item.Условие в данном случае: если x.Date меньше или равно конечной даты enddate(максимальная)
-        //    // и x.Date больше или равно начальной даты startdate(минимальная)
+
         List<TimeRecord> filteredRecord = new ArrayList<TimeRecord>();
 
         for (var item : records) {
@@ -227,7 +225,29 @@ public class FileRepository {
         }
         return filteredRecord;
     }
+
+    // Получаем отчет по конкретному сотруднику
+    public List<TimeRecord> reportGetByUser(String userName, UserRole userRole, LocalDateTime from, LocalDateTime to) {
+        List<TimeRecord> filteredRep = new ArrayList<TimeRecord>();
+        var rep = reportGet(userRole, from, to);
+
+        for (var item : rep) {
+
+            if (item.getName() == userName) {
+                filteredRep.add(item);
+            }
+        }
+        return filteredRep;
+    }
 }
+
+
+
+
+
+
+
+
 
 
 
