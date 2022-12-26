@@ -17,7 +17,7 @@ import static SoftwareDevelopDomain.Person.UserRole.valueOf;
 
 public class FileRepository {
     /// Записываем коллекцию в файл user.csv
-    public void fillFileUser(List users, boolean userNeedWrite ) throws IOException {
+    public void fillFileUser(List users, boolean userNeedWrite) throws IOException {
         String userPath = "\\Data\\User.csv";
         File file = new File(userPath);
 
@@ -39,19 +39,19 @@ public class FileRepository {
         }
         for (var user : users)//перебираем коллекцию и выбираем из нее элементы
         {
-            var usr = (User)user;
+            var usr = (User) user;
             String userStr = usr.getName() + "," + usr.getUserRole() + System.lineSeparator();//создаем строку с разделительными символами и переносом строки
 
             writer.write(userStr);//записываем указанную строку
         }
     }
+
     public static boolean isFileExists(File file) {
         return file.exists() && !file.isDirectory();
     }
 
     /// Записываем коллекцию TimeRecord в файл согласно роли
-    public void fillFileGeneric(List timeRecords, int roles, boolean genericneedwrite) throws IOException
-    {
+    public void fillFileGeneric(List timeRecords, int roles, boolean genericneedwrite) throws IOException {
         String newpath = ConvertRoleToPath(roles);
         File file = new File(newpath);
 
@@ -71,94 +71,119 @@ public class FileRepository {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        for ( var userRole : timeRecords)//перебираем коллекцию и выбираем из нее элементы
+        for (var userRole : timeRecords)//перебираем коллекцию и выбираем из нее элементы
         {
-            var usrRol = (TimeRecord)userRole;
+            var usrRol = (TimeRecord) userRole;
             //создаем строку с разделительными символами и переносом строки
-            String genericstr = usrRol.getDate()+ "," + usrRol.getName() + "," + usrRol.getHours() + "," + usrRol.getMessage() + System.lineSeparator();
+            String genericstr = usrRol.getDate() + "," + usrRol.getName() + "," + usrRol.getHours() + "," + usrRol.getMessage() + System.lineSeparator();
 
             writer.write(genericstr);//записываем указанную строку
         }
     }
+
     /// Конвертируем тип int(роль) в string(путь к файлу)
-    private static String ConvertRoleToPath(int roles)
-    {
+    private static String ConvertRoleToPath(int roles) {
         String newpath = "";
 
-        if (roles == UserRole.MANAGER.ordinal())
-        {
-            newpath =".\\Data\\Manager.csv";
+        if (roles == UserRole.MANAGER.ordinal()) {
+            newpath = ".\\Data\\Manager.csv";
         }
-        if (roles == UserRole.EMPLOYEE.ordinal())
-        {
+        if (roles == UserRole.EMPLOYEE.ordinal()) {
             newpath = ".\\Data\\Employee.csv";
-        }
-        else if (roles == UserRole.FREELANCER.ordinal())
-        {
+        } else if (roles == UserRole.FREELANCER.ordinal()) {
             newpath = ".\\Data\\Frilanser.csv";
         }
 
         return newpath;
     }
-// Считывает все строки файла User.csv и закрывает файл
-public List<User> readFileUser()  {
-    //создаем экземпляр/объект User для использования по умолчанию, чтобы была возможность зайти в приложение даже, если файл пустой
-    //добавляем этот объект в коллекцию tmplist
-    var defaultuser = new User("defaultuser", MANAGER);
-    var tmplist = new ArrayList<User>();
-    tmplist.add(defaultuser);
 
-    String userpath = ".\\Data\\User.csv";
-    File file = new File(userpath);
+    // Считывает все строки файла User.csv и закрывает файл
+    public List<User> readFileUser() {
+        //создаем экземпляр/объект User для использования по умолчанию, чтобы была возможность зайти в приложение даже, если файл пустой
+        //добавляем этот объект в коллекцию tmplist
+        var defaultuser = new User("defaultuser", MANAGER);
+        var tmplist = new ArrayList<User>();
+        tmplist.add(defaultuser);
 
-    if (!isFileExists(file))
-        return tmplist;
+        String userpath = ".\\Data\\User.csv";
+        File file = new File(userpath);
 
-    List<User> users = new ArrayList<User>();
+        if (!isFileExists(file))
+            return tmplist;
 
-    try {
-    FileReader fr = new FileReader(file);
-    BufferedReader reader = new BufferedReader(fr);
+        List<User> users = new ArrayList<User>();
 
-        var str = reader.readLine();
+        try {
+            FileReader fr = new FileReader(file);
+            BufferedReader reader = new BufferedReader(fr);
 
-        while (str != null) {
+            var str = reader.readLine();
 
-
-            str = reader.readLine();
-            var plitedstroka = str.split(",");
-            User user = null;
-
-            UserRole strokainenum;
+            while (str != null) {
 
 
-        try
-        {
-            strokainenum = UserRole.valueOf(plitedstroka[1]);
-            user = new User(plitedstroka[0], strokainenum);//создали  объект
-        }
+                str = reader.readLine();
+                var plitedstroka = str.split(",");
+                User user = null;
 
-        catch(Exception e)
-        {
-            System.out.println("Не соответствует формат введенной строки!");
-        }
+                UserRole strokainenum;
 
-            if (user != null) {
-                users.add(user);// добавили объект в коллекцию
+
+                try {
+                    strokainenum = UserRole.valueOf(plitedstroka[1]);
+                    user = new User(plitedstroka[0], strokainenum);//создали  объект
+                } catch (Exception e) {
+                    System.out.println("Не соответствует формат введенной строки!");
+                }
+
+                if (user != null) {
+                    users.add(user);// добавили объект в коллекцию
+                }
+
             }
+        } catch (FileNotFoundException e) {
+
+        } catch (IOException e) {
 
         }
-    }catch (FileNotFoundException e) {
-
+        if (users.size() == 0) {
+            return tmplist;
+        }
+        return users;
     }
-    catch (IOException e){
 
-    }
-    if(users.size() == 0)
-    {
-        return tmplist;
-    }
-    return users;
-}
+    // Считывает все строки файла согласно роли
+    public List<TimeRecord> readFileGeneric(int roles) {
+        String newpath = ConvertRoleToPath(roles);
+        File file = new File(newpath);
 
+        if (!isFileExists(file))
+            return null;
+        List<TimeRecord> generic = new ArrayList<TimeRecord>();
+
+        try {
+
+            FileReader fr = new FileReader(file);
+            BufferedReader reader = new BufferedReader(fr);
+
+            var str = reader.readLine();
+
+            while (str != null) {
+
+                str = reader.readLine();
+                var plitedstroka = str.split(",");
+
+                var user = new TimeRecord(plitedstroka);//создали  объект
+
+                generic.add(user);// добавили объект в коллекцию
+            }
+        }
+        catch (FileNotFoundException e){
+
+        }
+        catch (IOException e){
+
+        }
+        return generic;
+    }
 }
