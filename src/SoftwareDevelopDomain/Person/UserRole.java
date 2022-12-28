@@ -3,7 +3,12 @@ package SoftwareDevelopDomain.Person;
 public enum UserRole {
     MANAGER("Manager"),
     EMPLOYEE("Employee"),
-    FREELANCER("Freelancer");
+    FREELANCER("Freelancer"),
+
+    DEFAULT("Default");
+
+
+
     private String value;
 
     private UserRole(String value) {

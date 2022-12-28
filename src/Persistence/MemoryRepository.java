@@ -9,9 +9,9 @@ import jdk.jshell.spi.ExecutionControl;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-import static SoftwareDevelopDomain.Person.UserRole.EMPLOYEE;
+import static SoftwareDevelopDomain.Person.UserRole.*;
 
-public class MemoryRepository   {
+public class MemoryRepository  implements IRepository {
 
     private ArrayList<TimeRecord> employees = new ArrayList<TimeRecord>();
     public void addFakeDataEmployee()
@@ -59,7 +59,7 @@ public void addFakeDataUser(){
         return manager;
     }
 
-    public ArrayList<TimeRecord> reportGet(UserRole userRole, LocalDateTime from, LocalDateTime to) throws ExecutionControl.NotImplementedException
+    public ArrayList<TimeRecord> reportGet(UserRole userRole, LocalDateTime from, LocalDateTime to)
     {
         var records = new ArrayList<TimeRecord>();
         switch (userRole)
@@ -74,7 +74,7 @@ public void addFakeDataUser(){
                 records = freelancer();
                 break;
             default:
-                throw new ExecutionControl.NotImplementedException("Добавлена новая роль");
+              System.out.println("Добавлена новая роль");
         }
         if(from == null)
         {
@@ -95,7 +95,7 @@ ArrayList<TimeRecord> getRep = new ArrayList<TimeRecord>();
         }
         return getRep;
     }
-    public ArrayList<TimeRecord> reportGetByUser(String userName, UserRole userRole, LocalDateTime from , LocalDateTime to) throws ExecutionControl.NotImplementedException
+    public ArrayList<TimeRecord> reportGetByUser(String userName, UserRole userRole, LocalDateTime from , LocalDateTime to)
     {
         var fakeRep = reportGet(userRole, from, to);
         ArrayList<TimeRecord> fakeRepGet = new ArrayList<TimeRecord>();
@@ -108,7 +108,7 @@ ArrayList<TimeRecord> getRep = new ArrayList<TimeRecord>();
         }
         return fakeRepGet;
     }
-    public void timeRecordAdd(UserRole userRole, TimeRecord timeRecord) throws ExecutionControl.NotImplementedException {
+    public void timeRecordAdd(UserRole userRole, TimeRecord timeRecord) {
         switch (userRole)
         {
             case MANAGER:
@@ -121,7 +121,7 @@ ArrayList<TimeRecord> getRep = new ArrayList<TimeRecord>();
                 freelancer.add(timeRecord);
                 break;
             default:
-                throw new ExecutionControl.NotImplementedException("Добавлена новая роль");
+             System.out.println("Добавлена новая роль");
         }
     }
     public boolean userCreate(UserRole userRole, String name)
@@ -153,6 +153,8 @@ ArrayList<TimeRecord> getRep = new ArrayList<TimeRecord>();
         return users;
 
     }
+
+
     public ArrayList<TimeRecord> generic = new ArrayList<TimeRecord>();
     public ArrayList<TimeRecord> Generic()
     {
