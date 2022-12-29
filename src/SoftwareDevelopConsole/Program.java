@@ -358,21 +358,22 @@ int actionFreelancer;
         var groupUser = fill.readFileUser();
         for(var groupitem : groupUser)
         {
-            if (!groupworkrep.containsKey(groupitem.getUserRole()))//проверяем наличие Ключа, если его нет
+            //проверяем наличие Ключа, если его нет, добавляем и ключ, и значение
+            if (!groupworkrep.containsKey(groupitem.getUserRole()))
             {
-                groupworkrep.put(groupitem.getUserRole(), new ArrayList<String>());// то добавляем ключ, а значение пока еще пустое!!!
-                //groupworkrep[groupitem.getUserRole()] (groupitem.getName());//после добавления ключа, добавляем Значение по вышедобавленному ключу
-                var tt =groupworkrep.get(groupitem.getUserRole());
-                groupworkrep.put(groupitem.getUserRole(),groupworkrep.get(groupitem.getUserRole()) = groupitem.getName() );
+                var itemsList = new ArrayList<String>();
+                itemsList.add(groupitem.getName());
+                groupworkrep.put(groupitem.getUserRole(), itemsList);
             }
-            else//иначе ключ есть
+            else//иначе ключ есть, просто обновляем значение
             {
-               // groupworkrep[groupitem.getUserRole()].add(groupitem.getName());//просто добавляем Значение по существующему ключу
-
+                var itemsList = groupworkrep.get(groupitem.getUserRole());
+                if(!itemsList.contains(groupitem.getName()))
+                    itemsList.add(groupitem.getName());
             }
         }
 
-        for (var groupwork : groupworkrep)
+        for (var groupwork : groupworkrep.)
         {
             if (groupwork.Key == user.getUserRole())
             {
