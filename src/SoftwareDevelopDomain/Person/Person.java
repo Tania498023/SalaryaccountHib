@@ -48,7 +48,7 @@ public class Person {
 
 
     public void printRepPerson(){
-        System.out.println("Отчет по сотруднику [" + users.getName() + users.getUserRole() + "за период с " + startDates.toString()
+        System.out.println("Отчет по сотруднику " + users.getName() + users.getUserRole() + "за период с " + startDates.toString()
                 + "по" + endDates.toString());
         for (TimeRecord item:timeRecords) {
           //  if((item.getDate() >= startdates) && (item.getDate() <= enddates)){

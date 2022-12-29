@@ -79,33 +79,33 @@ public class FileRepository {
         {
             var usrRol = (TimeRecord) userRole;
             //создаем строку с разделительными символами и переносом строки
-            String genericstr = usrRol.getDate() + "," + usrRol.getName() + "," + usrRol.getHours() + "," + usrRol.getMessage() + System.lineSeparator();
+            String genericStr = usrRol.getDate() + "," + usrRol.getName() + "," + usrRol.getHours() + "," + usrRol.getMessage() + System.lineSeparator();
 
-            writer.write(genericstr);//записываем указанную строку
+            writer.write(genericStr);//записываем указанную строку
         }
     }
 
     /// Конвертируем тип int(роль) в string(путь к файлу)
     private static String ConvertRoleToPath(int roles) {
-        String newpath = "";
+        String newPath = "";
 
         if (roles == UserRole.MANAGER.ordinal()) {
-            newpath = ".\\Data\\Manager.csv";
+            newPath = ".\\Data\\Manager.csv";
         }
         if (roles == UserRole.EMPLOYEE.ordinal()) {
-            newpath = ".\\Data\\Employee.csv";
+            newPath = ".\\Data\\Employee.csv";
         } else if (roles == UserRole.FREELANCER.ordinal()) {
-            newpath = ".\\Data\\Frilanser.csv";
+            newPath = ".\\Data\\Frilanser.csv";
         }
 
-        return newpath;
+        return newPath;
     }
 
     // Считывает все строки файла User.csv и закрывает файл
     public List<User> readFileUser() {
         //создаем экземпляр/объект User для использования по умолчанию, чтобы была возможность зайти в приложение даже, если файл пустой
-        //добавляем этот объект в коллекцию tmplist
-        var defaultUser = new User("defaultuser", MANAGER);
+        //добавляем этот объект в коллекцию tmpList
+        var defaultUser = new User("defaultUser", MANAGER);
         var tmpList = new ArrayList<User>();
         tmpList.add(defaultUser);
 
