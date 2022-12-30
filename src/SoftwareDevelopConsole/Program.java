@@ -528,38 +528,42 @@ public class Program {
         }
         while (true);
 
-        ArrayList<TimeRecord> allworkrep = new ArrayList<TimeRecord>();//создали новую общую коллекцию (пустая)
-        for (int indexrole = 0; indexrole < 3; indexrole++)
+        ArrayList<TimeRecord> allWorkRep = new ArrayList<TimeRecord>();//создали новую общую коллекцию (пустая)
+        for (int indexRole = 0; indexRole < 3; indexRole++)
         {
-            List<TimeRecord> allwork = fill.readFileGeneric(indexrole);//вычитываем все файлы в коллекцию allwork
-            allworkrep.AddRange(allwork);//добавляем группу элементов коллекции allwork в общую коллекцию allworkrep
+            List<TimeRecord> allWork = fill.readFileGeneric(indexRole);//вычитываем все файлы в коллекцию allWork
+            allWorkRep.addAll(allWork);//добавляем группу элементов коллекции allWork в общую коллекцию allWorkRep
         }
 
 
-        Dictionary<String, List<TimeRecord>> workmap = new Dictionary<String, List<TimeRecord>>();//создаем новый словарь (пока пустой), в котором тип
+        Map<String, List<TimeRecord>> workMap = new HashMap<String, List<TimeRecord>>();//создаем новый словарь (пока пустой), в котором тип
         //Ключа строка(фильтруем по имени, так как
         // в нашем приложении оно уникально), тип Значения Список(List<>)
 
-        foreach (var workitem in allworkrep)//перебираем общую коллекцию и каждый ее элемент кладем в переменную workitem
+        for (var workItem : allWorkRep)//перебираем общую коллекцию и каждый ее элемент кладем в переменную workItem
         {
-            if (workitem.Date >= startdate && workitem.Date <= enddate)//фильтруем дату отчета
-                if (!workmap.ContainsKey(workitem.Name))//проверяем наличие Ключа, если его нет
+            if (Helpers.getMillisecFromDate(workItem.getDate()) >= Helpers.getMillisecFromDate(startDate) && Helpers.getMillisecFromDate(workItem.getDate()) <= Helpers.getMillisecFromDate(endDate))//фильтруем дату отчета
+                if (!workMap.containsKey(workItem.getName()))//проверяем наличие Ключа, если его нет
                 {
-                    workmap.Add(workitem.Name, new List<TimeRecord>());// то добавляем ключ, а значение пока еще пустое!!!
-                    workmap[workitem.Name].Add(workitem);//после добавления ключа, добавляем Значение по вышедобавленному ключу
+                    var itemList = new ArrayList<TimeRecord>();
+                    itemList.add((workItem));
+                    workMap.put(workItem.getName(),itemList);
+
                 }
                 else//иначе ключ есть
                 {
-                    workmap[workitem.Name].Add(workitem);//просто добавляем Значение по существующему ключу
-
+                    List<TimeRecord> items = workMap.get(workItem.getName());
+                    if(!items.contains(workItem.getName())){
+                        items.add(workItem);
+                    }
                 }
         }
 
-        foreach (var sortwork in workmap)
+        for (var sortWork : workMap.entrySet())
         {
-            var repHour = fill.userGet(sortwork.Key);//получаем имя-ключ из словаря и значение кладем в переменную rephour
+            var repHour = fill.userGet(sortWork.getKey());//получаем имя-ключ из словаря и значение кладем в переменную rephour
 
-            var HH = sortwork.Value;//значение из словаря положили в переменную HH
+            var HH = sortWork.getValue();//значение из словаря положили в переменную HH
 
             double monthSalary = 0;
             double bonus = 0;
@@ -570,7 +574,7 @@ public class Program {
                 var totp = new Manager(monthSalary,repHour, HH, startDate, endDate,bonus,monthBonus);//создаем новый экземпляр типа Manager
                 System.out.println("");
                 System.out.println("--------------------------------------");
-                System.out.println("Сотрудник" + sortwork.Key);
+                System.out.println("Сотрудник" + sortWork.getKey());
                 totp.printRepPerson();
 
                 System.out.println("Всего отработано {totp.sumhour}");//итоговое время по конкретному сотруднику
@@ -580,32 +584,32 @@ public class Program {
 
 
             }
-            else if (repHour.UserRole == UserRole.EMPLOYEE)
+            else if (repHour.getUserRole() == UserRole.EMPLOYEE)
             {
                 var totp = new Employee(monthSalary,repHour, HH, startDate, endDate,bonus);
                 System.out.println("");
                 System.out.println("--------------------------------------");
-                System.out.println("Сотрудник" + sortwork.Key);
+                System.out.println("Сотрудник" + sortWork.getKey());
                 totp.printRepPerson();
 
                 System.out.println("Всего отработано" + totp.sumHours);
                 System.out.println("Всего заработано" + totp.getTotalPay());
                 itogHour += totp.sumHours;
-                itogtotalpay += totp.getTotalPay();
+                itogTotalPay += totp.getTotalPay();
 
             }
-            else if (repHour.UserRole == UserRole.FREELANCER)
+            else if (repHour.getUserRole() == UserRole.FREELANCER)
             {
                 var totp = new Freelancer(repHour, HH, startDate, endDate);
                 System.out.println("");
                 System.out.println("--------------------------------------");
-                System.out.println("Сотрудник" + sortwork.Key);
+                System.out.println("Сотрудник" + sortWork.getKey());
                 totp.printRepPerson();
 
-                System.out.println("Всего отработано" + totp.sumHour);
+                System.out.println("Всего отработано" + totp.sumHours);
                 System.out.println("Всего заработано" + totp.getTotalPay());
                 itogHour += totp.sumHours;
-                itogtotalpay += totp.getTotalPay();
+                itogTotalPay += totp.getTotalPay();
 
             }
 
@@ -613,7 +617,7 @@ public class Program {
         System.out.println("");
         System.out.println("--------------------------------------");
         System.out.println("Всего отработано" + itogHour);
-        System.out.println("Всего заработано" + itogtotalpay);
+        System.out.println("Всего заработано" + itogTotalPay);
 
         menuUp();
     }
