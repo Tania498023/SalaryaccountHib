@@ -14,6 +14,11 @@ import static SoftwareDevelopDomain.Person.UserRole.*;
 public class MemoryRepository  implements IRepository {
 
     private ArrayList<TimeRecord> employees = new ArrayList<TimeRecord>();
+
+    public MemoryRepository( ) {
+        addFakeDataUser();
+    }
+
     public void addFakeDataEmployee()
     {
         employees.add(new TimeRecord(LocalDateTime.now().minusDays(3),"Иванов",8,"test message 1"));
@@ -40,11 +45,11 @@ public class MemoryRepository  implements IRepository {
 
     private ArrayList<User> users = new ArrayList<User>();
 public void addFakeDataUser(){
-    users.add(new User("Иванов", UserRole.valueOf("Employee")));
-    users.add(new User("Васильев", UserRole.valueOf("Employee")));
-    users.add(new User("Смит", UserRole.valueOf("Freelancer")));
-    users.add(new User("Бонд", UserRole.valueOf("Freelancer")));
-    users.add(new User("Береговой", UserRole.valueOf("Manager")));
+    users.add(new User("Иванов", EMPLOYEE));
+    users.add(new User("Васильев", EMPLOYEE));
+    users.add(new User("Смит", FREELANCER));
+    users.add(new User("Бонд", FREELANCER));
+    users.add(new User("Береговой", MANAGER));
 }
     public ArrayList<TimeRecord> employees()
     {

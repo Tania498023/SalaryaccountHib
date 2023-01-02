@@ -21,12 +21,13 @@ import static SoftwareDevelopDomain.Person.UserRole.valueOf;
 
 public class FileRepository {
     /// Записываем коллекцию в файл user.csv
-    public void fillFileUser(List users, boolean userNeedWrite) throws IOException {
-        String userPath = "\\Data\\User.csv";
+    public void fillFileUser(ArrayList<User> users, boolean userNeedWrite) throws IOException {
+        String userPath = ".\\Data\\User.csv"; //".\\Data\\User.csv";
         File file = new File(userPath);
 
+
         if (!isFileExists(file))
-            return;
+            file.createNewFile();
 
         long size = file.length();
 
@@ -35,19 +36,20 @@ public class FileRepository {
 
         FileWriter writer;
         try {
-            File wr = new File("User.csv");
-            writer = new FileWriter(wr);
+            // File wr = new File("User.csv");
+            writer = new FileWriter(file);
+            for (Object user : users)//перебираем коллекцию и выбираем из нее элементы
+            {
+                User usr = (User) user;
+                String userStr = usr.getName() + "," + usr.getUserRole() + System.lineSeparator();//создаем строку с разделительными символами и переносом строки
 
+                writer.write(userStr);//записываем указанную строку
+            }
+            writer.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        for (var user : users)//перебираем коллекцию и выбираем из нее элементы
-        {
-            var usr = (User) user;
-            String userStr = usr.getName() + "," + usr.getUserRole() + System.lineSeparator();//создаем строку с разделительными символами и переносом строки
 
-            writer.write(userStr);//записываем указанную строку
-        }
     }
 
     public static boolean isFileExists(File file) {
@@ -56,11 +58,11 @@ public class FileRepository {
 
     /// Записываем коллекцию TimeRecord в файл согласно роли
     public void fillFileGeneric(List timeRecords, int roles, boolean genericneedwrite) throws IOException {
-        String newpath = ConvertRoleToPath(roles);
-        File file = new File(newpath);
+        String newPath = ConvertRoleToPath(roles);
+        File file = new File(newPath);
 
         if (!isFileExists(file))
-            return;
+            file.createNewFile();
 
         long size = file.length();
 
@@ -102,7 +104,7 @@ public class FileRepository {
     }
 
     // Считывает все строки файла User.csv и закрывает файл
-    public List<User> readFileUser() {
+    public List<User> readFileUser() throws IOException {
         //создаем экземпляр/объект User для использования по умолчанию, чтобы была возможность зайти в приложение даже, если файл пустой
         //добавляем этот объект в коллекцию tmpList
         var defaultUser = new User("defaultUser", MANAGER);
@@ -116,24 +118,29 @@ public class FileRepository {
             return tmpList;
 
         List<User> users = new ArrayList<User>();
+        FileReader fr;
+        BufferedReader reader= null;
 
         try {
-            FileReader fr = new FileReader(file);
-            BufferedReader reader = new BufferedReader(fr);
+              fr = new FileReader(file);
+              reader = new BufferedReader(fr);
 
             var str = reader.readLine();
+            User user = null;
+
+            UserRole strokaEnum;
 
             while (str != null) {
 
-
-                str = reader.readLine();
-                var plitedStroka = str.split(",");
-                User user = null;
-
-                UserRole strokaEnum;
-
-
                 try {
+                str = reader.readLine();
+              if(str == null)
+                  break;
+
+                var plitedStroka = str.split(",");
+
+
+
                     strokaEnum = UserRole.valueOf(plitedStroka[1]);
                     user = new User(plitedStroka[0], strokaEnum);//создали  объект
                 } catch (Exception e) {
@@ -149,7 +156,11 @@ public class FileRepository {
 
         } catch (IOException e) {
 
+        }finally {
+            reader.close();
         }
+
+
         if (users.size() == 0) {
             return tmpList;
         }
@@ -191,7 +202,7 @@ public class FileRepository {
 
     // Получаем имя пользователя и возвращаем коллекцию User
 
-    public User userGet(String name) {
+    public User userGet(String name) throws IOException {
         for (var record : readFileUser()) {
             if (record.getName() == name)
                 return record;

@@ -25,7 +25,7 @@ public class Program {
         fill = new FileRepository();//создаем экземпляры для возможности вызова метода FillFileUser
 
         var userReturn = new MemoryRepository();//создаем экземпляры для возможности вызова метода Users
-        fill.fillFileUser(Collections.singletonList(userReturn.Users()), false);
+        fill.fillFileUser(userReturn.Users(), false);
 
 
         var genericReturn = new MemoryRepository();
@@ -38,17 +38,22 @@ public class Program {
 
     public static void controlRole(FileRepository userReturn) throws IOException//контроль вводимой роли при входе в программу
     {
-        do {
+      do {
+            try {  System.out.println("Введите ваше имя");
+               // String name = System.console().readLine();
+                Scanner in = new Scanner(System.in);
+                String name = in.next();
 
-            Scanner in = new Scanner(System.in);
-            System.out.println("Введите ваше имя");
-            String name = String.valueOf(in.nextInt());
+                in.close();
 
-            in.close();
+                polzovatel = userReturn.userGet(name);
+                if (polzovatel == null)
+                    System.out.println("Пользователь с таким именем не существует");
+            }
+            catch (Exception e){
 
-            polzovatel = userReturn.userGet(name);
-            if (polzovatel == null)
-                System.out.println("Пользователь с таким именем не существует");
+            }
+
         }
         while (polzovatel == null);
         displayMenu(polzovatel.getUserRole());
