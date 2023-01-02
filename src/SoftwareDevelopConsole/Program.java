@@ -42,7 +42,7 @@ public class Program {
             try {  System.out.println("Введите ваше имя");
                // String name = System.console().readLine();
                 Scanner in = new Scanner(System.in);
-                String name = in.next();
+                String name = in.nextLine();
 
                 in.close();
 
