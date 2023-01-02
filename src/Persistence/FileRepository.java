@@ -204,7 +204,7 @@ public class FileRepository {
 
     public User userGet(String name) throws IOException {
         for (var record : readFileUser()) {
-            if (record.getName() == name)
+            if (record.getName().equals(name))
                 return record;
         }
         return null;

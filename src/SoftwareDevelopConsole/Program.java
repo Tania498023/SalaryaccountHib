@@ -38,13 +38,15 @@ public class Program {
 
     public static void controlRole(FileRepository userReturn) throws IOException//контроль вводимой роли при входе в программу
     {
-      do {
-            try {  System.out.println("Введите ваше имя");
-               // String name = System.console().readLine();
-                Scanner in = new Scanner(System.in);
-                String name = in.nextLine();
 
-                in.close();
+        Scanner inpt = null;
+      do {
+          try {
+                System.out.println("Введите ваше имя");
+
+                inpt = new Scanner(System.in);
+                String name = inpt.nextLine();
+
 
                 polzovatel = userReturn.userGet(name);
                 if (polzovatel == null)
@@ -52,10 +54,14 @@ public class Program {
             }
             catch (Exception e){
 
+                var tt = e;
             }
 
         }
         while (polzovatel == null);
+
+        inpt.close();
+
         displayMenu(polzovatel.getUserRole());
 
     }
