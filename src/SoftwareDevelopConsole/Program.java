@@ -38,7 +38,7 @@ public class Program {
     public static void controlRole(FileRepository userReturn) throws IOException//контроль вводимой роли при входе в программу
     {
 
-        Scanner inpt = null;
+        Scanner inpt;
       do {
           try {
                 System.out.println("Введите ваше имя");
@@ -59,15 +59,13 @@ public class Program {
         }
         while (polzovatel == null);
 
-        inpt.close();
-
         displayMenu(polzovatel.getUserRole());
 
     }
 
     private static UserRole inputRole() {
         UserRole enterUser = UserRole.DEFAULT;
-        Scanner inp = null;
+        Scanner inp ;
         do {
             System.out.println("\n Введите 0, если менеджер \n Введите 1, если сотрудник \n Введите 2, если фрилансер");
             inp = new Scanner(System.in);
@@ -76,13 +74,13 @@ public class Program {
 
             {
 
-                if (inputRole == "0") {
+                if (inputRole.equals("0")) {
                     enterUser = UserRole.MANAGER;
                     break;
-                } else if (inputRole == "1") {
+                } else if (inputRole.equals("1")) {
                     enterUser = UserRole.EMPLOYEE;
                     break;
-                } else if (inputRole == "2") {
+                } else if (inputRole.equals("2")) {
                     enterUser = UserRole.FREELANCER;
                     break;
                 } else
@@ -91,8 +89,7 @@ public class Program {
             }
         } while (enterUser.ordinal() < UserRole.MANAGER.ordinal() || enterUser.ordinal() > UserRole.FREELANCER.ordinal());
 
-        inp.close();
-        return enterUser;
+         return enterUser;
     }
 
     private static void displayMenu(UserRole userRole) throws IOException {
@@ -118,7 +115,7 @@ public class Program {
 
     private static void showManagerMenu() throws IOException {
         int actionManager;
-        Scanner inp = null;
+        Scanner inp;
         do {
             System.out.println("Выберите действие  \n " +
                     "Введите 1, если вы хотите добавить сотрудника \n " +
@@ -149,7 +146,7 @@ public class Program {
                 break;
             } else if (actionManager == 0) {
 
-                System.exit(0);
+               System.exit(0);
 
                 break;
             } else
@@ -158,8 +155,7 @@ public class Program {
         }
 
         while ((actionManager < 1 || actionManager > 4) && actionManager != 0);
-        inp.close();
-    }
+       }
 
     private static void showEmployeeMenu() throws IOException {
         int actionEmployee;
@@ -188,8 +184,7 @@ public class Program {
         }
 
         while (actionEmployee < 1 || actionEmployee > 2);
-        inp.close();
-    }
+      }
 
     private static void showFreelancerMenu() throws IOException {
         int actionFreelancer;
@@ -217,7 +212,7 @@ public class Program {
         }
 
         while (actionFreelancer < 1 || actionFreelancer > 2);
-        inp.close();
+
     }
 
     private static void menuUp() throws IOException {
@@ -230,7 +225,6 @@ public class Program {
         inp = new Scanner(System.in);
         String enterChoice = inp.nextLine();
         choice = Integer.parseInt(enterChoice);
-        inp.close();
 
         if (choice == 1) {
             if (polzovatel.getUserRole() == UserRole.MANAGER) {
@@ -312,9 +306,6 @@ public class Program {
                 break;
         }
         while (true);
-        inp.close();
-
-
 
         for (var item : HH)
         {
@@ -328,7 +319,6 @@ public class Program {
             }
         }
 //        Scanner in = new Scanner(System.in);
-//        in.close();//TODO
     }
     private static void addStaffHour() throws IOException {
         addHour();
@@ -375,14 +365,13 @@ public class Program {
 
     }
         while((H <=0||H >=24));
-        inp.close();
-}
+ }
 
     private static void addWorkerHour() throws IOException {
         User worker;
         LocalDateTime date;
 
-        Scanner inn = null;
+        Scanner inn ;
         System.out.println("*************************************************");
         System.out.println("Введите пользователя");
         inn = new Scanner(System.in);
@@ -419,8 +408,7 @@ public class Program {
             addHourWithControlDate(worker, Integer.parseInt(H), date);
 
             menuUp();
-            inn.close();
-        }
+          }
         while (true);
 
     }
@@ -434,8 +422,7 @@ public class Program {
             List<TimeRecord> times = new ArrayList<TimeRecord>();
             times.add(time);
             fill.fillFileGeneric(times, Us.getUserRole().ordinal(), true);
-             inn.close();
-        }
+          }
 
 
     private static void addWorker() throws IOException {
@@ -445,7 +432,6 @@ public class Program {
         String userName = inn.nextLine();
 
         User M = fill.userGet(userName);
-        inn.close();
 
         if(M == null)
         {
@@ -557,7 +543,6 @@ public class Program {
                 break;
         }
         while (true);
-        inn.close();
 
         ArrayList<TimeRecord> allWorkRep = new ArrayList<TimeRecord>();//создали новую общую коллекцию (пустая)
         for (int indexRole = 0; indexRole < 3; indexRole++)
@@ -705,7 +690,7 @@ public class Program {
                 break;
         }
         while (true);
-        inn.close();
+
 
         User repHour;
         double monthSalary = 0;
@@ -734,7 +719,6 @@ public class Program {
             }
         }
         while (true);
-        inp.close();
 
         var HH = fill.readFileGeneric(repHour.getUserRole().ordinal());
         if (repHour.getUserRole() == UserRole.MANAGER)
@@ -746,7 +730,6 @@ public class Program {
             System.out.println("Всего заработано" + totp.getTotalPay());
 
 //            Scanner in = new Scanner(System.in);//TODO
-//            in.close();
         }
 
         else if (repHour.getUserRole() == UserRole.EMPLOYEE)
@@ -757,7 +740,6 @@ public class Program {
             System.out.println("Всего заработано" + totp.getTotalPay());
 
 //            Scanner in = new Scanner(System.in);//TODO
-//            in.close();
         }
         else if (repHour.getUserRole() == UserRole.FREELANCER)
         {
@@ -771,4 +753,5 @@ public class Program {
         menuUp();
 
     }
+
 }

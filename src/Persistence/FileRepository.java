@@ -31,7 +31,7 @@ public class FileRepository {
 
         FileWriter writer;
         try {
-            // File wr = new File("User.csv");
+
             writer = new FileWriter(file);
             for (Object user : users)//перебираем коллекцию и выбираем из нее элементы
             {
@@ -66,7 +66,7 @@ public class FileRepository {
             return;
         FileWriter writer;
         try {
-            File wr = new File("User.csv");
+            File wr = new File(newPath);
             writer = new FileWriter(wr);
 
         } catch (IOException e) {
@@ -107,56 +107,47 @@ public class FileRepository {
         tmpList.add(defaultUser);
 
         String userPath = ".\\Data\\User.csv";
-        File file = new File(userPath);
 
-        if (!isFileExists(file))
+        if (!isFileExists(new File(userPath)))
             return tmpList;
 
         List<User> users = new ArrayList<User>();
-        FileReader fr;
-        BufferedReader reader= null;
 
-        try {
-              fr = new FileReader(file);
-              reader = new BufferedReader(fr);
+        Scanner sc = new Scanner(new File(userPath));
+        List<String> lines = new ArrayList<String>();
+        while (sc.hasNextLine())
+        {
+            lines.add(sc.nextLine());
+        }
 
-            var str = reader.readLine();
-            User user = null;
-
-            UserRole strokaEnum;
-
-            while (str != null) {
-
-                try {
-                str = reader.readLine();
-              if(str == null)
-                  break;
-
-                var plitedStroka = str.split(",");
-
-
+        String[] str = lines.toArray(new String[0]);
+        UserRole strokaEnum;
+        for (var stroka : str)
+        {
+            if (str != null || str.length > 0)
+            {
+                var plitedStroka = stroka.split(",");
+                User user = null;
+                try
+                {
 
                     strokaEnum = UserRole.valueOf(plitedStroka[1]);
                     user = new User(plitedStroka[0], strokaEnum);//создали  объект
-                } catch (Exception e) {
+
+                }
+                catch (Exception e)
+                {
                     System.out.println("Не соответствует формат введенной строки!");
                 }
 
                 if (user != null) {
                     users.add(user);// добавили объект в коллекцию
                 }
-
             }
-        } catch (FileNotFoundException e) {
-
-        } catch (IOException e) {
-
-        }finally {
-            reader.close();
         }
 
-
-        if (users.size() == 0) {
+        if (users.size() == 0)
+        {
             return tmpList;
         }
         return users;
@@ -197,8 +188,10 @@ public class FileRepository {
 
     // Получаем имя пользователя и возвращаем коллекцию User
 
-    public User userGet(String name) throws IOException {
-        for (var record : readFileUser()) {
+    public User userGet(String name) throws IOException
+    {
+        for (var record : readFileUser())
+        {
             if (record.getName().equals(name))
                 return record;
         }
