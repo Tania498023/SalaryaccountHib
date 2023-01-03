@@ -67,11 +67,12 @@ public class Program {
 
     private static UserRole inputRole() {
         UserRole enterUser = UserRole.DEFAULT;
+        Scanner inp = null;
         do {
             System.out.println("\n Введите 0, если менеджер \n Введите 1, если сотрудник \n Введите 2, если фрилансер");
-            Scanner in = new Scanner(System.in);
-            String inputRole = String.valueOf(in.nextInt());
-            in.close();
+            inp = new Scanner(System.in);
+            String inputRole = inp.nextLine();
+
 
             {
 
@@ -90,6 +91,7 @@ public class Program {
             }
         } while (enterUser.ordinal() < UserRole.MANAGER.ordinal() || enterUser.ordinal() > UserRole.FREELANCER.ordinal());
 
+        inp.close();
         return enterUser;
     }
 
@@ -116,6 +118,7 @@ public class Program {
 
     private static void showManagerMenu() throws IOException {
         int actionManager;
+        Scanner inp = null;
         do {
             System.out.println("Выберите действие  \n " +
                     "Введите 1, если вы хотите добавить сотрудника \n " +
@@ -124,9 +127,9 @@ public class Program {
                     "Введите 4, если вы хотите посмотреть часы работы сотрудника \n " +
                     "Введите 0, если вы хотите выйти из программы");
 
-            Scanner in = new Scanner(System.in);
-            String enterManager = String.valueOf(in.nextInt());
-            in.close();
+            inp = new Scanner(System.in);
+            String enterManager = inp.nextLine();
+
             actionManager = Integer.parseInt(enterManager);
 
             if (actionManager == 1) {
@@ -155,18 +158,20 @@ public class Program {
         }
 
         while ((actionManager < 1 || actionManager > 4) && actionManager != 0);
+        inp.close();
     }
 
     private static void showEmployeeMenu() throws IOException {
         int actionEmployee;
+        Scanner inp = null;
         do {
             System.out.println("Выберите действие  \n " +
                     "Введите 1, если вы хотите ввести часы \n " +
                     "Введите 2, если вы хотите просмотреть часы");
 
-            Scanner in = new Scanner(System.in);
-            String enterEmployee = String.valueOf(in.nextInt());
-            in.close();
+            inp = new Scanner(System.in);
+            String enterEmployee = inp.nextLine();
+
 
             actionEmployee = Integer.parseInt(enterEmployee);
             {
@@ -183,17 +188,19 @@ public class Program {
         }
 
         while (actionEmployee < 1 || actionEmployee > 2);
+        inp.close();
     }
 
     private static void showFreelancerMenu() throws IOException {
         int actionFreelancer;
+        Scanner inp = null;
         do {
             System.out.println("Выберите действие  \n " +
                     "Введите 1, если вы хотите ввести часы \n " +
                     "Введите 2, если вы хотите просмотреть часы");
-            Scanner in = new Scanner(System.in);
-            String enterFreelancer = String.valueOf(in.nextInt());
-            in.close();
+            inp = new Scanner(System.in);
+            String enterFreelancer = inp.nextLine();
+
             actionFreelancer = Integer.parseInt(enterFreelancer);
 
             {
@@ -210,19 +217,20 @@ public class Program {
         }
 
         while (actionFreelancer < 1 || actionFreelancer > 2);
+        inp.close();
     }
 
     private static void menuUp() throws IOException {
         int choice;
-
+        Scanner inp = null;
         System.out.println("Выберите действие  \n " +
                 "Введите 1, если вы хотите продолжить \n " +
                 "Введите 2, если вы хотите выйти из меню");
 
-        Scanner in = new Scanner(System.in);
-        String enterChoice = String.valueOf(in.nextInt());
-        in.close();
+        inp = new Scanner(System.in);
+        String enterChoice = inp.nextLine();
         choice = Integer.parseInt(enterChoice);
+        inp.close();
 
         if (choice == 1) {
             if (polzovatel.getUserRole() == UserRole.MANAGER) {
@@ -240,6 +248,7 @@ public class Program {
         } else
             System.out.println("Вы выбрали несуществующее действие");
         System.exit(0);
+
     }
     private static void watchStaffHour() throws IOException {
         watchHour();
@@ -252,13 +261,14 @@ public class Program {
 
         LocalDateTime startDate;
         LocalDateTime endDate;
+        Scanner inp = null;
 
         do
         {
             System.out.println("Введите дату начала отчета");
-            Scanner in = new Scanner(System.in);
-            String D = String.valueOf(in.nextInt());
-            in.close();
+            inp = new Scanner(System.in);
+            String D = inp.nextLine();
+
 
             if(D == null&& D.isEmpty())
             {
@@ -276,9 +286,9 @@ public class Program {
             }
 
             System.out.println("Введите дату окончания отчета");
-            Scanner inn = new Scanner(System.in);
-            String DD = String.valueOf(in.nextInt());
-            in.close();
+            inp = new Scanner(System.in);
+            String DD = inp.nextLine();
+
 
             if(DD == null&& D.isEmpty())
             {
@@ -302,6 +312,8 @@ public class Program {
                 break;
         }
         while (true);
+        inp.close();
+
 
 
         for (var item : HH)
@@ -315,8 +327,8 @@ public class Program {
                 }
             }
         }
-        Scanner in = new Scanner(System.in);
-        in.close();//TODO
+//        Scanner in = new Scanner(System.in);
+//        in.close();//TODO
     }
     private static void addStaffHour() throws IOException {
         addHour();
@@ -326,12 +338,13 @@ public class Program {
     private static void addHour() throws IOException {
         int H;
         LocalDateTime date;
+        Scanner inp = null;
         do
         {
             System.out.println("Введите отработанное время");
-            Scanner in = new Scanner(System.in);
-            String enterH = String.valueOf(in.nextInt());
-            in.close();
+            inp = new Scanner(System.in);
+            String enterH = inp.nextLine();
+
             H = Integer.parseInt(enterH);
 
 
@@ -341,9 +354,9 @@ public class Program {
 
             }
             System.out.println("Введите дату");
-            Scanner inn = new Scanner(System.in);
-            String enterDate = String.valueOf(in.nextInt());
-            in.close();
+            inp = new Scanner(System.in);
+            String enterDate = inp.nextLine();
+
             date = LocalDateTime.parse(enterDate);
 
 
@@ -362,18 +375,21 @@ public class Program {
 
     }
         while((H <=0||H >=24));
+        inp.close();
 }
 
     private static void addWorkerHour() throws IOException {
         User worker;
         LocalDateTime date;
+
+        Scanner inn = null;
         System.out.println("*************************************************");
         System.out.println("Введите пользователя");
-        Scanner in = new Scanner(System.in);
-        String name = String.valueOf(in.nextInt());
-        in.close();
+        inn = new Scanner(System.in);
+        String name = inn.nextLine();
 
         worker = fill.userGet(name);
+
         do {
             if (worker == null) {
                 System.out.println("Пользователь не существует");
@@ -381,9 +397,8 @@ public class Program {
             }
 
             System.out.println("Введите дату");
-            Scanner inn = new Scanner(System.in);
-            String inputDateString = String.valueOf(in.nextInt());
-            in.close();
+            inn = new Scanner(System.in);
+            String inputDateString = inn.nextLine();
 
 
             if(!(inputDateString == null && inputDateString.isEmpty()))
@@ -398,36 +413,40 @@ public class Program {
             }
 
             System.out.println("Введите отработанное время");
-            Scanner ih = new Scanner(System.in);
-            String H = String.valueOf(in.nextInt());
-            in.close();
+            inn = new Scanner(System.in);
+            String H = inn.nextLine();
 
             addHourWithControlDate(worker, Integer.parseInt(H), date);
 
             menuUp();
+            inn.close();
         }
         while (true);
+
     }
          private static void addHourWithControlDate(User Us, int H, LocalDateTime date) throws IOException {
+            Scanner inn = null;
             System.out.println("Введите сообщение");
-            Scanner inn = new Scanner(System.in);
-            String mas = String.valueOf(inn.nextInt());
-            inn.close();
+            inn= new Scanner(System.in);
+            String mas = inn.nextLine();
 
             var time = new TimeRecord(date, Us.getName(), H, mas);
             List<TimeRecord> times = new ArrayList<TimeRecord>();
             times.add(time);
             fill.fillFileGeneric(times, Us.getUserRole().ordinal(), true);
+             inn.close();
         }
 
 
     private static void addWorker() throws IOException {
+        Scanner inn = null;
         System.out.println("Введите имя пользователя");
-        Scanner in = new Scanner(System.in);
-        String userName = String.valueOf(in.nextInt());
-        in.close();
+        inn = new Scanner(System.in);
+        String userName = inn.nextLine();
 
         User M = fill.userGet(userName);
+        inn.close();
+
         if(M == null)
         {
 
@@ -488,12 +507,13 @@ public class Program {
         LocalDateTime endDate;
         int itogHour = 0;
         double itogTotalPay  = 0;
+        Scanner inn = null;
         do
         {
             System.out.println("Введите дату начала отчета");
-            Scanner in = new Scanner(System.in);
-            String D = String.valueOf(in.nextInt());
-            in.close();
+            inn = new Scanner(System.in);
+            String D = inn.nextLine();
+
 
             if(D == null && D.isEmpty())
             {
@@ -510,9 +530,9 @@ public class Program {
                 continue;
             }
             System.out.println("Введите дату окончания отчета");
-            Scanner inn = new Scanner(System.in);
-            String DD = String.valueOf(in.nextInt());
-            in.close();
+            inn = new Scanner(System.in);
+            String DD = inn.nextLine();
+
 
             if(DD == null && D.isEmpty())
             {
@@ -537,6 +557,7 @@ public class Program {
                 break;
         }
         while (true);
+        inn.close();
 
         ArrayList<TimeRecord> allWorkRep = new ArrayList<TimeRecord>();//создали новую общую коллекцию (пустая)
         for (int indexRole = 0; indexRole < 3; indexRole++)
@@ -635,13 +656,13 @@ public class Program {
     private static void watchWorkerHour() throws IOException {
         LocalDateTime startDate;
         LocalDateTime endDate;
-
+        Scanner inn = null;
         do
         {
             System.out.println("Введите дату начала отчета");
-            Scanner in = new Scanner(System.in);
-            String enterStartDate = String.valueOf(in.nextInt());
-            in.close();
+            inn = new Scanner(System.in);
+            String enterStartDate = inn.nextLine();
+
 
             if ((enterStartDate == null && enterStartDate.isEmpty()))
             {
@@ -658,9 +679,9 @@ public class Program {
                 continue;
             }
             System.out.println("Введите дату окончания отчета");
-            Scanner iN = new Scanner(System.in);
-            String enterEndDate = String.valueOf(in.nextInt());
-            in.close();
+            inn = new Scanner(System.in);
+            String enterEndDate = inn.nextLine();
+
 
             if ((enterEndDate == null && enterEndDate.isEmpty()))
             {
@@ -684,19 +705,21 @@ public class Program {
                 break;
         }
         while (true);
+        inn.close();
 
         User repHour;
         double monthSalary = 0;
         double bonus = 0;
         double monthBonus = 0;
+        Scanner inp = null;
         do
         {
             System.out.println("---------------------");
             System.out.println("Введите пользователя");
 
-            Scanner in = new Scanner(System.in);
-            String inputString = String.valueOf(in.nextInt());
-            in.close();
+            inp = new Scanner(System.in);
+            String inputString = inp.nextLine();
+
 
             System.out.println("---------------------");
             repHour = fill.userGet(inputString);
@@ -711,6 +734,7 @@ public class Program {
             }
         }
         while (true);
+        inp.close();
 
         var HH = fill.readFileGeneric(repHour.getUserRole().ordinal());
         if (repHour.getUserRole() == UserRole.MANAGER)
@@ -721,8 +745,8 @@ public class Program {
             System.out.println("Всего отработано" + totp.sumHours);
             System.out.println("Всего заработано" + totp.getTotalPay());
 
-            Scanner in = new Scanner(System.in);
-            in.close();
+//            Scanner in = new Scanner(System.in);//TODO
+//            in.close();
         }
 
         else if (repHour.getUserRole() == UserRole.EMPLOYEE)
@@ -732,8 +756,8 @@ public class Program {
             System.out.println("Всего отработано" + totp.sumHours);
             System.out.println("Всего заработано" + totp.getTotalPay());
 
-            Scanner in = new Scanner(System.in);
-            in.close();
+//            Scanner in = new Scanner(System.in);//TODO
+//            in.close();
         }
         else if (repHour.getUserRole() == UserRole.FREELANCER)
         {
