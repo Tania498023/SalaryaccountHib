@@ -19,7 +19,7 @@ public class Helpers {
         }
     }
 
-    public static final long getMillisecFromDate(LocalDateTime ldt)
+    public static final long getMilliSecFromDate(LocalDateTime ldt)
     {
         //LocalDateTime localDateTime = LocalDateTime.now();
         ZonedDateTime zdt = ZonedDateTime.of(ldt, ZoneId.systemDefault());

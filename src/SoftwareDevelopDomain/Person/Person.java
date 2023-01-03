@@ -51,11 +51,11 @@ public class Person {
         System.out.println("Отчет по сотруднику " + users.getName() + users.getUserRole() + "за период с " + startDates.toString()
                 + "по" + endDates.toString());
         for (TimeRecord item:timeRecords) {
-          //  if((item.getDate() >= startdates) && (item.getDate() <= enddates)){
+          //  if((item.getDate() >= startDates) && (item.getDate() <= endDates)){
             //  TODO realise
 
            // }
-    if(users.getName()== item.getName()){
+    if(users.getName().equals(item.getName())){
     System.out.println(item.getDate().toString() + item.getHours() + item.getMessage());
     sumHours += item.getHours();
 }

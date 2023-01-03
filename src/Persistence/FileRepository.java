@@ -5,15 +5,10 @@ import SoftwareDevelopDomain.Person.User;
 import SoftwareDevelopDomain.Person.UserRole;
 import SoftwareDevelopDomain.TimeRecord;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import javax.management.StringValueExp;
 import java.io.*;
-import java.awt.*;
-import java.lang.annotation.Documented;
 import java.util.*;
-import java.util.List;
 
 import static SoftwareDevelopDomain.Person.UserRole.MANAGER;
 import static SoftwareDevelopDomain.Person.UserRole.valueOf;
@@ -57,7 +52,7 @@ public class FileRepository {
     }
 
     /// Записываем коллекцию TimeRecord в файл согласно роли
-    public void fillFileGeneric(List timeRecords, int roles, boolean genericneedwrite) throws IOException {
+    public void fillFileGeneric(List timeRecords, int roles, boolean genericNeedWrite) throws IOException {
         String newPath = ConvertRoleToPath(roles);
         File file = new File(newPath);
 
@@ -67,7 +62,7 @@ public class FileRepository {
         long size = file.length();
 
 
-        if (!genericneedwrite && size > 0)// TODO
+        if (!genericNeedWrite && size > 0)// TODO
             return;
         FileWriter writer;
         try {
@@ -97,7 +92,7 @@ public class FileRepository {
         if (roles == UserRole.EMPLOYEE.ordinal()) {
             newPath = ".\\Data\\Employee.csv";
         } else if (roles == UserRole.FREELANCER.ordinal()) {
-            newPath = ".\\Data\\Frilanser.csv";
+            newPath = ".\\Data\\Freelancer.csv";
         }
 
         return newPath;
@@ -212,15 +207,15 @@ public class FileRepository {
     }
     // Получаем отчет по сотрудникам с учетом роли
 
-    public List<TimeRecord> reportGet(UserRole userRole, LocalDateTime startdate, LocalDateTime enddate) {
+    public List<TimeRecord> reportGet(UserRole userRole, LocalDateTime startDate, LocalDateTime endDate) {
         var records = readFileGeneric(userRole.ordinal());
 
-        if (startdate == null) {
-            startdate = LocalDateTime.now().minusYears(100);
+        if (startDate == null) {
+            startDate = LocalDateTime.now().minusYears(100);
         }
 
-        if (enddate == null) {
-            enddate = LocalDateTime.now();
+        if (endDate == null) {
+            endDate = LocalDateTime.now();
         }
 
 
@@ -228,8 +223,8 @@ public class FileRepository {
 
         for (var item : records) {
 
-            if (Helpers.getMillisecFromDate(item.getDate()) >= Helpers.getMillisecFromDate(startdate)
-                    && Helpers.getMillisecFromDate(item.getDate()) <= Helpers.getMillisecFromDate(enddate)) {
+            if (Helpers.getMilliSecFromDate(item.getDate()) >= Helpers.getMilliSecFromDate(startDate)
+                    && Helpers.getMilliSecFromDate(item.getDate()) <= Helpers.getMilliSecFromDate(endDate)) {
                 filteredRecord.add(item);
             }
 
@@ -244,7 +239,7 @@ public class FileRepository {
 
         for (var item : rep) {
 
-            if (item.getName() == userName) {
+            if (item.getName().equals(userName)) {
                 filteredRep.add(item);
             }
         }

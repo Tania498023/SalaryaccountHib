@@ -10,7 +10,6 @@ import SoftwareDevelopDomain.Person.User;
 import SoftwareDevelopDomain.Person.UserRole;
 import SoftwareDevelopDomain.TimeRecord;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.io.IOException;
@@ -295,7 +294,7 @@ public class Program {
                 System.out.println("Введенная дата неверная!");
                 continue;
             }
-            if (Helpers.getMillisecFromDate(endDate) < Helpers.getMillisecFromDate(startDate))
+            if (Helpers.getMilliSecFromDate(endDate) < Helpers.getMilliSecFromDate(startDate))
             {
                 System.out.println("Вы  вводите некорректную дату");
             }
@@ -307,10 +306,10 @@ public class Program {
 
         for (var item : HH)
         {
-            if (Helpers.getMillisecFromDate(item.getDate()) >= Helpers.getMillisecFromDate(startDate) && Helpers.getMillisecFromDate(item.getDate()) >= Helpers.getMillisecFromDate(endDate))
+            if (Helpers.getMilliSecFromDate(item.getDate()) >= Helpers.getMilliSecFromDate(startDate) && Helpers.getMilliSecFromDate(item.getDate()) >= Helpers.getMilliSecFromDate(endDate))
 
             {
-                if (item.getName() == polzovatel.getName())
+                if (item.getName().equals(polzovatel.getName()))
                 {
                     System.out.println(item.getDate().toString() + "\t" + item.getName() + "\t" + item.getHours() + "\t" + item.getMessage());
                 }
@@ -348,11 +347,11 @@ public class Program {
             date = LocalDateTime.parse(enterDate);
 
 
-                if (date != LocalDateTime.MIN && Helpers.getMillisecFromDate(date) <= Helpers.getMillisecFromDate(LocalDateTime.now()) && polzovatel.getUserRole() == UserRole.EMPLOYEE)
+                if (date != LocalDateTime.MIN && Helpers.getMilliSecFromDate(date) <= Helpers.getMilliSecFromDate(LocalDateTime.now()) && polzovatel.getUserRole() == UserRole.EMPLOYEE)
                 {
                     addHourWithControlDate(polzovatel, H, date);
                 }
-                else if (date != LocalDateTime.MAX && Helpers.getMillisecFromDate(date) <= Helpers.getMillisecFromDate(LocalDateTime.now()) && Helpers.getMillisecFromDate(date) >= Helpers.getMillisecFromDate(LocalDateTime.now().minusDays(2) )&& polzovatel.getUserRole() == UserRole.FREELANCER)
+                else if (date != LocalDateTime.MAX && Helpers.getMilliSecFromDate(date) <= Helpers.getMilliSecFromDate(LocalDateTime.now()) && Helpers.getMilliSecFromDate(date) >= Helpers.getMilliSecFromDate(LocalDateTime.now().minusDays(2) )&& polzovatel.getUserRole() == UserRole.FREELANCER)
                 {
                     addHourWithControlDate(polzovatel, H, date);
                 }
@@ -529,7 +528,7 @@ public class Program {
                 System.out.println("Вы вводите некорректные данные");
                 continue;
             }
-            if (Helpers.getMillisecFromDate(endDate) < Helpers.getMillisecFromDate(startDate))
+            if (Helpers.getMilliSecFromDate(endDate) < Helpers.getMilliSecFromDate(startDate))
             {
                 System.out.println("Вы  вводите некорректную дату");
 
@@ -553,7 +552,7 @@ public class Program {
 
         for (var workItem : allWorkRep)//перебираем общую коллекцию и каждый ее элемент кладем в переменную workItem
         {
-            if (Helpers.getMillisecFromDate(workItem.getDate()) >= Helpers.getMillisecFromDate(startDate) && Helpers.getMillisecFromDate(workItem.getDate()) <= Helpers.getMillisecFromDate(endDate))//фильтруем дату отчета
+            if (Helpers.getMilliSecFromDate(workItem.getDate()) >= Helpers.getMilliSecFromDate(startDate) && Helpers.getMilliSecFromDate(workItem.getDate()) <= Helpers.getMilliSecFromDate(endDate))//фильтруем дату отчета
                 if (!workMap.containsKey(workItem.getName()))//проверяем наличие Ключа, если его нет
                 {
                     var itemList = new ArrayList<TimeRecord>();
@@ -677,7 +676,7 @@ public class Program {
                 continue;
             }
 
-            if(Helpers.getMillisecFromDate(endDate) < Helpers.getMillisecFromDate(startDate))
+            if(Helpers.getMilliSecFromDate(endDate) < Helpers.getMilliSecFromDate(startDate))
             {
                 System.out.println("Вы  вводите некорректную дату");
             }

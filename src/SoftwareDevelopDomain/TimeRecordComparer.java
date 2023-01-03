@@ -23,7 +23,7 @@ public int GetHashCode(Object obj)
         {
         int hCode;
         //TODO - int это костыль
-        hCode = (int)((TimeRecord)obj).getMillisecs() ^   ((TimeRecord)obj).getMessage().length() ^ ((TimeRecord)obj).getName().length();
+        hCode = (int)((TimeRecord)obj).getMilliSecs() ^   ((TimeRecord)obj).getMessage().length() ^ ((TimeRecord)obj).getName().length();
         return hCode ;
         }
 }

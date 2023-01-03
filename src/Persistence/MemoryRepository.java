@@ -4,7 +4,6 @@ import SoftwareDevelopDomain.Helpers;
 import SoftwareDevelopDomain.Person.User;
 import SoftwareDevelopDomain.Person.UserRole;
 import SoftwareDevelopDomain.TimeRecord;
-import jdk.jshell.spi.ExecutionControl;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -92,8 +91,8 @@ public void addFakeDataUser(){
 ArrayList<TimeRecord> getRep = new ArrayList<TimeRecord>();
         for (var item : records)
         {
-            if((Helpers.getMillisecFromDate(item.getDate()) >= Helpers.getMillisecFromDate(to)
-                    && Helpers.getMillisecFromDate(item.getDate()) <= Helpers.getMillisecFromDate(from))){
+            if((Helpers.getMilliSecFromDate(item.getDate()) >= Helpers.getMilliSecFromDate(to)
+                    && Helpers.getMilliSecFromDate(item.getDate()) <= Helpers.getMilliSecFromDate(from))){
                 getRep.add(item);
             }
 
@@ -106,7 +105,7 @@ ArrayList<TimeRecord> getRep = new ArrayList<TimeRecord>();
         ArrayList<TimeRecord> fakeRepGet = new ArrayList<TimeRecord>();
         for (var item: fakeRep)
         {
-        if(item.getName() == userName)
+        if(item.getName().equals(userName))
         {
             fakeRepGet.add(item);
         }
@@ -147,7 +146,7 @@ ArrayList<TimeRecord> getRep = new ArrayList<TimeRecord>();
     {
         for(var record:Users())
         {
-            if (record.getName() == name)
+            if (record.getName().equals(name))
                 return record;
         }
         return null;
