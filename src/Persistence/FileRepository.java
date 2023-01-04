@@ -40,9 +40,14 @@ public class FileRepository {
 
                 writer.append(userStr);//записываем указанную строку
             }
-            writer.close();
+
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+        finally {
+            if (writer != null) {
+                writer.close();
+            }
         }
 
     }
