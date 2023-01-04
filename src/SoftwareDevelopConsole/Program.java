@@ -413,7 +413,7 @@ public class Program {
             var time = new TimeRecord(date, Us.getName(), H, mas);
             List<TimeRecord> times = new ArrayList<TimeRecord>();
             times.add(time);
-            fill.fillFileGeneric(times, Us.getUserRole().ordinal(), true);
+            fill.fillFileGeneric((ArrayList<TimeRecord>) times, Us.getUserRole().ordinal(), true);
           }
 
 

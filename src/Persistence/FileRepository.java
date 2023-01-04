@@ -52,33 +52,32 @@ public class FileRepository {
     }
 
     /// Записываем коллекцию TimeRecord в файл согласно роли
-    public void fillFileGeneric(List timeRecords, int roles, boolean genericNeedWrite) throws IOException {
+    public void fillFileGeneric(ArrayList<TimeRecord> timeRecords, int roles, boolean genericNeedWrite) throws IOException {
         String newPath = ConvertRoleToPath(roles);
         File file = new File(newPath);
 
         if (!isFileExists(file))
             file.createNewFile();
-
         long size = file.length();
-
 
         if (!genericNeedWrite && size > 0)// TODO
             return;
         FileWriter writer;
         try {
-            File wr = new File(newPath);
-            writer = new FileWriter(wr,true);
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        for (var userRole : timeRecords)//перебираем коллекцию и выбираем из нее элементы
+            writer = new FileWriter(file,true);
+
+        for (Object userRole : timeRecords)//перебираем коллекцию и выбираем из нее элементы
         {
-            var usrRol = (TimeRecord) userRole;
+            TimeRecord usrRol = (TimeRecord) userRole;
             //создаем строку с разделительными символами и переносом строки
             String genericStr = usrRol.getDate() + "," + usrRol.getName() + "," + usrRol.getHours() + "," + usrRol.getMessage() + System.lineSeparator();
 
-            writer.write(genericStr);//записываем указанную строку
+            writer.append(genericStr);//записываем указанную строку
+        }
+        writer.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

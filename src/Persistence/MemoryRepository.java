@@ -14,8 +14,11 @@ public class MemoryRepository  implements IRepository {
 
     private ArrayList<TimeRecord> employees = new ArrayList<TimeRecord>();
 
-    public MemoryRepository( ) {
+    public MemoryRepository() {
         addFakeDataUser();
+        addFakeDataEmployee();
+        addFakeDataFreelancer();
+        addFakeDataManager();
     }
 
     public void addFakeDataEmployee()
