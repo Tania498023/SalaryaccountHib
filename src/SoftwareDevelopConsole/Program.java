@@ -37,15 +37,12 @@ public class Program {
 
     public static void controlRole(FileRepository userReturn) throws IOException//контроль вводимой роли при входе в программу
     {
-
         Scanner inpt;
       do {
           try {
                 System.out.println("Введите ваше имя");
-
                 inpt = new Scanner(System.in);
                 String name = inpt.nextLine();
-
 
                 polzovatel = userReturn.userGet(name);
                 if (polzovatel == null)
@@ -55,12 +52,9 @@ public class Program {
 
                 var tt = e;
             }
-
         }
         while (polzovatel == null);
-
         displayMenu(polzovatel.getUserRole());
-
     }
 
     private static UserRole inputRole() {
@@ -70,7 +64,6 @@ public class Program {
             System.out.println("\n Введите 0, если менеджер \n Введите 1, если сотрудник \n Введите 2, если фрилансер");
             inp = new Scanner(System.in);
             String inputRole = inp.nextLine();
-
 
             {
 
@@ -130,7 +123,6 @@ public class Program {
             actionManager = Integer.parseInt(enterManager);
 
             if (actionManager == 1) {
-
                 addWorker();
                 break;
             } else if (actionManager == 2) {
@@ -167,7 +159,6 @@ public class Program {
 
             inp = new Scanner(System.in);
             String enterEmployee = inp.nextLine();
-
 
             actionEmployee = Integer.parseInt(enterEmployee);
             {
@@ -447,7 +438,7 @@ public class Program {
         var user = new User(userName, IR);
         ArrayList<User> users = new ArrayList<User>();
         users.add(user);
-        fill.fillFileUser(users, true);
+        fill.fillFileUser(users, true);//режим true- введенный пользователь добавляется в файл
 
         Map<UserRole, ArrayList<String>> groupWorkRep = new HashMap<UserRole, ArrayList<String>>();
 
@@ -593,8 +584,8 @@ public class Program {
                 System.out.println("Сотрудник" + sortWork.getKey());
                 totp.printRepPerson();
 
-                System.out.println("Всего отработано {totp.sumhour}");//итоговое время по конкретному сотруднику
-                System.out.println("Всего заработано {totp.TotalPay}");//итоговая зп по конкретному сотруднику
+                System.out.println("Всего отработано" + totp.sumHours);//итоговое время по конкретному сотруднику
+                System.out.println("Всего заработано" + totp.getTotalPay());//итоговая зп по конкретному сотруднику
                 itogHour += totp.sumHours;//итоговое время по всем независимо от роли
                 itogTotalPay += totp.getTotalPay();//итоговая з/п по всем независимо от роли
 

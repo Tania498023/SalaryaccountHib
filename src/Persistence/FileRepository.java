@@ -32,13 +32,13 @@ public class FileRepository {
         FileWriter writer;
         try {
 
-            writer = new FileWriter(file);
+            writer = new FileWriter(file,true);//запись с добавлением строки в конец существующего текста
             for (Object user : users)//перебираем коллекцию и выбираем из нее элементы
             {
                 User usr = (User) user;
                 String userStr = usr.getName() + "," + usr.getUserRole() + System.lineSeparator();//создаем строку с разделительными символами и переносом строки
 
-                writer.write(userStr);//записываем указанную строку
+                writer.append(userStr);//записываем указанную строку
             }
             writer.close();
         } catch (IOException e) {
@@ -67,7 +67,7 @@ public class FileRepository {
         FileWriter writer;
         try {
             File wr = new File(newPath);
-            writer = new FileWriter(wr);
+            writer = new FileWriter(wr,true);
 
         } catch (IOException e) {
             throw new RuntimeException(e);
