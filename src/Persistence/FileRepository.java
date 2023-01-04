@@ -5,7 +5,7 @@ import SoftwareDevelopDomain.Person.User;
 import SoftwareDevelopDomain.Person.UserRole;
 import SoftwareDevelopDomain.TimeRecord;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.io.*;
 import java.util.*;
@@ -200,15 +200,15 @@ public class FileRepository {
     }
     // Получаем отчет по сотрудникам с учетом роли
 
-    public List<TimeRecord> reportGet(UserRole userRole, LocalDateTime startDate, LocalDateTime endDate) {
+    public List<TimeRecord> reportGet(UserRole userRole, LocalDate startDate, LocalDate endDate) {
         var records = readFileGeneric(userRole.ordinal());
 
         if (startDate == null) {
-            startDate = LocalDateTime.now().minusYears(100);
+            startDate = LocalDate.now().minusYears(100);
         }
 
         if (endDate == null) {
-            endDate = LocalDateTime.now();
+            endDate = LocalDate.now();
         }
 
 
@@ -226,7 +226,7 @@ public class FileRepository {
     }
 
     // Получаем отчет по конкретному сотруднику
-    public List<TimeRecord> reportGetByUser(String userName, UserRole userRole, LocalDateTime from, LocalDateTime to) {
+    public List<TimeRecord> reportGetByUser(String userName, UserRole userRole, LocalDate from, LocalDate to) {
         List<TimeRecord> filteredRep = new ArrayList<TimeRecord>();
         var rep = reportGet(userRole, from, to);
 

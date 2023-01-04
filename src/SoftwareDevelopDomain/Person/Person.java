@@ -2,19 +2,19 @@ package SoftwareDevelopDomain.Person;
 
 import SoftwareDevelopDomain.TimeRecord;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.ListIterator;
 
 public class Person {
-    public LocalDateTime startDates;
-    public LocalDateTime endDates;
+    public LocalDate startDates;
+    public LocalDate endDates;
     public int sumHours;
     private static User users;
     private static double totalPays;
     private List<TimeRecord> timeRecords;
 
-    public Person(User user, List<TimeRecord> timeRecord, LocalDateTime startDate, LocalDateTime endDate) {
+    public Person(User user, List<TimeRecord> timeRecord, LocalDate startDate, LocalDate endDate) {
         this.users = user;
         this.timeRecords = timeRecord;
         this.startDates = startDate;

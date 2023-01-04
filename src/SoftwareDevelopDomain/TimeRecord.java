@@ -1,32 +1,32 @@
 package SoftwareDevelopDomain;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class TimeRecord {
-    private LocalDateTime dates;
+    private LocalDate dates;
     private String names;
     private int hours;
     private String messages;
-    public TimeRecord(LocalDateTime date, String name, int hour, String message) {
+    public TimeRecord(LocalDate date, String name, int hour, String message) {
         this.dates = date;
         this.names = name;
         this.hours = hour;
         this.messages = message;
     }
     public TimeRecord(String[] stroka) {
-        dates = LocalDateTime.parse(stroka[0]);
+        dates = LocalDate.parse(stroka[0]);
         names = stroka[1];
         hours = Integer.parseInt(stroka[2]);
         messages = stroka[3];
     }
 
-    public LocalDateTime getDate() {
+    public LocalDate getDate() {
         return dates;
     }
     public long getMilliSecs() {
         return Helpers.getMilliSecFromDate(dates);
     }
-    public void setDate(LocalDateTime date) {
+    public void setDate(LocalDate date) {
         this.dates = date;
     }
     public String getName() {

@@ -4,7 +4,7 @@ import SoftwareDevelopDomain.Settings;
 
 import SoftwareDevelopDomain.TimeRecord;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 public class Staff extends Person {
@@ -17,13 +17,13 @@ public class Staff extends Person {
     }
 
 
-    public Staff(double monthSalary, User user, List<TimeRecord> timeRecord, LocalDateTime startDate, LocalDateTime endDate,double bonus) {
+    public Staff(double monthSalary, User user, List<TimeRecord> timeRecord, LocalDate startDate, LocalDate endDate,double bonus) {
         super(user, timeRecord, startDate, endDate);
         bonuses = bonus;
         monthSalarys = monthSalary;
         raschetTotalPay(user.getName(),timeRecord, startDate,endDate);
     }
-    private void raschetTotalPay(String name, List<TimeRecord> timeRecord,LocalDateTime startDate, LocalDateTime endDate)
+    private void raschetTotalPay(String name, List<TimeRecord> timeRecord,LocalDate startDate, LocalDate endDate)
     {
 
         double payPerHour = monthSalarys/Settings.WORKHOURSINMONTH;

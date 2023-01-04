@@ -2,7 +2,7 @@ package SoftwareDevelopDomain.Person;
 
 import SoftwareDevelopDomain.TimeRecord;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 public class Manager extends Staff {
@@ -20,7 +20,7 @@ public class Manager extends Staff {
 
 
 
-    public Manager(double monthSalary, User user, List<TimeRecord> timeRecord, LocalDateTime startDate, LocalDateTime endDate, double bonus, double monthBonus) {
+    public Manager(double monthSalary, User user, List<TimeRecord> timeRecord, LocalDate startDate, LocalDate endDate, double bonus, double monthBonus) {
         super(monthSalary, user, timeRecord, startDate, endDate, bonus);
         this.monthBonuses = monthBonus;
     }

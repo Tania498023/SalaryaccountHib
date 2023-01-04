@@ -1,8 +1,11 @@
 package SoftwareDevelopDomain;
 
+import java.sql.Time;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.chrono.ChronoLocalDateTime;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class Helpers {
@@ -19,9 +22,13 @@ public class Helpers {
         }
     }
 
-    public static final long getMilliSecFromDate(LocalDateTime ldt)
+    public static final long getMilliSecFromDate(LocalDate ld)
     {
-        //LocalDateTime localDateTime = LocalDateTime.now();
+        //LocalDate преобразовать в LocalDateTime
+
+        var strLd = ld.toString() + "T10:15:30" ;//2007-12-03T10:15:30
+        LocalDateTime ldt = LocalDateTime.parse(strLd);
+
         ZonedDateTime zdt = ZonedDateTime.of(ldt, ZoneId.systemDefault());
         return zdt.toInstant().toEpochMilli();
     }

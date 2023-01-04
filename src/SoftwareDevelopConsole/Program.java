@@ -10,7 +10,8 @@ import SoftwareDevelopDomain.Person.User;
 import SoftwareDevelopDomain.Person.UserRole;
 import SoftwareDevelopDomain.TimeRecord;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalDate;
 import java.util.*;
 import java.io.IOException;
 
@@ -244,8 +245,8 @@ public class Program {
     {
         List<TimeRecord> HH = fill.readFileGeneric(polzovatel.getUserRole().ordinal());//!!!метод вернул коллекцию, сохранили в переменную
 
-        LocalDateTime startDate;
-        LocalDateTime endDate;
+        LocalDate startDate;
+        LocalDate endDate;
         Scanner inp = null;
 
         do
@@ -261,7 +262,7 @@ public class Program {
             }
             if (!(D == null&& D.isEmpty()))
             {
-                startDate = LocalDateTime.parse(D);
+                startDate = LocalDate.parse(D);
 
             }
             else
@@ -281,7 +282,7 @@ public class Program {
             }
             if (!(DD == null&& D.isEmpty()))
             {
-                endDate = LocalDateTime.parse(D);
+                endDate = LocalDate.parse(D);
 
             }
             else
@@ -318,7 +319,7 @@ public class Program {
 
     private static void addHour() throws IOException {
         int H;
-        LocalDateTime date;
+        LocalDate date;
         Scanner inp = null;
         do
         {
@@ -338,14 +339,14 @@ public class Program {
             inp = new Scanner(System.in);
             String enterDate = inp.nextLine();
 
-            date = LocalDateTime.parse(enterDate);
+            date = LocalDate.parse(enterDate);
 
 
-                if (date != LocalDateTime.MIN && Helpers.getMilliSecFromDate(date) <= Helpers.getMilliSecFromDate(LocalDateTime.now()) && polzovatel.getUserRole() == UserRole.EMPLOYEE)
+                if (date != LocalDate.MIN && Helpers.getMilliSecFromDate(date) <= Helpers.getMilliSecFromDate(LocalDate.now()) && polzovatel.getUserRole() == UserRole.EMPLOYEE)
                 {
                     addHourWithControlDate(polzovatel, H, date);
                 }
-                else if (date != LocalDateTime.MAX && Helpers.getMilliSecFromDate(date) <= Helpers.getMilliSecFromDate(LocalDateTime.now()) && Helpers.getMilliSecFromDate(date) >= Helpers.getMilliSecFromDate(LocalDateTime.now().minusDays(2) )&& polzovatel.getUserRole() == UserRole.FREELANCER)
+                else if (date != LocalDate.MAX && Helpers.getMilliSecFromDate(date) <= Helpers.getMilliSecFromDate(LocalDate.now()) && Helpers.getMilliSecFromDate(date) >= Helpers.getMilliSecFromDate(LocalDate.now().minusDays(2) )&& polzovatel.getUserRole() == UserRole.FREELANCER)
                 {
                     addHourWithControlDate(polzovatel, H, date);
                 }
@@ -360,7 +361,7 @@ public class Program {
 
     private static void addWorkerHour() throws IOException {
         User worker;
-        LocalDateTime date;
+        LocalDate date;
 
         Scanner inn ;
         System.out.println("*************************************************");
@@ -383,7 +384,7 @@ public class Program {
 
             if(!(inputDateString == null && inputDateString.isEmpty()))
              {
-                 date = LocalDateTime.parse(inputDateString);
+                 date = LocalDate.parse(inputDateString);//2007-12-03T10:15:30
 
 
             } else {
@@ -403,7 +404,7 @@ public class Program {
         while (true);
 
     }
-         private static void addHourWithControlDate(User Us, int H, LocalDateTime date) throws IOException {
+         private static void addHourWithControlDate(User Us, int H, LocalDate date) throws IOException {
             Scanner inn = null;
             System.out.println("Введите сообщение");
             inn= new Scanner(System.in);
@@ -480,8 +481,8 @@ public class Program {
         menuUp();
     }
     private static void watchWorkerReport() throws IOException {
-        LocalDateTime startDate;
-        LocalDateTime endDate;
+        LocalDate startDate;
+        LocalDate endDate;
         int itogHour = 0;
         double itogTotalPay  = 0;
         Scanner inn = null;
@@ -499,7 +500,7 @@ public class Program {
             if (!(D == null && D.isEmpty()))
             {
 
-                startDate = LocalDateTime.parse(D);
+                startDate = LocalDate.parse(D);
             }
             else
             {
@@ -518,7 +519,7 @@ public class Program {
             if (!(DD == null && D.isEmpty()))
             {
 
-                endDate = LocalDateTime.parse(DD);
+                endDate = LocalDate.parse(DD);
             }
             else
             {
@@ -630,8 +631,8 @@ public class Program {
     }
 
     private static void watchWorkerHour() throws IOException {
-        LocalDateTime startDate;
-        LocalDateTime endDate;
+        LocalDate startDate;
+        LocalDate endDate;
         Scanner inn = null;
         do
         {
@@ -647,7 +648,7 @@ public class Program {
             }
             if(!(enterStartDate == null && enterStartDate.isEmpty()))
             {
-                startDate = LocalDateTime.parse(enterStartDate);
+                startDate = LocalDate.parse(enterStartDate);
             }
             else
             {
@@ -665,7 +666,7 @@ public class Program {
             }
             if (!(enterEndDate == null && enterEndDate.isEmpty()))
             {
-                endDate = LocalDateTime.parse(enterEndDate);
+                endDate = LocalDate.parse(enterEndDate);
             }
             else
             {

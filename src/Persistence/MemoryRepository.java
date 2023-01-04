@@ -5,7 +5,7 @@ import SoftwareDevelopDomain.Person.User;
 import SoftwareDevelopDomain.Person.UserRole;
 import SoftwareDevelopDomain.TimeRecord;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import static SoftwareDevelopDomain.Person.UserRole.*;
@@ -20,26 +20,26 @@ public class MemoryRepository  implements IRepository {
 
     public void addFakeDataEmployee()
     {
-        employees.add(new TimeRecord(LocalDateTime.now().minusDays(3),"Иванов",8,"test message 1"));
-        employees.add(new TimeRecord(LocalDateTime.now().minusDays(3),"Васильев",8,"test message 2"));
-        employees.add(new TimeRecord(LocalDateTime.now().minusDays(2),"Иванов",10,"test message 3"));
-        employees.add(new TimeRecord(LocalDateTime.now().minusDays(2),"Васильев",8,"test message 4"));
+        employees.add(new TimeRecord(LocalDate.now().minusDays(3),"Иванов",8,"test message 1"));
+        employees.add(new TimeRecord(LocalDate.now().minusDays(3),"Васильев",8,"test message 2"));
+        employees.add(new TimeRecord(LocalDate.now().minusDays(2),"Иванов",10,"test message 3"));
+        employees.add(new TimeRecord(LocalDate.now().minusDays(2),"Васильев",8,"test message 4"));
 
     };
     private ArrayList<TimeRecord> freelancer = new ArrayList<TimeRecord>();
     public void addFakeDataFreelancer()
     {
-        freelancer.add(new TimeRecord(LocalDateTime.now().minusDays(3),"Смит",8,"test message 1"));
-        freelancer.add(new TimeRecord(LocalDateTime.now().minusDays(3),"Бонд",8,"test message 2"));
-        freelancer.add(new TimeRecord(LocalDateTime.now().minusDays(2),"Смит",10,"test message 3"));
-        freelancer.add(new TimeRecord(LocalDateTime.now().minusDays(2),"Бонд",8,"test message 4"));
+        freelancer.add(new TimeRecord(LocalDate.now().minusDays(3),"Смит",8,"test message 1"));
+        freelancer.add(new TimeRecord(LocalDate.now().minusDays(3),"Бонд",8,"test message 2"));
+        freelancer.add(new TimeRecord(LocalDate.now().minusDays(2),"Смит",10,"test message 3"));
+        freelancer.add(new TimeRecord(LocalDate.now().minusDays(2),"Бонд",8,"test message 4"));
 
     };
 
     private ArrayList<TimeRecord> manager = new ArrayList<TimeRecord>();
     public void addFakeDataManager(){
-        manager.add(new TimeRecord(LocalDateTime.now().minusDays(3),"Береговой",8,"test message 1"));
-        manager.add(new TimeRecord(LocalDateTime.now().minusDays(2),"Береговой",10,"test message 2"));
+        manager.add(new TimeRecord(LocalDate.now().minusDays(3),"Береговой",8,"test message 1"));
+        manager.add(new TimeRecord(LocalDate.now().minusDays(2),"Береговой",10,"test message 2"));
     }
 
     private ArrayList<User> users = new ArrayList<User>();
@@ -63,7 +63,7 @@ public void addFakeDataUser(){
         return manager;
     }
 
-    public ArrayList<TimeRecord> reportGet(UserRole userRole, LocalDateTime from, LocalDateTime to)
+    public ArrayList<TimeRecord> reportGet(UserRole userRole, LocalDate from, LocalDate to)
     {
         var records = new ArrayList<TimeRecord>();
         switch (userRole)
@@ -82,11 +82,11 @@ public void addFakeDataUser(){
         }
         if(from == null)
         {
-            from = LocalDateTime.now().minusYears(100);
+            from = LocalDate.now().minusYears(100);
         }
         if(to == null)
         {
-            to = LocalDateTime.now();
+            to = LocalDate.now();
         }
 ArrayList<TimeRecord> getRep = new ArrayList<TimeRecord>();
         for (var item : records)
@@ -99,7 +99,7 @@ ArrayList<TimeRecord> getRep = new ArrayList<TimeRecord>();
         }
         return getRep;
     }
-    public ArrayList<TimeRecord> reportGetByUser(String userName, UserRole userRole, LocalDateTime from , LocalDateTime to)
+    public ArrayList<TimeRecord> reportGetByUser(String userName, UserRole userRole, LocalDate from , LocalDate to)
     {
         var fakeRep = reportGet(userRole, from, to);
         ArrayList<TimeRecord> fakeRepGet = new ArrayList<TimeRecord>();

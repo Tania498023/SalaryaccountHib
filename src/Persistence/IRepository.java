@@ -4,7 +4,7 @@ import SoftwareDevelopDomain.Person.User;
 import SoftwareDevelopDomain.Person.UserRole;
 import SoftwareDevelopDomain.TimeRecord;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public interface IRepository {
@@ -13,8 +13,8 @@ public interface IRepository {
     User userGet(String name);
 
     void timeRecordAdd(UserRole userRole, TimeRecord timeRecord);
-    ArrayList<TimeRecord> reportGet (UserRole userRole, LocalDateTime from, LocalDateTime to);
-    ArrayList<TimeRecord> reportGetByUser(String userName, UserRole userRole, LocalDateTime from, LocalDateTime to);
+    ArrayList<TimeRecord> reportGet (UserRole userRole, LocalDate from, LocalDate to);
+    ArrayList<TimeRecord> reportGetByUser(String userName, UserRole userRole, LocalDate from, LocalDate to);
 
     ArrayList<TimeRecord> employees();
     ArrayList<TimeRecord> manager();
