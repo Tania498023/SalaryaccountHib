@@ -29,7 +29,7 @@ public class FileRepository {
         if (!userNeedWrite && size > 0) //TODO true для рабочего(не фейкового файла)
             return;
 
-        FileWriter writer;
+        FileWriter writer = null;
         try {
 
             writer = new FileWriter(file,true);//запись с добавлением строки в конец существующего текста
@@ -62,23 +62,23 @@ public class FileRepository {
 
         if (!genericNeedWrite && size > 0)// TODO
             return;
-        FileWriter writer;
+        FileWriter writer = null;
         try {
-
-            writer = new FileWriter(file,true);
-
-        for (Object userRole : timeRecords)//перебираем коллекцию и выбираем из нее элементы
-        {
-            TimeRecord usrRol = (TimeRecord) userRole;
-            //создаем строку с разделительными символами и переносом строки
-            String genericStr = usrRol.getDate() + "," + usrRol.getName() + "," + usrRol.getHours() + "," + usrRol.getMessage() + System.lineSeparator();
-
-            writer.append(genericStr);//записываем указанную строку
-        }
-        writer.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+                writer = new FileWriter(file,true);
+                for (var userRole : timeRecords)//перебираем коллекцию и выбираем из нее элементы
+                {
+                    var usrRol = (TimeRecord) userRole;
+                    //создаем строку с разделительными символами и переносом строки
+                    String genericStr = usrRol.getDate() + "," + usrRol.getName() + "," + usrRol.getHours() + "," + usrRol.getMessage() + System.lineSeparator();
+                    writer.append(genericStr);//записываем указанную строку
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }finally {
+                if (writer != null) {
+                    writer.close();
+                }
+            }
     }
 
     /// Конвертируем тип int(роль) в string(путь к файлу)
