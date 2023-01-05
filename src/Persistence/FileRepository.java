@@ -6,7 +6,6 @@ import SoftwareDevelopDomain.Person.UserRole;
 import SoftwareDevelopDomain.TimeRecord;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.io.*;
 import java.util.*;
 
@@ -85,6 +84,41 @@ public class FileRepository {
                 }
             }
     }
+    public void fillFileGeneric(HashMap<UserRole,ArrayList<TimeRecord>> timeRecords, int roles, boolean genericNeedWrite) throws IOException {
+
+        var keys = timeRecords.keySet();
+        for(var curKey : keys)
+        {
+            String newPath = ConvertRoleToPath(curKey.ordinal());
+            File file = new File(newPath);
+            if (!isFileExists(file))
+                file.createNewFile();
+        long size = file.length();
+
+        if (!genericNeedWrite && size > 0)// TODO
+            return;
+        FileWriter writer = null;
+           try {
+               writer = new FileWriter(file,true);
+               for (var ur : timeRecords.get(curKey))//перебираем коллекцию и выбираем из нее элементы
+               {
+                   //создаем строку с разделительными символами и переносом строки
+                   String genericStr = ur.getDate() + "," + ur.getName() + "," + ur.getHours() + "," + ur.getMessage() + System.lineSeparator();
+                   writer.append(genericStr);//записываем указанную строку
+
+               }
+           }
+           catch (IOException e){
+               throw new RuntimeException(e);
+           }
+           finally {
+               if (writer != null) {
+                   writer.close();
+               }
+           }
+        }
+
+    }
 
     /// Конвертируем тип int(роль) в string(путь к файлу)
     private static String ConvertRoleToPath(int roles) {
@@ -158,37 +192,35 @@ public class FileRepository {
     }
 
     // Считывает все строки файла согласно роли
-    public List<TimeRecord> readFileGeneric(int roles) {
+    public List<TimeRecord> readFileGeneric(int roles) throws FileNotFoundException {
         String newPath = ConvertRoleToPath(roles);
         File file = new File(newPath);
 
         if (!isFileExists(file))
             return null;
         List<TimeRecord> generic = new ArrayList<TimeRecord>();
+        Scanner sc = new Scanner(new File(newPath));
+        List<String> lines = new ArrayList<String>();
+        while (sc.hasNextLine())
+        {
+        lines.add(sc.nextLine());
+        }
+        String[] str = lines.toArray(new String[0]);
+        for (var stroka :str)
+        {
+        if (str!= null || str.length>0)
+        {
+            var plitedStroka = stroka.split(",");
+            var user = new TimeRecord(plitedStroka);//создали  объект
 
-        try {
-
-            FileReader fr = new FileReader(file);
-            BufferedReader reader = new BufferedReader(fr);
-
-            var str = reader.readLine();
-
-            while (str != null) {
-
-                str = reader.readLine();
-                var plitedStroka = str.split(",");
-
-                var user = new TimeRecord(plitedStroka);//создали  объект
-
+            if (user != null){
                 generic.add(user);// добавили объект в коллекцию
             }
-        } catch (FileNotFoundException e) {
-
-        } catch (IOException e) {
-
         }
+        }
+
         return generic;
-    }
+        }
 
     // Получаем имя пользователя и возвращаем коллекцию User
 
@@ -204,7 +236,7 @@ public class FileRepository {
     }
     // Получаем отчет по сотрудникам с учетом роли
 
-    public List<TimeRecord> reportGet(UserRole userRole, LocalDate startDate, LocalDate endDate) {
+    public List<TimeRecord> reportGet(UserRole userRole, LocalDate startDate, LocalDate endDate) throws FileNotFoundException {
         var records = readFileGeneric(userRole.ordinal());
 
         if (startDate == null) {
@@ -230,7 +262,7 @@ public class FileRepository {
     }
 
     // Получаем отчет по конкретному сотруднику
-    public List<TimeRecord> reportGetByUser(String userName, UserRole userRole, LocalDate from, LocalDate to) {
+    public List<TimeRecord> reportGetByUser(String userName, UserRole userRole, LocalDate from, LocalDate to) throws FileNotFoundException {
         List<TimeRecord> filteredRep = new ArrayList<TimeRecord>();
         var rep = reportGet(userRole, from, to);
 

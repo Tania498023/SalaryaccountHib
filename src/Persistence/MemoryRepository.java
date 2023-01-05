@@ -6,7 +6,7 @@ import SoftwareDevelopDomain.Person.UserRole;
 import SoftwareDevelopDomain.TimeRecord;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.*;
 
 import static SoftwareDevelopDomain.Person.UserRole.*;
 
@@ -19,6 +19,22 @@ public class MemoryRepository  implements IRepository {
         addFakeDataEmployee();
         addFakeDataFreelancer();
         addFakeDataManager();
+        fillGeneric();
+    }
+    private void fillGeneric()
+    {
+        for (var user:employees)
+        {
+           sortGenerics(EMPLOYEE, user);
+        }
+        for (var user : freelancer)
+        {
+            sortGenerics(FREELANCER, user);
+        }
+        for (var user : manager)
+        {
+            sortGenerics(MANAGER, user);
+        }
     }
 
     public void addFakeDataEmployee()
@@ -156,14 +172,62 @@ ArrayList<TimeRecord> getRep = new ArrayList<TimeRecord>();
     }
     public ArrayList<User> Users()//возвращаем  List<User>
     {
-
         return users;
+    }
+    public void sortGenerics(UserRole userRole, TimeRecord timeRecord)
+    {
+        switch (userRole)
+        {
+            case MANAGER:
+                if (!generic.containsKey(MANAGER))
+                {
+                    var itemsList = new ArrayList<TimeRecord>();
+                    itemsList.add(timeRecord);
+                    generic.put(MANAGER, itemsList);
 
+                }
+                else {
+                    var it  = generic.get(userRole);
+                    if(!it.contains(userRole))
+                     it.add(timeRecord);
+                }
+
+                break;
+            case EMPLOYEE:
+                if (!generic.containsKey(EMPLOYEE))
+                {
+                    var itemsList = new ArrayList<TimeRecord>();
+                    itemsList.add(timeRecord);
+                    generic.put(EMPLOYEE, itemsList);
+
+                }
+                else {
+                    var it  = generic.get(userRole);
+                    if(!it.contains(userRole))
+                        it.add(timeRecord);
+                }
+                break;
+            case FREELANCER:
+                if (!generic.containsKey(FREELANCER))
+                {
+                    var itemsList = new ArrayList<TimeRecord>();
+                    itemsList.add(timeRecord);
+                    generic.put(FREELANCER, itemsList);
+
+                }
+                else {
+                    var it  = generic.get(userRole);
+                    if(!it.contains(userRole))
+                        it.add(timeRecord);
+                }
+                break;
+
+        }
     }
 
+    public HashMap<UserRole, ArrayList<TimeRecord>> generic = new HashMap<UserRole, ArrayList<TimeRecord>>();
 
-    public ArrayList<TimeRecord> generic = new ArrayList<TimeRecord>();
-    public ArrayList<TimeRecord> Generic()
+    public HashMap<UserRole, ArrayList<TimeRecord>> Generic()
     {
         return generic;
 

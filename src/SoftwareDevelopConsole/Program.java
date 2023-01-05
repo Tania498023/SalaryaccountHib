@@ -10,6 +10,7 @@ import SoftwareDevelopDomain.Person.User;
 import SoftwareDevelopDomain.Person.UserRole;
 import SoftwareDevelopDomain.TimeRecord;
 
+import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.time.LocalDate;
 import java.util.*;
@@ -29,7 +30,7 @@ public class Program {
 
 
         var genericReturn = new MemoryRepository();
-        fill.fillFileGeneric(genericReturn.Generic(), userRole, false);
+        fill.fillFileGeneric( genericReturn.Generic(), userRole, false);
 
         var text = fill.readFileUser();
 
@@ -241,8 +242,7 @@ public class Program {
         menuUp();
     }
 
-    private static void watchHour()
-    {
+    private static void watchHour() throws FileNotFoundException {
         List<TimeRecord> HH = fill.readFileGeneric(polzovatel.getUserRole().ordinal());//!!!метод вернул коллекцию, сохранили в переменную
 
         LocalDate startDate;
