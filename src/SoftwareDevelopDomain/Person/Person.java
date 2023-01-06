@@ -11,7 +11,7 @@ public class Person {
     public LocalDate endDates;
     public int sumHours;
     private static User users;
-    private static double totalPays;
+    protected static double totalPays;
     private List<TimeRecord> timeRecords;
 
     public Person(User user, List<TimeRecord> timeRecord, LocalDate startDate, LocalDate endDate) {

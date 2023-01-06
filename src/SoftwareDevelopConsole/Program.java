@@ -573,13 +573,12 @@ public class Program {
 
             var HH = sortWork.getValue();//значение из словаря положили в переменную HH
 
-            double monthSalary = 0;
+
             double bonus = 0;
-            double monthBonus = 0;
 
             if (repHour.getUserRole() == UserRole.MANAGER)//проверяем роль через имя
             {
-                var totp = new Manager(monthSalary,repHour, HH, startDate, endDate,bonus,monthBonus);//создаем новый экземпляр типа Manager
+                var totp = new Manager( repHour, HH, startDate, endDate,bonus );//создаем новый экземпляр типа Manager
                 System.out.println("");
                 System.out.println("--------------------------------------");
                 System.out.println("Сотрудник" + sortWork.getKey());
@@ -594,7 +593,7 @@ public class Program {
             }
             else if (repHour.getUserRole() == UserRole.EMPLOYEE)
             {
-                var totp = new Employee(monthSalary,repHour, HH, startDate, endDate,bonus);
+                var totp = new Employee( repHour, HH, startDate, endDate,bonus);
                 System.out.println("");
                 System.out.println("--------------------------------------");
                 System.out.println("Сотрудник" + sortWork.getKey());
@@ -685,9 +684,7 @@ public class Program {
 
 
         User repHour;
-        double monthSalary = 0;
         double bonus = 0;
-        double monthBonus = 0;
         Scanner inp = null;
         do
         {
@@ -716,7 +713,7 @@ public class Program {
         if (repHour.getUserRole() == UserRole.MANAGER)
         {
 
-            var totp = new Manager(monthSalary,repHour, HH, startDate, endDate, bonus, monthBonus);
+            var totp = new Manager(repHour, HH, startDate, endDate, bonus );
             totp.printRepPerson();
             System.out.println("Всего отработано" + totp.sumHours);
             System.out.println("Всего заработано" + totp.getTotalPay());
@@ -726,7 +723,7 @@ public class Program {
 
         else if (repHour.getUserRole() == UserRole.EMPLOYEE)
         {
-            var totp = new Employee(monthSalary,repHour, HH, startDate, endDate,bonus);
+            var totp = new Employee( repHour, HH, startDate, endDate,bonus);
             totp.printRepPerson();
             System.out.println("Всего отработано" + totp.sumHours);
             System.out.println("Всего заработано" + totp.getTotalPay());
