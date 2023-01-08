@@ -9,9 +9,7 @@ import SoftwareDevelopDomain.Person.Manager;
 import SoftwareDevelopDomain.Person.User;
 import SoftwareDevelopDomain.Person.UserRole;
 import SoftwareDevelopDomain.TimeRecord;
-
 import java.io.FileNotFoundException;
-import java.time.LocalDate;
 import java.time.LocalDate;
 import java.util.*;
 import java.io.IOException;
@@ -80,9 +78,8 @@ public class Program {
                     break;
                 } else
                     System.out.println("Вы ввели несуществующую роль");
-
             }
-        } while (enterUser.ordinal() < UserRole.MANAGER.ordinal() || enterUser.ordinal() > UserRole.FREELANCER.ordinal());
+        } while (true);
 
          return enterUser;
     }
@@ -109,7 +106,7 @@ public class Program {
     }
 
     private static void showManagerMenu() throws IOException {
-        int actionManager;
+        int actionManager = 0;
         Scanner inp;
         do {
             System.out.println("Выберите действие  \n " +
@@ -117,13 +114,17 @@ public class Program {
                     "Введите 2, если вы хотите добавить время сотруднику \n " +
                     "Введите 3, если вы хотите посмотреть отчет по всем сотрудникам (возможность выбрать период) \n " +
                     "Введите 4, если вы хотите посмотреть часы работы сотрудника \n " +
-                    "Введите 0, если вы хотите выйти из программы");
+                    "Введите 5, если вы хотите выйти из программы");
+        try {
 
-            inp = new Scanner(System.in);
-            String enterManager = inp.nextLine();
+                    inp = new Scanner(System.in);
+                    String enterManager = inp.nextLine();
+                    actionManager = Integer.parseInt(enterManager);
+        }
+        catch (Exception e){
+            System.out.println("Неверный формат данных");
 
-            actionManager = Integer.parseInt(enterManager);
-
+        }
             if (actionManager == 1) {
                 addWorker();
                 break;
@@ -131,52 +132,48 @@ public class Program {
                 addWorkerHour();
                 break;
             } else if (actionManager == 3) {
-
                 watchWorkerReport();
                 break;
             } else if (actionManager == 4) {
-
                 watchWorkerHour();
                 break;
-            } else if (actionManager == 0) {
-
+            } else  if (actionManager == 5){
+            System.out.println("Вы вышли из приложения!");
                System.exit(0);
 
                 break;
-            } else
-                System.out.println("Вы выбрали несуществующее действие");
+            }
 
         }
 
-        while ((actionManager < 1 || actionManager > 4) && actionManager != 0);
+        while (true);
        }
 
     private static void showEmployeeMenu() throws IOException {
-        int actionEmployee;
-        Scanner inp = null;
+        int actionEmployee = 0;
+        Scanner inp;
         do {
             System.out.println("Выберите действие  \n " +
                     "Введите 1, если вы хотите ввести часы \n " +
                     "Введите 2, если вы хотите просмотреть часы");
+        try {
 
-            inp = new Scanner(System.in);
-            String enterEmployee = inp.nextLine();
-
-            actionEmployee = Integer.parseInt(enterEmployee);
-            {
-
+                    inp = new Scanner(System.in);
+                    String enterEmployee = inp.nextLine();
+                    actionEmployee = Integer.parseInt(enterEmployee);
+        }
+        catch (Exception e){
+            System.out.println("Вы ввели неверный формат!");
+        }
                 if (actionEmployee == 1) {
                     addStaffHour();
                     break;
                 } else if (actionEmployee == 2) {
                     watchStaffHour();
                     break;
-                } else
-                    System.out.println("Вы выбрали несуществующее действие");
-            }
+                }
         }
-
-        while (actionEmployee < 1 || actionEmployee > 2);
+        while (true);
       }
 
     private static void showFreelancerMenu() throws IOException {
@@ -204,37 +201,43 @@ public class Program {
             }
         }
 
-        while (actionFreelancer < 1 || actionFreelancer > 2);
+        while (true);
 
     }
 
     private static void menuUp() throws IOException {
-        int choice;
+        int choice =0;
+
         Scanner inp = null;
         System.out.println("Выберите действие  \n " +
                 "Введите 1, если вы хотите продолжить \n " +
-                "Введите 2, если вы хотите выйти из меню");
-
+                "Введите любое значение, если вы хотите выйти из меню");
+        try {
         inp = new Scanner(System.in);
         String enterChoice = inp.nextLine();
         choice = Integer.parseInt(enterChoice);
-
-        if (choice == 1) {
-            if (polzovatel.getUserRole() == UserRole.MANAGER) {
-                showManagerMenu();
-            }
-            if (polzovatel.getUserRole() == UserRole.FREELANCER) {
-                showFreelancerMenu();
-            }
-            if (polzovatel.getUserRole() == UserRole.EMPLOYEE) {
-                showEmployeeMenu();
-            }
-
-        } else if (choice == 2) {
+        }
+        catch (Exception e){
+            System.out.println("Неверный формат данных");
             System.exit(0);
-        } else
-            System.out.println("Вы выбрали несуществующее действие");
-        System.exit(0);
+
+        }
+              if (choice == 1) {
+                if (polzovatel.getUserRole() == UserRole.MANAGER) {
+                    showManagerMenu();
+                }
+                if (polzovatel.getUserRole() == UserRole.FREELANCER) {
+                    showFreelancerMenu();
+                }
+                if (polzovatel.getUserRole() == UserRole.EMPLOYEE) {
+                    showEmployeeMenu();
+                }
+
+      System.exit(0);
+            } else
+               System.out.println("Работа завершена");
+
+            System.exit(0);
 
     }
     private static void watchStaffHour() throws IOException {

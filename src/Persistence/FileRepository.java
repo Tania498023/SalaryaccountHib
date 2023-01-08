@@ -10,7 +10,7 @@ import java.io.*;
 import java.util.*;
 
 import static SoftwareDevelopDomain.Person.UserRole.MANAGER;
-import static SoftwareDevelopDomain.Person.UserRole.valueOf;
+
 
 
 public class FileRepository {
@@ -41,7 +41,7 @@ public class FileRepository {
             }
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
+
         }
         finally {
             if (writer != null) {
@@ -77,7 +77,7 @@ public class FileRepository {
                     writer.append(genericStr);//записываем указанную строку
                 }
             } catch (IOException e) {
-                throw new RuntimeException(e);
+
             }finally {
                 if (writer != null) {
                     writer.close();
@@ -109,7 +109,7 @@ public class FileRepository {
                }
            }
            catch (IOException e){
-               throw new RuntimeException(e);
+
            }
            finally {
                if (writer != null) {
@@ -246,7 +246,6 @@ public class FileRepository {
         if (endDate == null) {
             endDate = LocalDate.now();
         }
-
 
         List<TimeRecord> filteredRecord = new ArrayList<TimeRecord>();
 
