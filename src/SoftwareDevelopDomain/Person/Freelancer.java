@@ -19,7 +19,7 @@ public class Freelancer extends Person {
                 {
                 totalPay += Settings.PAYPERHOUR * timeRecords.getHours();
                 }
-          double totalPays = totalPay;
+           totalPays = totalPay;
         }
     }
 }

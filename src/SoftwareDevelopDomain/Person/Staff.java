@@ -1,5 +1,6 @@
 package SoftwareDevelopDomain.Person;
 
+import SoftwareDevelopDomain.Helpers;
 import SoftwareDevelopDomain.Settings;
 
 import SoftwareDevelopDomain.TimeRecord;
@@ -17,7 +18,7 @@ public class Staff extends Person {
     }
 
 
-    public Staff(double monthSalary, User user, List<TimeRecord> timeRecord, LocalDate startDate, LocalDate endDate, double bonus) {
+    public Staff(double monthSalary, User user, List<TimeRecord> timeRecord, LocalDate startDate, LocalDate endDate,double bonus) {
         super(user, timeRecord, startDate, endDate);
         bonuses = bonus;
         monthSalarys = monthSalary;
@@ -32,8 +33,8 @@ public class Staff extends Person {
 
 
         for (var timeRecordses : timeRecord) {
-            if (name.equals(timeRecordses.getName())) // перепроверить equals(==)!!!!!!!!!!!!!
-                // if (timeRecord.getDate()>=starDate&&timeRecord.getDate()<=endDate) TODO !!!!!!!!!!!!!
+            if (name.equals(timeRecordses.getName()))
+                 if (Helpers.getMilliSecFromDate(timeRecordses.getDate())>=Helpers.getMilliSecFromDate(startDate)&&Helpers.getMilliSecFromDate(timeRecordses.getDate())<=Helpers.getMilliSecFromDate(endDate))
                 if (timeRecordses.getHours() <= Settings.WORKHOURSINDAY) {
                     totalPay += payPerHour * timeRecordses.getHours();
                     totalHours += timeRecordses.getHours();

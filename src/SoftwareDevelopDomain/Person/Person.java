@@ -1,5 +1,6 @@
 package SoftwareDevelopDomain.Person;
 
+import SoftwareDevelopDomain.Helpers;
 import SoftwareDevelopDomain.TimeRecord;
 
 import java.time.LocalDate;
@@ -48,13 +49,13 @@ public class Person {
 
 
     public void printRepPerson(){
-        System.out.println("Отчет по сотруднику " + users.getName() + users.getUserRole() + "за период с " + startDates.toString()
-                + "по" + endDates.toString());
+        System.out.println("Отчет по сотруднику \t" + users.getName() + "\t" + users.getUserRole() + "\t за период с \t " + startDates.toString()
+                + "\t по" +"\t" + endDates.toString());
         for (TimeRecord item:timeRecords) {
-          //  if((item.getDate() >= startDates) && (item.getDate() <= endDates)){
-            //  TODO realise
+           if((Helpers.getMilliSecFromDate(item.getDate()) >= Helpers.getMilliSecFromDate(startDates)) && (Helpers.getMilliSecFromDate(item.getDate()) <= Helpers.getMilliSecFromDate(endDates))){
 
-           // }
+
+           }
     if(users.getName().equals(item.getName())){
     System.out.println(item.getDate().toString() + item.getHours() + item.getMessage());
     sumHours += item.getHours();

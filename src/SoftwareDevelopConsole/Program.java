@@ -578,14 +578,14 @@ public class Program {
 
             if (repHour.getUserRole() == UserRole.MANAGER)//проверяем роль через имя
             {
-                var totp = new Manager( repHour, HH, startDate, endDate,bonus );//создаем новый экземпляр типа Manager
+                var totp = new Manager( repHour, HH, startDate, endDate);//создаем новый экземпляр типа Manager
                 System.out.println("");
                 System.out.println("--------------------------------------");
-                System.out.println("Сотрудник" + sortWork.getKey());
+                System.out.println("Сотрудник \t" + sortWork.getKey());
                 totp.printRepPerson();
 
-                System.out.println("Всего отработано" + totp.sumHours);//итоговое время по конкретному сотруднику
-                System.out.println("Всего заработано" + totp.getTotalPay());//итоговая зп по конкретному сотруднику
+                System.out.println("Всего отработано \t" + totp.sumHours);//итоговое время по конкретному сотруднику
+                System.out.println("Всего заработано \t" + totp.getTotalPay());//итоговая зп по конкретному сотруднику
                 itogHour += totp.sumHours;//итоговое время по всем независимо от роли
                 itogTotalPay += totp.getTotalPay();//итоговая з/п по всем независимо от роли
 
@@ -596,11 +596,11 @@ public class Program {
                 var totp = new Employee( repHour, HH, startDate, endDate,bonus);
                 System.out.println("");
                 System.out.println("--------------------------------------");
-                System.out.println("Сотрудник" + sortWork.getKey());
+                System.out.println("Сотрудник \t" + sortWork.getKey());
                 totp.printRepPerson();
 
-                System.out.println("Всего отработано" + totp.sumHours);
-                System.out.println("Всего заработано" + totp.getTotalPay());
+                System.out.println("Всего отработано \t" + totp.sumHours);
+                System.out.println("Всего заработано \t" + totp.getTotalPay());
                 itogHour += totp.sumHours;
                 itogTotalPay += totp.getTotalPay();
 
@@ -610,11 +610,11 @@ public class Program {
                 var totp = new Freelancer(repHour, HH, startDate, endDate);
                 System.out.println("");
                 System.out.println("--------------------------------------");
-                System.out.println("Сотрудник" + sortWork.getKey());
+                System.out.println("Сотрудник \t" + sortWork.getKey());
                 totp.printRepPerson();
 
-                System.out.println("Всего отработано" + totp.sumHours);
-                System.out.println("Всего заработано" + totp.getTotalPay());
+                System.out.println("Всего отработано \t" + totp.sumHours);
+                System.out.println("Всего заработано \t" + totp.getTotalPay());
                 itogHour += totp.sumHours;
                 itogTotalPay += totp.getTotalPay();
 
@@ -623,8 +623,8 @@ public class Program {
         }
         System.out.println("");
         System.out.println("--------------------------------------");
-        System.out.println("Всего отработано" + itogHour);
-        System.out.println("Всего заработано" + itogTotalPay);
+        System.out.println("Всего отработано \t" + itogHour);
+        System.out.println("Всего заработано \t" + itogTotalPay);
 
         menuUp();
     }
@@ -713,10 +713,10 @@ public class Program {
         if (repHour.getUserRole() == UserRole.MANAGER)
         {
 
-            var totp = new Manager(repHour, HH, startDate, endDate, bonus );
+            var totp = new Manager(repHour, HH, startDate, endDate);
             totp.printRepPerson();
-            System.out.println("Всего отработано" + totp.sumHours);
-            System.out.println("Всего заработано" + totp.getTotalPay());
+            System.out.println("Всего отработано \t" + totp.sumHours);
+            System.out.println("Всего заработано \t" + totp.getTotalPay());
 
 //            Scanner in = new Scanner(System.in);//TODO
         }
@@ -725,8 +725,8 @@ public class Program {
         {
             var totp = new Employee( repHour, HH, startDate, endDate,bonus);
             totp.printRepPerson();
-            System.out.println("Всего отработано" + totp.sumHours);
-            System.out.println("Всего заработано" + totp.getTotalPay());
+            System.out.println("Всего отработано \t" + totp.sumHours);
+            System.out.println("Всего заработано \t" + totp.getTotalPay());
 
 //            Scanner in = new Scanner(System.in);//TODO
         }
@@ -734,8 +734,8 @@ public class Program {
         {
             var totp = new Freelancer(repHour, HH, startDate, endDate);
             totp.printRepPerson();
-            System.out.println("Всего отработано" + totp.sumHours);
-            System.out.println("Всего заработано" +  totp.getTotalPay());
+            System.out.println("Всего отработано \t" + totp.sumHours);
+            System.out.println("Всего заработано \t" +  totp.getTotalPay());
 
 
         }
