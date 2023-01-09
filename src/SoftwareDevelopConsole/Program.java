@@ -177,18 +177,21 @@ public class Program {
       }
 
     private static void showFreelancerMenu() throws IOException {
-        int actionFreelancer;
+        int actionFreelancer = 0;
         Scanner inp = null;
         do {
             System.out.println("Выберите действие  \n " +
                     "Введите 1, если вы хотите ввести часы \n " +
                     "Введите 2, если вы хотите просмотреть часы");
+            try {
+
             inp = new Scanner(System.in);
             String enterFreelancer = inp.nextLine();
-
             actionFreelancer = Integer.parseInt(enterFreelancer);
-
-            {
+            }
+            catch (Exception e) {
+                System.out.println("Вы ввели неверный формат!");
+            }
 
                 if (actionFreelancer == 1) {
                     addStaffHour();
@@ -196,48 +199,52 @@ public class Program {
                 } else if (actionFreelancer == 2) {
                     watchStaffHour();
                     break;
-                } else
-                    System.out.println("Вы выбрали несуществующее действие");
-            }
+                }
+
         }
-
         while (true);
-
     }
 
     private static void menuUp() throws IOException {
         int choice =0;
 
-        Scanner inp = null;
-        System.out.println("Выберите действие  \n " +
-                "Введите 1, если вы хотите продолжить \n " +
-                "Введите любое значение, если вы хотите выйти из меню");
-        try {
+
+
+    Scanner inp = null;
+    System.out.println("Выберите действие  \n " +
+            "Введите 1, если вы хотите продолжить \n " +
+            "Введите любое значение, если вы хотите выйти из меню");
+        do {
+    try {
         inp = new Scanner(System.in);
         String enterChoice = inp.nextLine();
         choice = Integer.parseInt(enterChoice);
+    } catch (Exception e) {
+        System.out.println("Неверный формат данных");
+        System.out.println("Попробуйте ввести другое значение!");
+      //  System.exit(0);
+        continue;
+
+    }
+    if (choice == 1) {
+        if (polzovatel.getUserRole() == UserRole.MANAGER) {
+            showManagerMenu();
         }
-        catch (Exception e){
-            System.out.println("Неверный формат данных");
-            System.exit(0);
-
+        if (polzovatel.getUserRole() == UserRole.FREELANCER) {
+            showFreelancerMenu();
         }
-              if (choice == 1) {
-                if (polzovatel.getUserRole() == UserRole.MANAGER) {
-                    showManagerMenu();
-                }
-                if (polzovatel.getUserRole() == UserRole.FREELANCER) {
-                    showFreelancerMenu();
-                }
-                if (polzovatel.getUserRole() == UserRole.EMPLOYEE) {
-                    showEmployeeMenu();
-                }
+        if (polzovatel.getUserRole() == UserRole.EMPLOYEE) {
+            showEmployeeMenu();
+        }
 
-      System.exit(0);
-            } else
-               System.out.println("Работа завершена");
+      //  System.exit(0);
+    }
+    else
+        System.out.println("Работа завершена");
 
-            System.exit(0);
+    System.exit(0);
+}
+while (true);
 
     }
     private static void watchStaffHour() throws IOException {
@@ -245,60 +252,55 @@ public class Program {
         menuUp();
     }
 
-    private static void watchHour() throws FileNotFoundException {
+    private static void watchHour() throws IOException {
         List<TimeRecord> HH = fill.readFileGeneric(polzovatel.getUserRole().ordinal());//!!!метод вернул коллекцию, сохранили в переменную
 
-        LocalDate startDate;
+        LocalDate startDate = null;
         LocalDate endDate;
         Scanner inp = null;
 
         do
         {
-            System.out.println("Введите дату начала отчета");
-            inp = new Scanner(System.in);
-            String D = inp.nextLine();
+            try {
+                System.out.println("Введите дату начала отчета");
+
+                inp = new Scanner(System.in);
+                String inpStartDate = inp.nextLine();
+
+                if (inpStartDate == null && inpStartDate.isEmpty()) {
+                    System.out.println("Дата должна быть введена!");
+                }
+                if (!(inpStartDate == null && inpStartDate.isEmpty())) {
+                    startDate = LocalDate.parse(inpStartDate);
+                } else {
+                    System.out.println("Введенная дата неверная!");
+                    continue;//пропускаем все условия ниже и переходим в конец цикла
+                }
+
+                System.out.println("Введите дату окончания отчета");
+                inp = new Scanner(System.in);
+                String inpEndDate = inp.nextLine();
 
 
-            if(D == null&& D.isEmpty())
-            {
-                System.out.println("Дата должна быть введена!");
-            }
-            if (!(D == null&& D.isEmpty()))
-            {
-                startDate = LocalDate.parse(D);
+                if (inpEndDate == null && inpEndDate.isEmpty()) {
+                    System.out.println("Дата должна быть введена!");
+                }
+                if (!(inpEndDate == null && inpEndDate.isEmpty())) {
+                    endDate = LocalDate.parse(inpEndDate);
+
+                } else {
+                    System.out.println("Введенная дата неверная!");
+                    continue;
+                }
+                if (Helpers.getMilliSecFromDate(endDate) < Helpers.getMilliSecFromDate(startDate)) {
+                    System.out.println("Вы  вводите некорректную дату");
+                } else
+                    break;
 
             }
-            else
-            {
-                System.out.println("Введенная дата неверная!");
-                continue;
+            catch (Exception e){
+                System.out.println("Введен неверный формат!");
             }
-
-            System.out.println("Введите дату окончания отчета");
-            inp = new Scanner(System.in);
-            String DD = inp.nextLine();
-
-
-            if(DD == null&& D.isEmpty())
-            {
-                System.out.println("Дата должна быть введена!");
-            }
-            if (!(DD == null&& D.isEmpty()))
-            {
-                endDate = LocalDate.parse(D);
-
-            }
-            else
-            {
-                System.out.println("Введенная дата неверная!");
-                continue;
-            }
-            if (Helpers.getMilliSecFromDate(endDate) < Helpers.getMilliSecFromDate(startDate))
-            {
-                System.out.println("Вы  вводите некорректную дату");
-            }
-            else
-                break;
         }
         while (true);
 
@@ -313,7 +315,7 @@ public class Program {
                 }
             }
         }
-//        Scanner in = new Scanner(System.in);
+
     }
     private static void addStaffHour() throws IOException {
         addHour();
@@ -321,22 +323,24 @@ public class Program {
     }
 
     private static void addHour() throws IOException {
-        int H;
+        int hour = 0;
         LocalDate date;
         Scanner inp = null;
         do
         {
-            System.out.println("Введите отработанное время");
-            inp = new Scanner(System.in);
-            String enterH = inp.nextLine();
+            try {
 
-            H = Integer.parseInt(enterH);
+                System.out.println("Введите отработанное время");
+                inp = new Scanner(System.in);
+                String enterH = inp.nextLine();
+
+                hour =  Integer.parseInt(enterH);
 
 
-            if (H <= 0 || H >= 24)
+            if (hour <= 0 || hour >= 24)
             {
                 System.out.println("Вы вводите некорректные данные");
-
+            continue;
             }
             System.out.println("Введите дату");
             inp = new Scanner(System.in);
@@ -347,77 +351,116 @@ public class Program {
 
                 if (date != LocalDate.MIN && Helpers.getMilliSecFromDate(date) <= Helpers.getMilliSecFromDate(LocalDate.now()) && polzovatel.getUserRole() == UserRole.EMPLOYEE)
                 {
-                    addHourWithControlDate(polzovatel, H, date);
+                    addHourWithControlDate(polzovatel, hour, date);
+                    break;
                 }
                 else if (date != LocalDate.MAX && Helpers.getMilliSecFromDate(date) <= Helpers.getMilliSecFromDate(LocalDate.now()) && Helpers.getMilliSecFromDate(date) >= Helpers.getMilliSecFromDate(LocalDate.now().minusDays(2) )&& polzovatel.getUserRole() == UserRole.FREELANCER)
                 {
-                    addHourWithControlDate(polzovatel, H, date);
+                    addHourWithControlDate(polzovatel, hour, date);
+                    break;
                 }
                 else
                 {
                     System.out.println("Дата введена некорректно!");
-                }
 
+                }
+            }
+            catch (Exception e){
+                System.out.println("Введен неверный формат!");
+               break;
+            }
     }
-        while((H <=0||H >=24));
+        while(true);
  }
 
     private static void addWorkerHour() throws IOException {
         User worker;
-        LocalDate date;
-
+        LocalDate date = null;
+        int hour = 0;
         Scanner inn ;
-        System.out.println("*************************************************");
-        System.out.println("Введите пользователя");
-        inn = new Scanner(System.in);
-        String name = inn.nextLine();
-
-        worker = fill.userGet(name);
-
         do {
+            System.out.println("*************************************************");
+            System.out.println("Введите пользователя");
+            inn = new Scanner(System.in);
+            String name = inn.nextLine();
+
+            worker = fill.userGet(name);
+
+
             if (worker == null) {
                 System.out.println("Пользователь не существует");
                 return;
             }
+            try {
 
-            System.out.println("Введите дату");
-            inn = new Scanner(System.in);
-            String inputDateString = inn.nextLine();
+                System.out.println("Введите дату");
+                inn = new Scanner(System.in);
+                String inputDateString = inn.nextLine();
+                date = LocalDate.parse(inputDateString);
+
+                if (inputDateString == null && inputDateString.isEmpty()) {
+
+                    System.out.println("Дата должна быть введена");
+                    continue;
+                }
+                else if(Helpers.getMilliSecFromDate(date) > Helpers.getMilliSecFromDate(LocalDate.now()))
+                {
+                   System.out.println("Введенная дата неверная!");
+                   continue;
+                }
+
+                System.out.println("Введите отработанное время");
+                inn = new Scanner(System.in);
+                String enterHour = inn.nextLine();
+                hour = Integer.parseInt(enterHour);
 
 
-            if(!(inputDateString == null && inputDateString.isEmpty()))
-             {
-                 date = LocalDate.parse(inputDateString);//2007-12-03T10:15:30
+                if(hour == 0||hour >= 24)
+                {
+                    System.out.println("Введено неверное количество часов!");
+                    continue;
+                }
+                addHourWithControlDate(worker, hour, date);
 
-
-            } else {
-                System.out.println("Введенная дата неверная!");
-                continue;
+                menuUp();
+            }
+            catch(Exception e)
+            {
+                System.out.println("Введен неверный формат!");
 
             }
+        }
 
-            System.out.println("Введите отработанное время");
-            inn = new Scanner(System.in);
-            String H = inn.nextLine();
-
-            addHourWithControlDate(worker, Integer.parseInt(H), date);
-
-            menuUp();
-          }
         while (true);
 
     }
-         private static void addHourWithControlDate(User Us, int H, LocalDate date) throws IOException {
+         private static void addHourWithControlDate(User Us, int H, LocalDate date) throws IOException
+         {
             Scanner inn = null;
-            System.out.println("Введите сообщение");
-            inn= new Scanner(System.in);
-            String mas = inn.nextLine();
+do {
 
-            var time = new TimeRecord(date, Us.getName(), H, mas);
-            List<TimeRecord> times = new ArrayList<TimeRecord>();
-            times.add(time);
-            fill.fillFileGeneric((ArrayList<TimeRecord>) times, Us.getUserRole().ordinal(), true);
-          }
+
+    System.out.println("Введите сообщение");
+
+    inn = new Scanner(System.in);
+    String mas = inn.nextLine();
+
+    if (mas == null || mas.isEmpty()) {
+        System.out.println("Поле должно быть заполнено!");
+
+
+    } else {
+        var time = new TimeRecord(date, Us.getName(), H, mas);
+        List<TimeRecord> times = new ArrayList<TimeRecord>();
+        times.add(time);
+        fill.fillFileGeneric((ArrayList<TimeRecord>) times, Us.getUserRole().ordinal(), true);
+        break;
+    }
+}
+while (true);
+
+
+         }
 
 
     private static void addWorker() throws IOException {
