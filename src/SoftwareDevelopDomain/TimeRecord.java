@@ -13,7 +13,7 @@ public class TimeRecord {
         this.hours = hour;
         this.messages = message;
     }
-    public TimeRecord(String[] stroka) {
+    public TimeRecord(String[] stroka) {//хорошим тоном является проверка входных параметров и бросание Exception в вызывающий код(а не сокрытие ошибки)
         dates = LocalDate.parse(stroka[0]);
         names = stroka[1];
         hours = Integer.parseInt(stroka[2]);

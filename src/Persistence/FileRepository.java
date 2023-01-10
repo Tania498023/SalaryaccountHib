@@ -208,15 +208,18 @@ public class FileRepository {
         String[] str = lines.toArray(new String[0]);
         for (var stroka :str)
         {
-        if (str!= null || str.length>0)
-        {
-            var plitedStroka = stroka.split(",");
-            var user = new TimeRecord(plitedStroka);//создали  объект
+            if (str!= null || str.length>0)
+            {
+                var plitedStroka = stroka.split(",");
+                if (plitedStroka.length<4){System.out.println("Строка неверная "+ stroka);
+                    break;
+                }
+                else if (plitedStroka.length==4) {
+                    var user = new TimeRecord(plitedStroka);//создали  объект
+                    generic.add(user);// добавили объект в коллекцию
+                }
 
-            if (user != null){
-                generic.add(user);// добавили объект в коллекцию
             }
-        }
         }
 
         return generic;

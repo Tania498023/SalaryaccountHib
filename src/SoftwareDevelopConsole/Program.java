@@ -464,67 +464,79 @@ while (true);
 
 
     private static void addWorker() throws IOException {
-        Scanner inn = null;
-        System.out.println("Введите имя пользователя");
-        inn = new Scanner(System.in);
-        String userName = inn.nextLine();
+            Scanner inn ;
+            String enterName = null;
+        do {
+                System.out.println("Введите имя пользователя");
 
-        User M = fill.userGet(userName);
+                    try {
 
-        if(M == null)
-        {
+                        inn = new Scanner(System.in);
+                        enterName = inn.nextLine();
+                        if (enterName.length() == 0)
+                        {
+                            System.out.println("Поле не может быть пустым");
+                            continue;
+                        }
+                        else {
+                            break;
+                        }
+                    } catch (Exception e) {
 
-        }
-        else
-        {
-            System.out.println("Такой пользователь существует!");
-            menuUp();
-        }
-        System.out.println("Введите роль пользователя");
-        var IR = inputRole();
-        var user = new User(userName, IR);
-        ArrayList<User> users = new ArrayList<User>();
-        users.add(user);
-        fill.fillFileUser(users, true);//режим true- введенный пользователь добавляется в файл
+                    }
+                }
+                while (true);
 
-        Map<UserRole, ArrayList<String>> groupWorkRep = new HashMap<UserRole, ArrayList<String>>();
+            var currentUser = fill.userGet(enterName);
 
-        var groupUser = fill.readFileUser();
-        for(var groupItem : groupUser)
-        {
-            //проверяем наличие Ключа, если его нет, добавляем и ключ, и значение
-            if (!groupWorkRep.containsKey(groupItem.getUserRole()))
-            {
-                var itemsList = new ArrayList<String>();
-                itemsList.add(groupItem.getName());
-                groupWorkRep.put(groupItem.getUserRole(), itemsList);
-            }
-            else//иначе ключ есть, просто обновляем значение
-            {
-                var itemsList = groupWorkRep.get(groupItem.getUserRole());
-                if(!itemsList.contains(groupItem.getName()))
-                    itemsList.add(groupItem.getName());
-            }
-        }
+               if (currentUser == null) {
 
-        for (var groupWork : groupWorkRep.entrySet())
-        {
-            if (groupWork.getKey() == user.getUserRole())
-            {
+                }
+                else {
+                    System.out.println("Такой пользователь существует!");
+                    menuUp();
+                }
+                System.out.println("Введите роль пользователя");
+                var IR = inputRole();
+                var user = new User(enterName, IR);
+                ArrayList<User> users = new ArrayList<User>();
+                users.add(user);
+                fill.fillFileUser(users, true);//режим true- введенный пользователь добавляется в файл
+
+                Map<UserRole, ArrayList<String>> groupWorkRep = new HashMap<UserRole, ArrayList<String>>();
+
+                var groupUser = fill.readFileUser();
+                for (var groupItem : groupUser) {
+                    //проверяем наличие Ключа, если его нет, добавляем и ключ, и значение
+                    if (!groupWorkRep.containsKey(groupItem.getUserRole())) {
+                        var itemsList = new ArrayList<String>();
+                        itemsList.add(groupItem.getName());
+                        groupWorkRep.put(groupItem.getUserRole(), itemsList);
+                    } else//иначе ключ есть, просто обновляем значение
+                    {
+                        var itemsList = groupWorkRep.get(groupItem.getUserRole());
+                        if (!itemsList.contains(groupItem.getName()))
+                            itemsList.add(groupItem.getName());
+                    }
+                }
+
+                for (var groupWork : groupWorkRep.entrySet()) {
+                    if (groupWork.getKey() == user.getUserRole()) {
+                        System.out.println("-------------------------");
+                        System.out.println(groupWork.getKey());
+                        System.out.println("-------------------------");
+                    }
+                    if (groupWork.getKey() == user.getUserRole())
+                        for (var item : groupWork.getValue()) {
+
+                            System.out.println(item);
+
+                        }
+                }
+
                 System.out.println("-------------------------");
-                System.out.println(groupWork.getKey());
-                System.out.println("-------------------------");
-            }
-            if (groupWork.getKey() == user.getUserRole())
-                for (var item : groupWork.getValue())
-            {
+                menuUp();
 
-                System.out.println(item);
-
-            }
-        }
-        System.out.println("-------------------------");
-        menuUp();
     }
     private static void watchWorkerReport() throws IOException {
         LocalDate startDate;
@@ -534,19 +546,22 @@ while (true);
         Scanner inn = null;
         do
         {
+            try {
+
+
             System.out.println("Введите дату начала отчета");
             inn = new Scanner(System.in);
-            String D = inn.nextLine();
+            String enterStartDate = inn.nextLine();
 
 
-            if(D == null && D.isEmpty())
+            if(enterStartDate == null && enterStartDate.isEmpty())
             {
                 System.out.println("Дата должна быть введена!");
             }
-            if (!(D == null && D.isEmpty()))
+            if (!(enterStartDate == null && enterStartDate.isEmpty()))
             {
 
-                startDate = LocalDate.parse(D);
+                startDate = LocalDate.parse(enterStartDate);
             }
             else
             {
@@ -555,17 +570,17 @@ while (true);
             }
             System.out.println("Введите дату окончания отчета");
             inn = new Scanner(System.in);
-            String DD = inn.nextLine();
+            String enterEndtDate = inn.nextLine();
 
 
-            if(DD == null && D.isEmpty())
+            if(enterEndtDate == null && enterEndtDate.isEmpty())
             {
                 System.out.println("Дата должна быть введена!");
             }
-            if (!(DD == null && D.isEmpty()))
+            if (!(enterEndtDate == null && enterEndtDate.isEmpty()))
             {
 
-                endDate = LocalDate.parse(DD);
+                endDate = LocalDate.parse(enterEndtDate);
             }
             else
             {
@@ -580,6 +595,12 @@ while (true);
             else
                 break;
         }
+            catch (Exception e){
+
+            }
+
+        }
+
         while (true);
 
         ArrayList<TimeRecord> allWorkRep = new ArrayList<TimeRecord>();//создали новую общую коллекцию (пустая)
@@ -681,50 +702,47 @@ while (true);
         Scanner inn = null;
         do
         {
-            System.out.println("Введите дату начала отчета");
-            inn = new Scanner(System.in);
-            String enterStartDate = inn.nextLine();
+            try {
 
 
-            if ((enterStartDate == null && enterStartDate.isEmpty()))
-            {
-                System.out.println("Дата должна быть введена!");
-
-            }
-            if(!(enterStartDate == null && enterStartDate.isEmpty()))
-            {
-                startDate = LocalDate.parse(enterStartDate);
-            }
-            else
-            {
-                System.out.println("Вы вводите некорректные данные");
-                continue;
-            }
-            System.out.println("Введите дату окончания отчета");
-            inn = new Scanner(System.in);
-            String enterEndDate = inn.nextLine();
+                System.out.println("Введите дату начала отчета");
+                inn = new Scanner(System.in);
+                String enterStartDate = inn.nextLine();
 
 
-            if ((enterEndDate == null && enterEndDate.isEmpty()))
-            {
-                System.out.println("Дата должна быть введена!");
-            }
-            if (!(enterEndDate == null && enterEndDate.isEmpty()))
-            {
-                endDate = LocalDate.parse(enterEndDate);
-            }
-            else
-            {
-                System.out.println("Вы вводите некорректные данные");
-                continue;
-            }
+                if ((enterStartDate == null && enterStartDate.isEmpty())) {
+                    System.out.println("Дата должна быть введена!");
 
-            if(Helpers.getMilliSecFromDate(endDate) < Helpers.getMilliSecFromDate(startDate))
-            {
-                System.out.println("Вы  вводите некорректную дату");
+                }
+                if (!(enterStartDate == null && enterStartDate.isEmpty())) {
+                    startDate = LocalDate.parse(enterStartDate);
+                } else {
+                    System.out.println("Вы вводите некорректные данные");
+                    continue;
+                }
+                System.out.println("Введите дату окончания отчета");
+                inn = new Scanner(System.in);
+                String enterEndDate = inn.nextLine();
+
+
+                if ((enterEndDate == null && enterEndDate.isEmpty())) {
+                    System.out.println("Дата должна быть введена!");
+                }
+                if (!(enterEndDate == null && enterEndDate.isEmpty())) {
+                    endDate = LocalDate.parse(enterEndDate);
+                } else {
+                    System.out.println("Вы вводите некорректные данные");
+                    continue;
+                }
+
+                if (Helpers.getMilliSecFromDate(endDate) < Helpers.getMilliSecFromDate(startDate)) {
+                    System.out.println("Вы  вводите некорректную дату");
+                } else
+                    break;
             }
-            else
-                break;
+            catch (Exception e){
+
+            }
         }
         while (true);
 
@@ -732,27 +750,35 @@ while (true);
         User repHour;
         double bonus = 0;
         Scanner inp = null;
-        do
-        {
-            System.out.println("---------------------");
-            System.out.println("Введите пользователя");
+        do {
+            try {
 
-            inp = new Scanner(System.in);
-            String inputString = inp.nextLine();
+                System.out.println("---------------------");
+                System.out.println("Введите пользователя");
 
+                inp = new Scanner(System.in);
+                String inputString = inp.nextLine();
+            if(inputString.isEmpty()){
+                System.out.println("Пользователь должен быть введен!");
+               continue;
+             }
+            else {
+                System.out.println("---------------------");
+                repHour = fill.userGet(inputString);
 
-            System.out.println("---------------------");
-            repHour = fill.userGet(inputString);
-
-            if (repHour == null)
-            {
-                System.out.println("Пользователь не существует");
             }
-            else
-            {
-                break;
+
+                if (repHour == null) {
+                    System.out.println("Пользователь не существует");
+                } else {
+                    break;
+                }
+            }
+            catch (Exception e){
+
             }
         }
+
         while (true);
 
         var HH = fill.readFileGeneric(repHour.getUserRole().ordinal());
@@ -764,7 +790,6 @@ while (true);
             System.out.println("Всего отработано \t" + totp.sumHours);
             System.out.println("Всего заработано \t" + totp.getTotalPay());
 
-//            Scanner in = new Scanner(System.in);//TODO
         }
 
         else if (repHour.getUserRole() == UserRole.EMPLOYEE)
@@ -774,7 +799,6 @@ while (true);
             System.out.println("Всего отработано \t" + totp.sumHours);
             System.out.println("Всего заработано \t" + totp.getTotalPay());
 
-//            Scanner in = new Scanner(System.in);//TODO
         }
         else if (repHour.getUserRole() == UserRole.FREELANCER)
         {
