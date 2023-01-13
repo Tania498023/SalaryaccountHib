@@ -25,10 +25,10 @@ public class Program {
         int userRole = 0;
 
         fill = new FileRepository();//создаем экземпляры для возможности вызова метода FillFileUser
-        fill.readXmlUser();
 
-//        var userReturn = new MemoryRepository();//создаем экземпляры для возможности вызова метода Users
-//        fill.fillFileUser(userReturn.Users(), false);
+
+       var userReturn = new MemoryRepository();//создаем экземпляры для возможности вызова метода Users
+        fill.fillXmlUser(userReturn.Users(), false);
 //
 //
 //        var genericReturn = new MemoryRepository();

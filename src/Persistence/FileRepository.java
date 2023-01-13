@@ -13,6 +13,12 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import java.time.LocalDate;
 import java.io.*;
 import java.util.*;
@@ -22,7 +28,66 @@ import static SoftwareDevelopDomain.Person.UserRole.MANAGER;
 
 
 public class FileRepository {
+
+    public static void fillXmlUser(ArrayList<User> users, boolean userNeedWrite) throws ParserConfigurationException, IOException, SAXException {
+        String userPath = ".\\Data2\\Users.xml";
+        File file = new File(userPath);
+        Document document = null;
+        if (!isFileExists(file)) {
+            DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            document = documentBuilder.parse("Users.xml");
+
+           }
+        long size = file.length();
+
+        if (!userNeedWrite && size > 0) //TODO true для рабочего(не фейкового файла)
+            return;
+        try {
+
+
+            for (Object persons : users)//перебираем коллекцию и выбираем из нее элементы
+            {
+                User usr = (User) persons;
+
+                Node root = document.getDocumentElement();
+                Element user = document.createElement("user");
+                Element name = document.createElement("name");
+                // Устанавливаем значение текста внутри тега
+                name.setTextContent(usr.getName());
+                Element userRole = document.createElement("userrole");
+                userRole.setTextContent(usr.getUserRole().toString());
+
+                // Добавляем внутренние элементы книги в элемент <Book>
+                user.appendChild(name);
+                user.appendChild(userRole);
+
+                // Добавляем книгу в корневой элемент
+                root.appendChild(user);
+
+                // Записываем XML в файл
+                writeDocument(document);
+            }
+
+        } catch (Exception e) {
+
+        }
+
+
+    }
+    private static void writeDocument(Document document) throws TransformerFactoryConfigurationError {
+        try {
+            Transformer tr = TransformerFactory.newInstance().newTransformer();
+            DOMSource source = new DOMSource(document);
+            FileOutputStream fos = new FileOutputStream("Users.xml");
+            StreamResult result = new StreamResult(fos);
+            tr.transform(source, result);
+        } catch (TransformerException | IOException e) {
+            e.printStackTrace(System.out);
+        }
+    }
+
     /// Записываем коллекцию в файл user.csv
+@Deprecated
     public void fillFileUser(ArrayList<User> users, boolean userNeedWrite) throws IOException {
         String userPath = ".\\Data\\User.csv"; //".\\Data\\User.csv";
         File file = new File(userPath);
@@ -39,7 +104,7 @@ public class FileRepository {
         FileWriter writer = null;
         try {
 
-            writer = new FileWriter(file, true);//запись с добавлением строки в конец существующего текста
+            writer = new FileWriter(file,true);//запись с добавлением строки в конец существующего текста
             for (Object user : users)//перебираем коллекцию и выбираем из нее элементы
             {
                 User usr = (User) user;
@@ -50,7 +115,8 @@ public class FileRepository {
 
         } catch (IOException e) {
 
-        } finally {
+        }
+        finally {
             if (writer != null) {
                 writer.close();
             }
@@ -139,8 +205,6 @@ public class FileRepository {
         var defaultUser = new User("defaultUser", MANAGER);
         var tmpList = new ArrayList<User>();
         tmpList.add(defaultUser);
-
-
 
     String filepath = ".\\Data2\\Users.xml";
     File xmlFile = new File(filepath);
