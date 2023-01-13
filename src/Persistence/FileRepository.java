@@ -4,7 +4,15 @@ import SoftwareDevelopDomain.Helpers;
 import SoftwareDevelopDomain.Person.User;
 import SoftwareDevelopDomain.Person.UserRole;
 import SoftwareDevelopDomain.TimeRecord;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.time.LocalDate;
 import java.io.*;
 import java.util.*;
@@ -31,7 +39,7 @@ public class FileRepository {
         FileWriter writer = null;
         try {
 
-            writer = new FileWriter(file,true);//запись с добавлением строки в конец существующего текста
+            writer = new FileWriter(file, true);//запись с добавлением строки в конец существующего текста
             for (Object user : users)//перебираем коллекцию и выбираем из нее элементы
             {
                 User usr = (User) user;
@@ -42,8 +50,7 @@ public class FileRepository {
 
         } catch (IOException e) {
 
-        }
-        finally {
+        } finally {
             if (writer != null) {
                 writer.close();
             }
@@ -68,75 +75,117 @@ public class FileRepository {
             return;
         FileWriter writer = null;
         try {
-                writer = new FileWriter(file,true);
-                for (var userRole : timeRecords)//перебираем коллекцию и выбираем из нее элементы
-                {
-                    var usrRol = (TimeRecord) userRole;
-                    //создаем строку с разделительными символами и переносом строки
-                    String genericStr = usrRol.getDate() + "," + usrRol.getName() + "," + usrRol.getHours() + "," + usrRol.getMessage() + System.lineSeparator();
-                    writer.append(genericStr);//записываем указанную строку
-                }
-            } catch (IOException e) {
-
-            }finally {
-                if (writer != null) {
-                    writer.close();
-                }
+            writer = new FileWriter(file, true);
+            for (var userRole : timeRecords)//перебираем коллекцию и выбираем из нее элементы
+            {
+                var usrRol = (TimeRecord) userRole;
+                //создаем строку с разделительными символами и переносом строки
+                String genericStr = usrRol.getDate() + "," + usrRol.getName() + "," + usrRol.getHours() + "," + usrRol.getMessage() + System.lineSeparator();
+                writer.append(genericStr);//записываем указанную строку
             }
+        } catch (IOException e) {
+
+        } finally {
+            if (writer != null) {
+                writer.close();
+            }
+        }
     }
-    public void fillFileGeneric(HashMap<UserRole,ArrayList<TimeRecord>> timeRecords, int roles, boolean genericNeedWrite) throws IOException {
+
+    public void fillFileGeneric(HashMap<UserRole, ArrayList<TimeRecord>> timeRecords, int roles, boolean genericNeedWrite) throws IOException {
 
         var keys = timeRecords.keySet();
-        for(var curKey : keys)
-        {
+        for (var curKey : keys) {
             String newPath = ConvertRoleToPath(curKey.ordinal());
             File file = new File(newPath);
             if (!isFileExists(file))
                 file.createNewFile();
-        long size = file.length();
+            long size = file.length();
 
-        if (!genericNeedWrite && size > 0)// TODO
-            return;
-        FileWriter writer = null;
-           try {
-               writer = new FileWriter(file,true);
-               for (var ur : timeRecords.get(curKey))//перебираем коллекцию и выбираем из нее элементы
-               {
-                   //создаем строку с разделительными символами и переносом строки
-                   String genericStr = ur.getDate() + "," + ur.getName() + "," + ur.getHours() + "," + ur.getMessage() + System.lineSeparator();
-                   writer.append(genericStr);//записываем указанную строку
+            if (!genericNeedWrite && size > 0)// TODO
+                return;
+            FileWriter writer = null;
+            try {
+                writer = new FileWriter(file, true);
+                for (var ur : timeRecords.get(curKey))//перебираем коллекцию и выбираем из нее элементы
+                {
+                    //создаем строку с разделительными символами и переносом строки
+                    String genericStr = ur.getDate() + "," + ur.getName() + "," + ur.getHours() + "," + ur.getMessage() + System.lineSeparator();
+                    writer.append(genericStr);//записываем указанную строку
 
-               }
-           }
-           catch (IOException e){
+                }
+            } catch (IOException e) {
 
-           }
-           finally {
-               if (writer != null) {
-                   writer.close();
-               }
-           }
+            } finally {
+                if (writer != null) {
+                    writer.close();
+                }
+            }
         }
 
     }
 
     /// Конвертируем тип int(роль) в string(путь к файлу)
+    @Deprecated
     private static String ConvertRoleToPath(int roles) {
         String newPath = "";
 
-        if (roles == UserRole.MANAGER.ordinal()) {
-            newPath = ".\\Data\\Manager.csv";
-        }
-        if (roles == UserRole.EMPLOYEE.ordinal()) {
-            newPath = ".\\Data\\Employee.csv";
-        } else if (roles == UserRole.FREELANCER.ordinal()) {
-            newPath = ".\\Data\\Freelancer.csv";
-        }
+        newPath = ".\\Data2\\Persons.xml";
 
         return newPath;
     }
 
-    // Считывает все строки файла User.csv и закрывает файл
+    public static ArrayList<User> readXmlUser() throws ParserConfigurationException, IOException, SAXException {
+        var defaultUser = new User("defaultUser", MANAGER);
+        var tmpList = new ArrayList<User>();
+        tmpList.add(defaultUser);
+
+
+
+    String filepath = ".\\Data2\\Users.xml";
+    File xmlFile = new File(filepath);
+    if (!isFileExists(xmlFile))
+        return tmpList;
+
+    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+    DocumentBuilder db = dbf.newDocumentBuilder();
+
+    Document doc = db.parse(xmlFile);
+    Element root = doc.getDocumentElement();
+    NodeList nl = root.getChildNodes();
+
+
+        List<User> users = new ArrayList<User>();
+            User user = null;
+            for (int i = 0; i < nl.getLength(); i++) {
+                Node node = nl.item(i);
+                if ((node.getNodeType() == Node.ELEMENT_NODE)) {//проверяем является ли Элемент Нод узлу Элемент
+                    Element element = (Element) node;//если нода- это элемент, то приводим ее к типу Элемент
+                    try {
+
+                        user = new User(element.getElementsByTagName("name").item(0).getChildNodes().item(0).getNodeValue(), UserRole.valueOf(element.getElementsByTagName("userrole").item(0).getChildNodes().item(0).getNodeValue()));//создали  объект
+
+                    } catch (Exception e) {
+                        System.out.println("Не соответствует формат введенной строки!");
+                    }
+
+                    if (user != null) {
+                        users.add(user);// добавили объект в коллекцию
+                    }
+                }
+            }
+            if (users.size() == 0) {
+                return tmpList;
+            }
+
+            return (ArrayList<User>) users;
+
+    }
+
+
+
+//Считывает все строки файла User.csv и закрывает файл
+    @Deprecated
     public List<User> readFileUser() throws IOException {
         //создаем экземпляр/объект User для использования по умолчанию, чтобы была возможность зайти в приложение даже, если файл пустой
         //добавляем этот объект в коллекцию tmpList

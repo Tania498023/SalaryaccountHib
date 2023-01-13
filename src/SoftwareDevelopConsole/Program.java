@@ -9,6 +9,9 @@ import SoftwareDevelopDomain.Person.Manager;
 import SoftwareDevelopDomain.Person.User;
 import SoftwareDevelopDomain.Person.UserRole;
 import SoftwareDevelopDomain.TimeRecord;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.*;
@@ -18,21 +21,22 @@ public class Program {
     public static FileRepository fill;
     public static User polzovatel;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException {
         int userRole = 0;
 
         fill = new FileRepository();//создаем экземпляры для возможности вызова метода FillFileUser
+        fill.readXmlUser();
 
-        var userReturn = new MemoryRepository();//создаем экземпляры для возможности вызова метода Users
-        fill.fillFileUser(userReturn.Users(), false);
-
-
-        var genericReturn = new MemoryRepository();
-        fill.fillFileGeneric( genericReturn.Generic(), userRole, false);
-
-        var text = fill.readFileUser();
-
-        controlRole(fill);
+//        var userReturn = new MemoryRepository();//создаем экземпляры для возможности вызова метода Users
+//        fill.fillFileUser(userReturn.Users(), false);
+//
+//
+//        var genericReturn = new MemoryRepository();
+//        fill.fillFileGeneric( genericReturn.Generic(), userRole, false);
+//
+//        var text = fill.readFileUser();
+//
+//        controlRole(fill);
     }
 
     public static void controlRole(FileRepository userReturn) throws IOException//контроль вводимой роли при входе в программу
