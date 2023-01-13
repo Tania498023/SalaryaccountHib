@@ -33,16 +33,18 @@ public class FileRepository {
         String userPath = ".\\Data2\\Users.xml";
         File file = new File(userPath);
         Document document = null;
-        if (!isFileExists(file)) {
+        try {
+  //      if (!isFileExists(file))
+        {
             DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            document = documentBuilder.parse("Users.xml");
+            document = documentBuilder.parse(userPath);
 
            }
         long size = file.length();
 
-        if (!userNeedWrite && size > 0) //TODO true для рабочего(не фейкового файла)
-            return;
-        try {
+//        if (!userNeedWrite && size > 0) //TODO true для рабочего(не фейкового файла)
+//            return;
+
 
 
             for (Object persons : users)//перебираем коллекцию и выбираем из нее элементы
