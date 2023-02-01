@@ -30,7 +30,7 @@ import static SoftwareDevelopDomain.Person.UserRole.MANAGER;
 public class FileRepository {
 
     public static void fillXmlUser(ArrayList<User> users, boolean userNeedWrite) throws ParserConfigurationException, IOException, SAXException {
-        String userPath = ".\\Data2\\Users.xml";
+        String userPath = ".\\Users.xml";
         File file = new File(userPath);
         Document document = null;
         try {
@@ -208,7 +208,7 @@ public class FileRepository {
         var tmpList = new ArrayList<User>();
         tmpList.add(defaultUser);
 
-    String filepath = ".\\Data2\\Users.xml";
+    String filepath = ".\\Users.xml";
     File xmlFile = new File(filepath);
     if (!isFileExists(xmlFile))
         return tmpList;
