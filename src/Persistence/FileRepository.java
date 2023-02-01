@@ -1,27 +1,25 @@
 package Persistence;
 
+import java.io.*;
+import java.time.LocalDate;
+import java.util.*;
+import Persistence.PeopleXML.UserXML;
+import Persistence.PeopleXML.UsersXML;
 import SoftwareDevelopDomain.Helpers;
 import SoftwareDevelopDomain.Person.User;
 import SoftwareDevelopDomain.Person.UserRole;
 import SoftwareDevelopDomain.TimeRecord;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Marshaller;
+import jakarta.xml.bind.Unmarshaller;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.TransformerFactoryConfigurationError;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import java.time.LocalDate;
-import java.io.*;
-import java.util.*;
+
 
 import static SoftwareDevelopDomain.Person.UserRole.MANAGER;
 
@@ -29,63 +27,40 @@ import static SoftwareDevelopDomain.Person.UserRole.MANAGER;
 
 public class FileRepository {
 
-    public static void fillXmlUser(ArrayList<User> users, boolean userNeedWrite) throws ParserConfigurationException, IOException, SAXException {
-        String userPath = ".\\Users.xml";
-        File file = new File(userPath);
-        Document document = null;
+    public static void fillXmlUser(ArrayList<User> users, boolean userNeedWrite) throws  IOException, SAXException {
+        UsersXML pers = new UsersXML();
+
         try {
-  //      if (!isFileExists(file))
-        {
-            DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            document = documentBuilder.parse(userPath);
 
-           }
-        long size = file.length();
+            // Создаем файл
+            File file = new File(".\\src\\Users.xml"); //
+            //D:\MyProject\Salaryaccount\src\Users.xml
+            //File file = new File("C:\\Users\\Tanya\\IdeaProjects\\Testxml\\src\\JAXB\\MyTest\\Users.xml");
+            // Вызываем статический метод JAXBContext
+            JAXBContext jaxbContext = JAXBContext.newInstance(UsersXML.class);
+            // Возвращает объект класса Marshaller, для того чтобы трансформировать объект
+            Marshaller marshaller = jaxbContext.createMarshaller();
+            // Читабельное форматирование
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
-//        if (!userNeedWrite && size > 0) //TODO true для рабочего(не фейкового файла)
-//            return;
-
-
-
-            for (Object persons : users)//перебираем коллекцию и выбираем из нее элементы
-            {
-                User usr = (User) persons;
-
-                Node root = document.getDocumentElement();
-                Element user = document.createElement("user");
-                Element name = document.createElement("name");
-                // Устанавливаем значение текста внутри тега
-                name.setTextContent(usr.getName());
-                Element userRole = document.createElement("userrole");
-                userRole.setTextContent(usr.getUserRole().toString());
-
-                // Добавляем внутренние элементы книги в элемент <Book>
-                user.appendChild(name);
-                user.appendChild(userRole);
-
-                // Добавляем книгу в корневой элемент
-                root.appendChild(user);
-
-                // Записываем XML в файл
-                writeDocument(document);
+            try {
+                // Считываем из файла
+                Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+                pers = (UsersXML) unmarshaller.unmarshal(file);
+                System.out.println(pers);
             }
+            catch (Exception e){
 
-        } catch (Exception e) {
+            }
+            pers.add(new UserXML("Я", "MANAGER"));
+            // Записываем в файл, marshal(из памяти, в файл)
+            marshaller.marshal(pers, file);
+            marshaller.marshal(pers, System.out);
 
+        } catch (JAXBException e) {
+            e.printStackTrace();
         }
 
-
-    }
-    private static void writeDocument(Document document) throws TransformerFactoryConfigurationError {
-        try {
-            Transformer tr = TransformerFactory.newInstance().newTransformer();
-            DOMSource source = new DOMSource(document);
-            FileOutputStream fos = new FileOutputStream("Users.xml");
-            StreamResult result = new StreamResult(fos);
-            tr.transform(source, result);
-        } catch (TransformerException | IOException e) {
-            e.printStackTrace(System.out);
-        }
     }
 
     /// Записываем коллекцию в файл user.csv
@@ -202,51 +177,51 @@ public class FileRepository {
 
         return newPath;
     }
-
-    public static ArrayList<User> readXmlUser() throws ParserConfigurationException, IOException, SAXException {
-        var defaultUser = new User("defaultUser", MANAGER);
-        var tmpList = new ArrayList<User>();
-        tmpList.add(defaultUser);
-
-    String filepath = ".\\Users.xml";
-    File xmlFile = new File(filepath);
-    if (!isFileExists(xmlFile))
-        return tmpList;
-
-    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-    DocumentBuilder db = dbf.newDocumentBuilder();
-
-    Document doc = db.parse(xmlFile);
-    Element root = doc.getDocumentElement();
-    NodeList nl = root.getChildNodes();
-
-
-        List<User> users = new ArrayList<User>();
-            User user = null;
-            for (int i = 0; i < nl.getLength(); i++) {
-                Node node = nl.item(i);
-                if ((node.getNodeType() == Node.ELEMENT_NODE)) {//проверяем является ли Элемент Нод узлу Элемент
-                    Element element = (Element) node;//если нода- это элемент, то приводим ее к типу Элемент
-                    try {
-
-                        user = new User(element.getElementsByTagName("name").item(0).getChildNodes().item(0).getNodeValue(), UserRole.valueOf(element.getElementsByTagName("userrole").item(0).getChildNodes().item(0).getNodeValue()));//создали  объект
-
-                    } catch (Exception e) {
-                        System.out.println("Не соответствует формат введенной строки!");
-                    }
-
-                    if (user != null) {
-                        users.add(user);// добавили объект в коллекцию
-                    }
-                }
-            }
-            if (users.size() == 0) {
-                return tmpList;
-            }
-
-            return (ArrayList<User>) users;
-
-    }
+//
+//    public static ArrayList<User> readXmlUser() throws ParserConfigurationException, IOException, SAXException {
+//        var defaultUser = new User("defaultUser", MANAGER);
+//        var tmpList = new ArrayList<User>();
+//        tmpList.add(defaultUser);
+//
+//    String filepath = ".\\Users.xml";
+//    File xmlFile = new File(filepath);
+//    if (!isFileExists(xmlFile))
+//        return tmpList;
+//
+//    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+//    DocumentBuilder db = dbf.newDocumentBuilder();
+//
+//    Document doc = db.parse(xmlFile);
+//    Element root = doc.getDocumentElement();
+//    NodeList nl = root.getChildNodes();
+//
+//
+//        List<User> users = new ArrayList<User>();
+//            User user = null;
+//            for (int i = 0; i < nl.getLength(); i++) {
+//                Node node = nl.item(i);
+//                if ((node.getNodeType() == Node.ELEMENT_NODE)) {//проверяем является ли Элемент Нод узлу Элемент
+//                    Element element = (Element) node;//если нода- это элемент, то приводим ее к типу Элемент
+//                    try {
+//
+//                        user = new User(element.getElementsByTagName("name").item(0).getChildNodes().item(0).getNodeValue(), UserRole.valueOf(element.getElementsByTagName("userrole").item(0).getChildNodes().item(0).getNodeValue()));//создали  объект
+//
+//                    } catch (Exception e) {
+//                        System.out.println("Не соответствует формат введенной строки!");
+//                    }
+//
+//                    if (user != null) {
+//                        users.add(user);// добавили объект в коллекцию
+//                    }
+//                }
+//            }
+//            if (users.size() == 0) {
+//                return tmpList;
+//            }
+//
+//            return (ArrayList<User>) users;
+//
+//    }
 
 
 
