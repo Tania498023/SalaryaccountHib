@@ -32,7 +32,6 @@ public class Program {
         fill.fillXmlUser(userReturn.Users(), false);
         // fill.fillFileUser(userReturn.Users(), false); Deprecated
 
-//
 //        var genericReturn = new MemoryRepository();
 //       fill.fillFileGeneric( genericReturn.Generic(), userRole, false);
 //

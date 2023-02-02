@@ -29,6 +29,7 @@ import static SoftwareDevelopDomain.Person.UserRole.values;
 public class FileRepository {
 
     public static void fillXmlUser(ArrayList<User> users, boolean userNeedWrite) throws IOException, SAXException {
+
         UsersXML pers = new UsersXML();
 
         try {
@@ -41,6 +42,7 @@ public class FileRepository {
             // Читабельное форматирование
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
+
             try {
                 Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
                 pers = (UsersXML) unmarshaller.unmarshal(file);
@@ -51,6 +53,10 @@ public class FileRepository {
                 }
             } catch (Exception e) {
             }
+
+//            long size = file.length();
+//            if (!userNeedWrite && size > 0) //TODO true для рабочего(не фейкового файла)
+//                return;
 
             // Записываем в файл, marshal(из памяти, в файл)
             marshaller.marshal(pers, file);
@@ -171,11 +177,6 @@ public class FileRepository {
 
 
     public static ArrayList<User> readXmlUser() throws JAXBException {
-        //создаем экземпляр/объект User для использования по умолчанию, чтобы была возможность зайти в приложение даже, если файл пустой
-        //добавляем этот объект в коллекцию tmpList
-        var defaultUser = new User("defaultUser", MANAGER);
-        var tmpLists = new ArrayList<User>();
-        tmpLists.add(defaultUser);
 
          UsersXML pers = new UsersXML();
         // Создаем файл
@@ -196,10 +197,6 @@ public class FileRepository {
         for (var psu : pers.getUsr()) {
             var userxml = new User(psu.getName(),UserRole.valueOf(psu.getUserRole()));
             xmlList.add(userxml);
-        }
-        if (xmlList.size() == 0)
-        {
-            return tmpLists;
         }
 
             return xmlList ;
