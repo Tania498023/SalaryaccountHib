@@ -20,6 +20,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 
+import javax.xml.parsers.ParserConfigurationException;
 
 import static SoftwareDevelopDomain.Person.UserRole.MANAGER;
 
@@ -27,20 +28,12 @@ import static SoftwareDevelopDomain.Person.UserRole.MANAGER;
 
 public class FileRepository {
 
-    public static void fillXmlUser(ArrayList<User> users, boolean userNeedWrite) throws  IOException, SAXException {
-
+    public static void fillXmlUser(ArrayList<User> users, boolean userNeedWrite) throws IOException, SAXException {
         UsersXML pers = new UsersXML();
-        //приводим коллекцию типа User к типу UserXML
-        for (var ps: users) {
-            var userxml = new UserXML(ps.getName(),ps.getUserRole().toString());
-            pers.add(userxml);
-        }
 
         try {
-
             // Создаем файл
             File file = new File(".\\src\\Users.xml"); //
-
             // Вызываем статический метод JAXBContext
             JAXBContext jaxbContext = JAXBContext.newInstance(UsersXML.class);
             // Возвращает объект класса Marshaller, для того чтобы трансформировать объект
@@ -48,48 +41,40 @@ public class FileRepository {
             // Читабельное форматирование
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
-//            try {
-//
-//                if (userNeedWrite) {
-//                    Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-//                    pers = (UsersXML) unmarshaller.unmarshal(file);
-//
-//                }
-//            }
-//            catch (Exception e) {
-//                //  pers.add(new UserXML("Я", "MANAGER"));
-//         !!!!   } блок перенести в метод reedfileuser
+            try {
+                Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+                pers = (UsersXML) unmarshaller.unmarshal(file);
 
+                for (var ps : users) {
+                    var userxml = new UserXML(ps.getName(), ps.getUserRole().toString());
+                    pers.add(userxml);
+                }
+            } catch (Exception e) {
+            }
 
             // Записываем в файл, marshal(из памяти, в файл)
             marshaller.marshal(pers, file);
-          //  marshaller.marshal(pers, System.out);
+            //  marshaller.marshal(pers, System.out);
 
         } catch (JAXBException e) {
             e.printStackTrace();
         }
-
     }
 
-    /// Записываем коллекцию в файл user.csv
-@Deprecated
+    @Deprecated /// Записываем коллекцию в файл user.csv
     public void fillFileUser(ArrayList<User> users, boolean userNeedWrite) throws IOException {
         String userPath = ".\\Data\\User.csv"; //".\\Data\\User.csv";
         File file = new File(userPath);
 
-
         if (!isFileExists(file))
             file.createNewFile();
-
         long size = file.length();
-
         if (!userNeedWrite && size > 0) //TODO true для рабочего(не фейкового файла)
             return;
-
         FileWriter writer = null;
         try {
 
-            writer = new FileWriter(file,true);//запись с добавлением строки в конец существующего текста
+            writer = new FileWriter(file, true);//запись с добавлением строки в конец существующего текста
             for (Object user : users)//перебираем коллекцию и выбираем из нее элементы
             {
                 User usr = (User) user;
@@ -100,13 +85,11 @@ public class FileRepository {
 
         } catch (IOException e) {
 
-        }
-        finally {
+        } finally {
             if (writer != null) {
                 writer.close();
             }
         }
-
     }
 
     public static boolean isFileExists(File file) {
@@ -185,14 +168,43 @@ public class FileRepository {
 
         return newPath;
     }
-//
-//    public static ArrayList<User> readXmlUser() throws ParserConfigurationException, IOException, SAXException {
-//        var defaultUser = new User("defaultUser", MANAGER);
-//        var tmpList = new ArrayList<User>();
-//        tmpList.add(defaultUser);
-//
-//    String filepath = ".\\Users.xml";
-//    File xmlFile = new File(filepath);
+
+
+    public static ArrayList<User> readXmlUser() throws JAXBException {
+         UsersXML pers = new UsersXML();
+        // Создаем файл
+        File xmlFile = new File(".\\src\\Users.xml");
+        // Вызываем статический метод JAXBContext
+        JAXBContext jaxbContext = JAXBContext.newInstance(UsersXML.class);
+        // Возвращает объект класса Marshaller, для того чтобы трансформировать объект
+        Marshaller marshaller = jaxbContext.createMarshaller();
+        // Читабельное форматирование
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        //   try {
+        Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+
+        pers = (UsersXML) unmarshaller.unmarshal(xmlFile);
+
+        ArrayList<User> xmlList = new ArrayList<>();
+
+        for (User psu : pers) {
+            var userxml = new User(psu.getName(),psu.getUserRole());
+            xmlList.add(userxml);
+        }
+
+        {
+            return xmlList ;
+        }
+    }
+
+
+//приводим коллекцию типа UserXML к типу User
+//            for (var psu: xmlList) {
+//                var userredxml = new User(psu.getName(),psu.getUserRole().toString());
+//                xmlList.add(userredxml);
+           // }
+//        } catch (Exception e) {
+     //   }
 //    if (!isFileExists(xmlFile))
 //        return tmpList;
 //
@@ -217,7 +229,7 @@ public class FileRepository {
 //                    } catch (Exception e) {
 //                        System.out.println("Не соответствует формат введенной строки!");
 //                    }
-//
+
 //                    if (user != null) {
 //                        users.add(user);// добавили объект в коллекцию
 //                    }
@@ -228,8 +240,17 @@ public class FileRepository {
 //            }
 //
 //            return (ArrayList<User>) users;
-//
+   // }
+//        catch(
+//    JAXBException e)
+
+//    {
+//        e.printStackTrace();
 //    }
+
+
+
+
 
 
 
