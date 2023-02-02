@@ -23,7 +23,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 
 import static SoftwareDevelopDomain.Person.UserRole.MANAGER;
-
+import static SoftwareDevelopDomain.Person.UserRole.values;
 
 
 public class FileRepository {
@@ -171,6 +171,12 @@ public class FileRepository {
 
 
     public static ArrayList<User> readXmlUser() throws JAXBException {
+        //создаем экземпляр/объект User для использования по умолчанию, чтобы была возможность зайти в приложение даже, если файл пустой
+        //добавляем этот объект в коллекцию tmpList
+        var defaultUser = new User("defaultUser", MANAGER);
+        var tmpLists = new ArrayList<User>();
+        tmpLists.add(defaultUser);
+
          UsersXML pers = new UsersXML();
         // Создаем файл
         File xmlFile = new File(".\\src\\Users.xml");
@@ -188,71 +194,18 @@ public class FileRepository {
         ArrayList<User> xmlList = new ArrayList<>();
 
         for (var psu : pers.getUsr()) {
-            var userxml = new User(psu.getName(),psu.getUserRole() );
+            var userxml = new User(psu.getName(),UserRole.valueOf(psu.getUserRole()));
             xmlList.add(userxml);
         }
-
+        if (xmlList.size() == 0)
         {
-            return xmlList ;
+            return tmpLists;
         }
-    }
+
+            return xmlList ;
 
 
-//приводим коллекцию типа UserXML к типу User
-//            for (var psu: xmlList) {
-//                var userredxml = new User(psu.getName(),psu.getUserRole().toString());
-//                xmlList.add(userredxml);
-           // }
-//        } catch (Exception e) {
-     //   }
-//    if (!isFileExists(xmlFile))
-//        return tmpList;
-//
-//    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-//    DocumentBuilder db = dbf.newDocumentBuilder();
-//
-//    Document doc = db.parse(xmlFile);
-//    Element root = doc.getDocumentElement();
-//    NodeList nl = root.getChildNodes();
-//
-//
-//        List<User> users = new ArrayList<User>();
-//            User user = null;
-//            for (int i = 0; i < nl.getLength(); i++) {
-//                Node node = nl.item(i);
-//                if ((node.getNodeType() == Node.ELEMENT_NODE)) {//проверяем является ли Элемент Нод узлу Элемент
-//                    Element element = (Element) node;//если нода- это элемент, то приводим ее к типу Элемент
-//                    try {
-//
-//                        user = new User(element.getElementsByTagName("name").item(0).getChildNodes().item(0).getNodeValue(), UserRole.valueOf(element.getElementsByTagName("userrole").item(0).getChildNodes().item(0).getNodeValue()));//создали  объект
-//
-//                    } catch (Exception e) {
-//                        System.out.println("Не соответствует формат введенной строки!");
-//                    }
-
-//                    if (user != null) {
-//                        users.add(user);// добавили объект в коллекцию
-//                    }
-//                }
-//            }
-//            if (users.size() == 0) {
-//                return tmpList;
-//            }
-//
-//            return (ArrayList<User>) users;
-   // }
-//        catch(
-//    JAXBException e)
-
-//    {
-//        e.printStackTrace();
-//    }
-
-
-
-
-
-
+}
 
 //Считывает все строки файла User.csv и закрывает файл
     @Deprecated
@@ -346,9 +299,8 @@ public class FileRepository {
 
     // Получаем имя пользователя и возвращаем коллекцию User
 
-    public User userGet(String name) throws IOException
-    {
-        for (var record : readFileUser())
+    public User userGet(String name) throws IOException, JAXBException {
+        for (var record : readXmlUser())
         {
             if (record.getName().equals(name))
                 return record;

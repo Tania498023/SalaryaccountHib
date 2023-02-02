@@ -9,6 +9,7 @@ import SoftwareDevelopDomain.Person.Manager;
 import SoftwareDevelopDomain.Person.User;
 import SoftwareDevelopDomain.Person.UserRole;
 import SoftwareDevelopDomain.TimeRecord;
+import jakarta.xml.bind.JAXBException;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -21,7 +22,7 @@ public class Program {
     public static FileRepository fill;
     public static User polzovatel;
 
-    public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException {
+    public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException, JAXBException {
         int userRole = 0;
 
         fill = new FileRepository();//создаем экземпляры для возможности вызова метода FillFileUser
@@ -33,14 +34,14 @@ public class Program {
 
 //
 //        var genericReturn = new MemoryRepository();
-//        fill.fillFileGeneric( genericReturn.Generic(), userRole, false);
+//       fill.fillFileGeneric( genericReturn.Generic(), userRole, false);
 //
-        //       var text = fill.readFileUser();
+       //var text = fill.readXmlUser();
 //
-         controlRole(fill);
+        controlRole(fill);
     }
 
-    public static void controlRole(FileRepository userReturn) throws IOException, SAXException//контроль вводимой роли при входе в программу
+    public static void controlRole(FileRepository userReturn) throws IOException, SAXException, JAXBException//контроль вводимой роли при входе в программу
     {
         Scanner inpt;
         do {
@@ -88,7 +89,7 @@ public class Program {
         return enterUser;
     }
 
-    private static void displayMenu(UserRole userRole) throws IOException, SAXException {
+    private static void displayMenu(UserRole userRole) throws IOException, SAXException, JAXBException {
         do {
             if (userRole == UserRole.MANAGER) {
                 System.out.println("Меню Руководитель");
@@ -109,7 +110,7 @@ public class Program {
         while (true);
     }
 
-    private static void showManagerMenu() throws IOException, SAXException {
+    private static void showManagerMenu() throws IOException, SAXException, JAXBException {
         int actionManager = 0;
         Scanner inp;
         do {
@@ -152,7 +153,7 @@ public class Program {
         while (true);
     }
 
-    private static void showEmployeeMenu() throws IOException, SAXException {
+    private static void showEmployeeMenu() throws IOException, SAXException, JAXBException {
         int actionEmployee = 0;
         Scanner inp;
         do {
@@ -178,7 +179,7 @@ public class Program {
         while (true);
     }
 
-    private static void showFreelancerMenu() throws IOException, SAXException {
+    private static void showFreelancerMenu() throws IOException, SAXException, JAXBException {
         int actionFreelancer = 0;
         Scanner inp = null;
         do {
@@ -206,7 +207,7 @@ public class Program {
         while (true);
     }
 
-    private static void menuUp() throws IOException, SAXException {
+    private static void menuUp() throws IOException, SAXException, JAXBException {
         int choice = 0;
 
 
@@ -247,7 +248,7 @@ public class Program {
 
     }
 
-    private static void watchStaffHour() throws IOException, SAXException {
+    private static void watchStaffHour() throws IOException, SAXException, JAXBException {
         watchHour();
         menuUp();
     }
@@ -312,7 +313,7 @@ public class Program {
 
     }
 
-    private static void addStaffHour() throws IOException, SAXException {
+    private static void addStaffHour() throws IOException, SAXException, JAXBException {
         addHour();
         menuUp();
     }
@@ -360,7 +361,7 @@ public class Program {
         while (true);
     }
 
-    private static void addWorkerHour() throws IOException {
+    private static void addWorkerHour() throws IOException, JAXBException {
         User worker;
         LocalDate date = null;
         int hour = 0;
@@ -445,7 +446,7 @@ public class Program {
     }
 
 
-    private static void addWorker() throws IOException, SAXException {
+    private static void addWorker() throws IOException, SAXException, JAXBException {
         Scanner inn;
         String enterName = null;
         do {
@@ -484,7 +485,7 @@ public class Program {
 
         Map<UserRole, ArrayList<String>> groupWorkRep = new HashMap<UserRole, ArrayList<String>>();
 
-        var groupUser = fill.readFileUser();
+        var groupUser = fill.readXmlUser();
         for (var groupItem : groupUser) {
             //проверяем наличие Ключа, если его нет, добавляем и ключ, и значение
             if (!groupWorkRep.containsKey(groupItem.getUserRole())) {
@@ -518,7 +519,7 @@ public class Program {
 
     }
 
-    private static void watchWorkerReport() throws IOException, SAXException {
+    private static void watchWorkerReport() throws IOException, SAXException, JAXBException {
         LocalDate startDate;
         LocalDate endDate;
         int itogHour = 0;
@@ -657,7 +658,7 @@ public class Program {
         menuUp();
     }
 
-    private static void watchWorkerHour() throws IOException, SAXException {
+    private static void watchWorkerHour() throws IOException, SAXException, JAXBException {
         LocalDate startDate;
         LocalDate endDate;
         Scanner inn = null;

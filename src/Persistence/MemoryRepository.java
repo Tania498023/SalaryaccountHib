@@ -63,11 +63,8 @@ public class MemoryRepository  implements IRepository {
 
     private ArrayList<User> users = new ArrayList<User>();
 public void addFakeDataUser(){
-    users.add(new User("Иванов", EMPLOYEE));
-    users.add(new User("Васильев", EMPLOYEE));
-    users.add(new User("Смит", FREELANCER));
-    users.add(new User("Бонд", FREELANCER));
-    users.add(new User("Береговой", MANAGER));
+
+       users.add(new User("Я", MANAGER));
 }
     public ArrayList<TimeRecord> employees()
     {
