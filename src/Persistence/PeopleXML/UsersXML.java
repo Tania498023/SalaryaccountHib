@@ -17,6 +17,10 @@ public class UsersXML {
         usr.add(user);
     }
 
+    public List<UserXML> getUsr() {
+        return usr;
+    }
+
     @Override
     public String toString() {
         return Arrays.deepToString(usr.toArray());

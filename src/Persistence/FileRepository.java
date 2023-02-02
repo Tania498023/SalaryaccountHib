@@ -187,8 +187,8 @@ public class FileRepository {
 
         ArrayList<User> xmlList = new ArrayList<>();
 
-        for (User psu : pers) {
-            var userxml = new User(psu.getName(),psu.getUserRole());
+        for (var psu : pers.getUsr()) {
+            var userxml = new User(psu.getName(),psu.getUserRole() );
             xmlList.add(userxml);
         }
 
