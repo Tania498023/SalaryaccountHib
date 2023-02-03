@@ -30,7 +30,6 @@ public class Program {
 
         var userReturn = new MemoryRepository();//создаем экземпляры для возможности вызова метода Users
         fill.fillXmlUser(userReturn.Users(), false);
-        // fill.fillFileUser(userReturn.Users(), false); Deprecated
 
 //        var genericReturn = new MemoryRepository();
 //       fill.fillFileGeneric( genericReturn.Generic(), userRole, false);

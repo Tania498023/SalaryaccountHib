@@ -46,17 +46,19 @@ public class FileRepository {
             try {
                 Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
                 pers = (UsersXML) unmarshaller.unmarshal(file);
+                long size = file.length();
+                if (!userNeedWrite && size > 0) //TODO true для рабочего(не фейкового файла)
+                    return;
 
                 for (var ps : users) {
                     var userxml = new UserXML(ps.getName(), ps.getUserRole().toString());
-                    pers.add(userxml);
+
+                        pers.add(userxml);
+
                 }
             } catch (Exception e) {
             }
 
-//            long size = file.length();
-//            if (!userNeedWrite && size > 0) //TODO true для рабочего(не фейкового файла)
-//                return;
 
             // Записываем в файл, marshal(из памяти, в файл)
             marshaller.marshal(pers, file);
@@ -64,37 +66,6 @@ public class FileRepository {
 
         } catch (JAXBException e) {
             e.printStackTrace();
-        }
-    }
-
-    @Deprecated /// Записываем коллекцию в файл user.csv
-    public void fillFileUser(ArrayList<User> users, boolean userNeedWrite) throws IOException {
-        String userPath = ".\\Data\\User.csv"; //".\\Data\\User.csv";
-        File file = new File(userPath);
-
-        if (!isFileExists(file))
-            file.createNewFile();
-        long size = file.length();
-        if (!userNeedWrite && size > 0) //TODO true для рабочего(не фейкового файла)
-            return;
-        FileWriter writer = null;
-        try {
-
-            writer = new FileWriter(file, true);//запись с добавлением строки в конец существующего текста
-            for (Object user : users)//перебираем коллекцию и выбираем из нее элементы
-            {
-                User usr = (User) user;
-                String userStr = usr.getName() + "," + usr.getUserRole() + System.lineSeparator();//создаем строку с разделительными символами и переносом строки
-
-                writer.append(userStr);//записываем указанную строку
-            }
-
-        } catch (IOException e) {
-
-        } finally {
-            if (writer != null) {
-                writer.close();
-            }
         }
     }
 
@@ -177,7 +148,7 @@ public class FileRepository {
 
 
     public static ArrayList<User> readXmlUser() throws JAXBException {
-        var defaultUser = new User("defaultUser", MANAGER);
+        var defaultUser = new User("Я", MANAGER);
         var tmpList = new ArrayList<User>();
         tmpList.add(defaultUser);
 
@@ -207,61 +178,6 @@ public class FileRepository {
 
 }
 
-//Считывает все строки файла User.csv и закрывает файл
-    @Deprecated
-    public List<User> readFileUser() throws IOException {
-        //создаем экземпляр/объект User для использования по умолчанию, чтобы была возможность зайти в приложение даже, если файл пустой
-        //добавляем этот объект в коллекцию tmpList
-        var defaultUser = new User("Я", MANAGER);
-        var tmpList = new ArrayList<User>();
-        tmpList.add(defaultUser);
-
-        String userPath = ".\\Data\\User.csv";
-
-        if (!isFileExists(new File(userPath)))
-            return tmpList;
-
-        List<User> users = new ArrayList<User>();
-
-        Scanner sc = new Scanner(new File(userPath));
-        List<String> lines = new ArrayList<String>();
-        while (sc.hasNextLine())
-        {
-            lines.add(sc.nextLine());
-        }
-
-        String[] str = lines.toArray(new String[0]);
-        UserRole strokaEnum;
-        for (var stroka : str)
-        {
-            if (str != null || str.length > 0)
-            {
-                var plitedStroka = stroka.split(",");
-                User user = null;
-                try
-                {
-
-                    strokaEnum = UserRole.valueOf(plitedStroka[1]);
-                    user = new User(plitedStroka[0], strokaEnum);//создали  объект
-
-                }
-                catch (Exception e)
-                {
-                    System.out.println("Не соответствует формат введенной строки!");
-                }
-
-                if (user != null) {
-                    users.add(user);// добавили объект в коллекцию
-                }
-            }
-        }
-
-        if (users.size() == 0)
-        {
-            return tmpList;
-        }
-        return users;
-    }
 
     // Считывает все строки файла согласно роли
     public List<TimeRecord> readFileGeneric(int roles) throws FileNotFoundException {
