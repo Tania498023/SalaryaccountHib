@@ -177,6 +177,9 @@ public class FileRepository {
 
 
     public static ArrayList<User> readXmlUser() throws JAXBException {
+        var defaultUser = new User("defaultUser", MANAGER);
+        var tmpList = new ArrayList<User>();
+        tmpList.add(defaultUser);
 
          UsersXML pers = new UsersXML();
         // Создаем файл
@@ -191,16 +194,16 @@ public class FileRepository {
         Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 
         pers = (UsersXML) unmarshaller.unmarshal(xmlFile);
-
+        if (pers.getSize() == 0){
+        return tmpList;
+}
         ArrayList<User> xmlList = new ArrayList<>();
 
         for (var psu : pers.getUsr()) {
             var userxml = new User(psu.getName(),UserRole.valueOf(psu.getUserRole()));
             xmlList.add(userxml);
         }
-
             return xmlList ;
-
 
 }
 
@@ -209,7 +212,7 @@ public class FileRepository {
     public List<User> readFileUser() throws IOException {
         //создаем экземпляр/объект User для использования по умолчанию, чтобы была возможность зайти в приложение даже, если файл пустой
         //добавляем этот объект в коллекцию tmpList
-        var defaultUser = new User("defaultUser", MANAGER);
+        var defaultUser = new User("Я", MANAGER);
         var tmpList = new ArrayList<User>();
         tmpList.add(defaultUser);
 
@@ -302,9 +305,10 @@ public class FileRepository {
             if (record.getName().equals(name))
                 return record;
         }
-        return null;
+       return null;
 
     }
+
     // Получаем отчет по сотрудникам с учетом роли
 
     public List<TimeRecord> reportGet(UserRole userRole, LocalDate startDate, LocalDate endDate) throws FileNotFoundException {

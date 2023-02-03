@@ -1,5 +1,9 @@
 package SoftwareDevelopDomain.Person;
 
+import Persistence.PeopleXML.UserXML;
+
+import java.util.List;
+
 public class User {
     private String names;
     private UserRole userRoles;
@@ -10,7 +14,6 @@ public class User {
         this.names = name;
         this.userRoles = userRole;
     }
-
 
 
     public String getName() {

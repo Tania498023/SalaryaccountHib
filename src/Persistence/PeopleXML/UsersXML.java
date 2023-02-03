@@ -20,6 +20,9 @@ public class UsersXML {
     public List<UserXML> getUsr() {
         return usr;
     }
+    public int getSize() {
+        return usr.size();
+    }
 
     @Override
     public String toString() {

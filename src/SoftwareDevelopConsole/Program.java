@@ -43,21 +43,21 @@ public class Program {
     public static void controlRole(FileRepository userReturn) throws IOException, SAXException, JAXBException//контроль вводимой роли при входе в программу
     {
         Scanner inpt;
-        do {
+     do {
             try {
                 System.out.println("Введите ваше имя");
                 inpt = new Scanner(System.in);
                 String name = inpt.nextLine();
 
-                polzovatel = userReturn.userGet(name);
+               polzovatel = userReturn.userGet(name);
                 if (polzovatel == null)
-                    System.out.println("Пользователь с таким именем не существует");
+              System.out.println("Пользователь с таким именем не существует");
             } catch (Exception e) {
 
                 var tt = e;
             }
-        }
-        while (polzovatel == null);
+    }
+       while (polzovatel == null);
         displayMenu(polzovatel.getUserRole());
     }
 
