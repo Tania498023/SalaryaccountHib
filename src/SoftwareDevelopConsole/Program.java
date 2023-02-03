@@ -27,12 +27,11 @@ public class Program {
 
         fill = new FileRepository();//создаем экземпляры для возможности вызова метода FillFileUser
 
-
         var userReturn = new MemoryRepository();//создаем экземпляры для возможности вызова метода Users
         fill.fillXmlUser(userReturn.Users(), false);
 
-//        var genericReturn = new MemoryRepository();
-//       fill.fillFileGeneric( genericReturn.Generic(), userRole, false);
+        var genericReturn = new MemoryRepository();
+      fill.fillXmlRecord( genericReturn.Generic(), userRole, false);
 //
        //var text = fill.readXmlUser();
 //
@@ -434,7 +433,7 @@ public class Program {
                 var time = new TimeRecord(date, Us.getName(), H, mas);
                 List<TimeRecord> times = new ArrayList<TimeRecord>();
                 times.add(time);
-                fill.fillFileGeneric((ArrayList<TimeRecord>) times, Us.getUserRole().ordinal(), true);
+                fill.fillXmlRecord((ArrayList<TimeRecord>) times, Us.getUserRole().ordinal(), true);
                 break;
             }
         }

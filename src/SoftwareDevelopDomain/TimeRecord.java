@@ -33,7 +33,7 @@ public class TimeRecord {
         return names;
     }
 
-    public int getHours() {
+    public Integer getHours() {
         return hours;
     }
 

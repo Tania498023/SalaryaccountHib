@@ -1,8 +1,6 @@
 package SoftwareDevelopDomain.Person;
 
-import Persistence.PeopleXML.UserXML;
 
-import java.util.List;
 
 public class User {
     private String names;

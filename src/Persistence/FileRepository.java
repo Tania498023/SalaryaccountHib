@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.util.*;
 import Persistence.PeopleXML.UserXML;
 import Persistence.PeopleXML.UsersXML;
+import Persistence.PersonsJava.Persons;
+import Persistence.PersonsJava.Role;
 import SoftwareDevelopDomain.Helpers;
 import SoftwareDevelopDomain.Person.User;
 import SoftwareDevelopDomain.Person.UserRole;
@@ -13,17 +15,10 @@ import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.Unmarshaller;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 
-import javax.xml.parsers.ParserConfigurationException;
-
 import static SoftwareDevelopDomain.Person.UserRole.MANAGER;
-import static SoftwareDevelopDomain.Person.UserRole.values;
 
 
 public class FileRepository {
@@ -73,6 +68,40 @@ public class FileRepository {
         return file.exists() && !file.isDirectory();
     }
 
+    public void fillXmlRecord(ArrayList<TimeRecord> timeRecords, int roles, boolean genericNeedWrite) throws IOException {
+        Persons rec = new Persons();
+        for (var ps : timeRecords) {
+            var recxml = new Role("", ps.getName(), ps.getDate().toString(),ps.getHours().toString(),ps.getMessage());//TODO
+
+            rec.add(recxml);
+        }
+        try {
+            // Создаем файл
+            File file = new File(".\\src\\Persons.xml"); //
+            // Вызываем статический метод JAXBContext
+            JAXBContext jaxbContext = JAXBContext.newInstance(Persons.class);
+            // Возвращает объект класса Marshaller, для того чтобы трансформировать объект
+            Marshaller marshaller = jaxbContext.createMarshaller();
+            // Читабельное форматирование
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+            try {
+                Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+                rec = (Persons) unmarshaller.unmarshal(file);
+
+            } catch (Exception e) {
+            }
+
+            // Записываем в файл, marshal(из памяти, в файл)
+            marshaller.marshal(rec, file);
+            //  marshaller.marshal(pers, System.out);
+
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        }
+
+    }
+    @Deprecated
     /// Записываем коллекцию TimeRecord в файл согласно роли
     public void fillFileGeneric(ArrayList<TimeRecord> timeRecords, int roles, boolean genericNeedWrite) throws IOException {
         String newPath = ConvertRoleToPath(roles);
@@ -103,45 +132,12 @@ public class FileRepository {
         }
     }
 
-    public void fillFileGeneric(HashMap<UserRole, ArrayList<TimeRecord>> timeRecords, int roles, boolean genericNeedWrite) throws IOException {
-
-        var keys = timeRecords.keySet();
-        for (var curKey : keys) {
-            String newPath = ConvertRoleToPath(curKey.ordinal());
-            File file = new File(newPath);
-            if (!isFileExists(file))
-                file.createNewFile();
-            long size = file.length();
-
-            if (!genericNeedWrite && size > 0)// TODO
-                return;
-            FileWriter writer = null;
-            try {
-                writer = new FileWriter(file, true);
-                for (var ur : timeRecords.get(curKey))//перебираем коллекцию и выбираем из нее элементы
-                {
-                    //создаем строку с разделительными символами и переносом строки
-                    String genericStr = ur.getDate() + "," + ur.getName() + "," + ur.getHours() + "," + ur.getMessage() + System.lineSeparator();
-                    writer.append(genericStr);//записываем указанную строку
-
-                }
-            } catch (IOException e) {
-
-            } finally {
-                if (writer != null) {
-                    writer.close();
-                }
-            }
-        }
-
-    }
-
     /// Конвертируем тип int(роль) в string(путь к файлу)
     @Deprecated
     private static String ConvertRoleToPath(int roles) {
         String newPath = "";
 
-        newPath = ".\\Data2\\Persons.xml";
+        newPath = ".\\src\\Persons.xml";
 
         return newPath;
     }

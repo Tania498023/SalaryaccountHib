@@ -19,8 +19,9 @@ public class MemoryRepository  implements IRepository {
         addFakeDataEmployee();
         addFakeDataFreelancer();
         addFakeDataManager();
-        fillGeneric();
+       // fillGeneric();
     }
+    /*
     private void fillGeneric()
     {
         for (var user:employees)
@@ -36,7 +37,7 @@ public class MemoryRepository  implements IRepository {
             sortGenerics(MANAGER, user);
         }
     }
-
+*/
     public void addFakeDataEmployee()
     {
         employees.add(new TimeRecord(LocalDate.now().minusDays(3),"Иванов",8,"test message 1"));
@@ -171,6 +172,7 @@ ArrayList<TimeRecord> getRep = new ArrayList<TimeRecord>();
     {
         return users;
     }
+    /*
     public void sortGenerics(UserRole userRole, TimeRecord timeRecord)
     {
         switch (userRole)
@@ -221,10 +223,10 @@ ArrayList<TimeRecord> getRep = new ArrayList<TimeRecord>();
 
         }
     }
+*/
+    public ArrayList<TimeRecord> generic = new ArrayList<TimeRecord>();
 
-    public HashMap<UserRole, ArrayList<TimeRecord>> generic = new HashMap<UserRole, ArrayList<TimeRecord>>();
-
-    public HashMap<UserRole, ArrayList<TimeRecord>> Generic()
+    public ArrayList<TimeRecord> Generic()
     {
         return generic;
 
