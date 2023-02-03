@@ -19,7 +19,7 @@ public class MemoryRepository  implements IRepository {
         addFakeDataEmployee();
         addFakeDataFreelancer();
         addFakeDataManager();
-       // fillGeneric();
+       //fillGeneric();
     }
     /*
     private void fillGeneric()
@@ -228,6 +228,7 @@ ArrayList<TimeRecord> getRep = new ArrayList<TimeRecord>();
 
     public ArrayList<TimeRecord> Generic()
     {
+        generic.add(new TimeRecord(LocalDate.now().minusDays(3),"Перехвал",8,"test message 1"));
         return generic;
 
     }

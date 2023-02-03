@@ -3,6 +3,7 @@ package Persistence;
 import java.io.*;
 import java.time.LocalDate;
 import java.util.*;
+
 import Persistence.PeopleXML.UserXML;
 import Persistence.PeopleXML.UsersXML;
 import Persistence.PersonsJava.Persons;
@@ -48,7 +49,7 @@ public class FileRepository {
                 for (var ps : users) {
                     var userxml = new UserXML(ps.getName(), ps.getUserRole().toString());
 
-                        pers.add(userxml);
+                    pers.add(userxml);
 
                 }
             } catch (Exception e) {
@@ -70,11 +71,7 @@ public class FileRepository {
 
     public void fillXmlRecord(ArrayList<TimeRecord> timeRecords, int roles, boolean genericNeedWrite) throws IOException {
         Persons rec = new Persons();
-        for (var ps : timeRecords) {
-            var recxml = new Role("", ps.getName(), ps.getDate().toString(),ps.getHours().toString(),ps.getMessage());//TODO
 
-            rec.add(recxml);
-        }
         try {
             // Создаем файл
             File file = new File(".\\src\\Persons.xml"); //
@@ -88,8 +85,18 @@ public class FileRepository {
             try {
                 Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
                 rec = (Persons) unmarshaller.unmarshal(file);
+                long size = file.length();
+                if (!genericNeedWrite && size > 0) //TODO true для рабочего(не фейкового файла)
+                    return;
+
+                for (var ps : timeRecords) {
+                    var recxml = new Role("", ps.getName(), ps.getDate().toString(), ps.getHours().toString(), ps.getMessage());//TODO
+
+                    rec.add(recxml);
+                }
 
             } catch (Exception e) {
+                System.out.println(e);
             }
 
             // Записываем в файл, marshal(из памяти, в файл)
@@ -101,6 +108,7 @@ public class FileRepository {
         }
 
     }
+
     @Deprecated
     /// Записываем коллекцию TimeRecord в файл согласно роли
     public void fillFileGeneric(ArrayList<TimeRecord> timeRecords, int roles, boolean genericNeedWrite) throws IOException {
@@ -148,7 +156,7 @@ public class FileRepository {
         var tmpList = new ArrayList<User>();
         tmpList.add(defaultUser);
 
-         UsersXML pers = new UsersXML();
+        UsersXML pers = new UsersXML();
         // Создаем файл
         File xmlFile = new File(".\\src\\Users.xml");
         // Вызываем статический метод JAXBContext
@@ -161,18 +169,18 @@ public class FileRepository {
         Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 
         pers = (UsersXML) unmarshaller.unmarshal(xmlFile);
-        if (pers.getSize() == 0){
-        return tmpList;
-}
+        if (pers.getSize() == 0) {
+            return tmpList;
+        }
         ArrayList<User> xmlList = new ArrayList<>();
 
         for (var psu : pers.getUsr()) {
-            var userxml = new User(psu.getName(),UserRole.valueOf(psu.getUserRole()));
+            var userxml = new User(psu.getName(), UserRole.valueOf(psu.getUserRole()));
             xmlList.add(userxml);
         }
-            return xmlList ;
+        return xmlList;
 
-}
+    }
 
 
     // Считывает все строки файла согласно роли
@@ -185,20 +193,17 @@ public class FileRepository {
         List<TimeRecord> generic = new ArrayList<TimeRecord>();
         Scanner sc = new Scanner(new File(newPath));
         List<String> lines = new ArrayList<String>();
-        while (sc.hasNextLine())
-        {
-        lines.add(sc.nextLine());
+        while (sc.hasNextLine()) {
+            lines.add(sc.nextLine());
         }
         String[] str = lines.toArray(new String[0]);
-        for (var stroka :str)
-        {
-            if (str!= null || str.length>0)
-            {
+        for (var stroka : str) {
+            if (str != null || str.length > 0) {
                 var plitedStroka = stroka.split(",");
-                if (plitedStroka.length<4){System.out.println("Строка неверная "+ stroka);
+                if (plitedStroka.length < 4) {
+                    System.out.println("Строка неверная " + stroka);
                     break;
-                }
-                else if (plitedStroka.length==4) {
+                } else if (plitedStroka.length == 4) {
                     var user = new TimeRecord(plitedStroka);//создали  объект
                     generic.add(user);// добавили объект в коллекцию
                 }
@@ -207,17 +212,16 @@ public class FileRepository {
         }
 
         return generic;
-        }
+    }
 
     // Получаем имя пользователя и возвращаем коллекцию User
 
     public User userGet(String name) throws IOException, JAXBException {
-        for (var record : readXmlUser())
-        {
+        for (var record : readXmlUser()) {
             if (record.getName().equals(name))
                 return record;
         }
-       return null;
+        return null;
 
     }
 
