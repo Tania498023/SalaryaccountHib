@@ -5,9 +5,9 @@ import java.time.LocalDate;
 public class TimeRecord {
     private LocalDate dates;
     private String names;
-    private int hours;
+    private Integer hours;
     private String messages;
-    public TimeRecord(LocalDate date, String name, int hour, String message) {
+    public TimeRecord(LocalDate date, String name, Integer hour, String message) {
         this.dates = date;
         this.names = name;
         this.hours = hour;

@@ -20,6 +20,7 @@ import org.xml.sax.SAXException;
 
 
 import static SoftwareDevelopDomain.Person.UserRole.MANAGER;
+import static SoftwareDevelopDomain.Person.UserRole.values;
 
 
 public class FileRepository {
@@ -109,37 +110,6 @@ public class FileRepository {
 
     }
 
-    @Deprecated
-    /// Записываем коллекцию TimeRecord в файл согласно роли
-    public void fillFileGeneric(ArrayList<TimeRecord> timeRecords, int roles, boolean genericNeedWrite) throws IOException {
-        String newPath = ConvertRoleToPath(roles);
-        File file = new File(newPath);
-
-        if (!isFileExists(file))
-            file.createNewFile();
-        long size = file.length();
-
-        if (!genericNeedWrite && size > 0)// TODO
-            return;
-        FileWriter writer = null;
-        try {
-            writer = new FileWriter(file, true);
-            for (var userRole : timeRecords)//перебираем коллекцию и выбираем из нее элементы
-            {
-                var usrRol = (TimeRecord) userRole;
-                //создаем строку с разделительными символами и переносом строки
-                String genericStr = usrRol.getDate() + "," + usrRol.getName() + "," + usrRol.getHours() + "," + usrRol.getMessage() + System.lineSeparator();
-                writer.append(genericStr);//записываем указанную строку
-            }
-        } catch (IOException e) {
-
-        } finally {
-            if (writer != null) {
-                writer.close();
-            }
-        }
-    }
-
     /// Конвертируем тип int(роль) в string(путь к файлу)
     @Deprecated
     private static String ConvertRoleToPath(int roles) {
@@ -184,34 +154,31 @@ public class FileRepository {
 
 
     // Считывает все строки файла согласно роли
-    public List<TimeRecord> readFileGeneric(int roles) throws FileNotFoundException {
-        String newPath = ConvertRoleToPath(roles);
-        File file = new File(newPath);
+    public List<TimeRecord> readXmlRecord(int roles) throws FileNotFoundException, JAXBException {
+        Persons pers = new Persons();
 
-        if (!isFileExists(file))
-            return null;
-        List<TimeRecord> generic = new ArrayList<TimeRecord>();
-        Scanner sc = new Scanner(new File(newPath));
-        List<String> lines = new ArrayList<String>();
-        while (sc.hasNextLine()) {
-            lines.add(sc.nextLine());
+        // Создаем файл
+        File xmlFile = new File(".\\src\\Persons.xml");
+        // Вызываем статический метод JAXBContext
+        JAXBContext jaxbContext = JAXBContext.newInstance(Persons.class);
+        // Возвращает объект класса Marshaller, для того чтобы трансформировать объект
+        Marshaller marshaller = jaxbContext.createMarshaller();
+        // Читабельное форматирование
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        //   try {
+        Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+
+        pers = (Persons) unmarshaller.unmarshal(xmlFile);
+
+        ArrayList<TimeRecord> listRec = new ArrayList<>();
+
+        for (var ps : pers.getUsrRec()) {
+            var recxml = new TimeRecord(LocalDate.parse(ps.getDate()),ps.getName(), Integer.parseInt(ps.getHour()), ps.getMessage());//TODO
+
+            listRec.add(recxml);
         }
-        String[] str = lines.toArray(new String[0]);
-        for (var stroka : str) {
-            if (str != null || str.length > 0) {
-                var plitedStroka = stroka.split(",");
-                if (plitedStroka.length < 4) {
-                    System.out.println("Строка неверная " + stroka);
-                    break;
-                } else if (plitedStroka.length == 4) {
-                    var user = new TimeRecord(plitedStroka);//создали  объект
-                    generic.add(user);// добавили объект в коллекцию
-                }
+        return listRec;
 
-            }
-        }
-
-        return generic;
     }
 
     // Получаем имя пользователя и возвращаем коллекцию User
@@ -227,8 +194,8 @@ public class FileRepository {
 
     // Получаем отчет по сотрудникам с учетом роли
 
-    public List<TimeRecord> reportGet(UserRole userRole, LocalDate startDate, LocalDate endDate) throws FileNotFoundException {
-        var records = readFileGeneric(userRole.ordinal());
+    public List<TimeRecord> reportGet(UserRole userRole, LocalDate startDate, LocalDate endDate) throws FileNotFoundException, JAXBException {
+        var records = readXmlRecord(userRole.ordinal());
 
         if (startDate == null) {
             startDate = LocalDate.now().minusYears(100);
@@ -252,7 +219,7 @@ public class FileRepository {
     }
 
     // Получаем отчет по конкретному сотруднику
-    public List<TimeRecord> reportGetByUser(String userName, UserRole userRole, LocalDate from, LocalDate to) throws FileNotFoundException {
+    public List<TimeRecord> reportGetByUser(String userName, UserRole userRole, LocalDate from, LocalDate to) throws FileNotFoundException, JAXBException {
         List<TimeRecord> filteredRep = new ArrayList<TimeRecord>();
         var rep = reportGet(userRole, from, to);
 

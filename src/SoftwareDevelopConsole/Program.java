@@ -250,8 +250,8 @@ public class Program {
         menuUp();
     }
 
-    private static void watchHour() throws IOException {
-        List<TimeRecord> HH = fill.readFileGeneric(polzovatel.getUserRole().ordinal());//!!!метод вернул коллекцию, сохранили в переменную
+    private static void watchHour() throws IOException, JAXBException {
+        List<TimeRecord> HH = fill.readXmlRecord(polzovatel.getUserRole().ordinal());//!!!метод вернул коллекцию, сохранили в переменную
 
         LocalDate startDate = null;
         LocalDate endDate;
@@ -572,7 +572,7 @@ public class Program {
 
         ArrayList<TimeRecord> allWorkRep = new ArrayList<TimeRecord>();//создали новую общую коллекцию (пустая)
         for (int indexRole = 0; indexRole < 3; indexRole++) {
-            List<TimeRecord> allWork = fill.readFileGeneric(indexRole);//вычитываем все файлы в коллекцию allWork
+            List<TimeRecord> allWork = fill.readXmlRecord(indexRole);//вычитываем все файлы в коллекцию allWork
             allWorkRep.addAll(allWork);//добавляем группу элементов коллекции allWork в общую коллекцию allWorkRep
         }
 
@@ -737,7 +737,7 @@ public class Program {
 
         while (true);
 
-        var HH = fill.readFileGeneric(repHour.getUserRole().ordinal());
+        var HH = fill.readXmlRecord(repHour.getUserRole().ordinal());
         if (repHour.getUserRole() == UserRole.MANAGER) {
 
             var totp = new Manager(repHour, HH, startDate, endDate);

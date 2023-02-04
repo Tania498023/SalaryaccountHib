@@ -1,6 +1,7 @@
 package Persistence.PersonsJava;
 
 
+import Persistence.PeopleXML.UserXML;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 
@@ -15,6 +16,10 @@ public class Persons {
 
     public void add(Role user) {
         usrs.add(user);
+    }
+
+    public List<Role> getUsrRec() {
+        return usrs;
     }
 
     @Override
