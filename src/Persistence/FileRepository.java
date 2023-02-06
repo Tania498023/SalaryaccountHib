@@ -91,7 +91,7 @@ public class FileRepository {
                     return;
 
                 for (var ps : timeRecords) {
-                    var recxml = new Role("", ps.getName(), ps.getDate().toString(), ps.getHours().toString(), ps.getMessage());//TODO
+                    var recxml = new Role(ps.getName(), ps.getDate().toString(), ps.getHours().toString(), ps.getMessage());//TODO
 
                     rec.add(recxml);
                 }
@@ -186,6 +186,7 @@ public class FileRepository {
     public User userGet(String name) throws IOException, JAXBException {
         for (var record : readXmlUser()) {
             if (record.getName().equals(name))
+
                 return record;
         }
         return null;

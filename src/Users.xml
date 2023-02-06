@@ -12,4 +12,8 @@
         <name>р</name>
         <userRole>MANAGER</userRole>
     </user>
+    <user>
+        <name>рр</name>
+        <userRole>EMPLOYEE</userRole>
+    </user>
 </users>

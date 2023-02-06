@@ -39,7 +39,7 @@ import jakarta.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "usersType", propOrder = {
-    "role",
+
     "name",
     "date",
     "hour",
@@ -47,8 +47,7 @@ import jakarta.xml.bind.annotation.XmlType;
 })
 public class UsersType {
 
-    @XmlElement(required = true)
-    protected String role;
+
     @XmlElement(required = true)
     protected String name;
     @XmlElement(required = true)
@@ -58,29 +57,6 @@ public class UsersType {
     @XmlElement(required = true)
     protected String message;
 
-    /**
-     * Gets the value of the role property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getRole() {
-        return role;
-    }
-
-    /**
-     * Sets the value of the role property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setRole(String value) {
-        this.role = value;
-    }
 
     /**
      * Gets the value of the name property.

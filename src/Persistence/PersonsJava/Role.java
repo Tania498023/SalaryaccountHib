@@ -5,7 +5,6 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "users")
 public class Role {
-    private String role;
     private String name;
     private String date;
     private String hour;
@@ -14,8 +13,8 @@ public class Role {
     public Role() {
     }
 
-    public Role(String role, String name, String date, String hour, String message) {
-        this.role = role;
+    public Role(String name, String date, String hour, String message) {
+
         this.name = name;
         this.date = date;
         this.hour = hour;
@@ -25,7 +24,6 @@ public class Role {
     @Override
     public String toString() {
         return "RecUser{" +
-                "role='" + role + '\'' +
                 ", name='" + name + '\'' +
                 ", date='" + date + '\'' +
                 ", hour='" + hour + '\'' +
@@ -33,9 +31,6 @@ public class Role {
                 '}';
     }
 
-    public String getRole() {
-        return role;
-    }
 
     public String getName() {
         return name;
@@ -51,10 +46,6 @@ public class Role {
 
     public String getMessage() {
         return message;
-    }
-@XmlElement
-    public void setRole(String role) {
-        this.role = role;
     }
 @XmlElement
     public void setName(String name) {

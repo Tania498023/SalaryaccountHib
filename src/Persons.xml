@@ -5,6 +5,11 @@
         <hour>8</hour>
         <message>рол</message>
         <name>р</name>
-        <role></role>
+    </users>
+    <users>
+        <date>2023-01-02</date>
+        <hour>8</hour>
+        <message>ддд</message>
+        <name>рр</name>
     </users>
 </persons>
