@@ -4,10 +4,10 @@ import java.io.*;
 import java.time.LocalDate;
 import java.util.*;
 
-import Persistence.PeopleXML.UserXML;
-import Persistence.PeopleXML.UsersXML;
-import Persistence.PersonsJava.Persons;
-import Persistence.PersonsJava.Role;
+import Persistence.UsersClassXml.UserXML;
+import Persistence.UsersClassXml.UsersXML;
+import Persistence.RecordsClassXml.Records;
+import Persistence.RecordsClassXml.UserRecord;
 import SoftwareDevelopDomain.Helpers;
 import SoftwareDevelopDomain.Person.User;
 import SoftwareDevelopDomain.Person.UserRole;
@@ -20,14 +20,14 @@ import org.xml.sax.SAXException;
 
 
 import static SoftwareDevelopDomain.Person.UserRole.MANAGER;
-import static SoftwareDevelopDomain.Person.UserRole.values;
 
 
 public class FileRepository {
 
-    public static void fillXmlUser(ArrayList<User> users, boolean userNeedWrite) throws IOException, SAXException {
+    public static void fillXmlUser(ArrayList<UserXML> users, boolean userNeedWrite) throws IOException, SAXException {
 
         UsersXML pers = new UsersXML();
+
 
         try {
             // Создаем файл
@@ -47,15 +47,10 @@ public class FileRepository {
                 if (!userNeedWrite && size > 0) //TODO true для рабочего(не фейкового файла)
                     return;
 
-                for (var ps : users) {
-                    var userxml = new UserXML(ps.getName(), ps.getUserRole().toString());
 
-                    pers.add(userxml);
-
-                }
             } catch (Exception e) {
             }
-
+            pers.addList(users);
 
             // Записываем в файл, marshal(из памяти, в файл)
             marshaller.marshal(pers, file);
@@ -71,13 +66,13 @@ public class FileRepository {
     }
 
     public void fillXmlRecord(ArrayList<TimeRecord> timeRecords, int roles, boolean genericNeedWrite) throws IOException {
-        Persons rec = new Persons();
+        Records rec = new Records();
 
         try {
             // Создаем файл
-            File file = new File(".\\src\\Persons.xml"); //
+            File file = new File(".\\src\\Records.xml"); //
             // Вызываем статический метод JAXBContext
-            JAXBContext jaxbContext = JAXBContext.newInstance(Persons.class);
+            JAXBContext jaxbContext = JAXBContext.newInstance(Records.class);
             // Возвращает объект класса Marshaller, для того чтобы трансформировать объект
             Marshaller marshaller = jaxbContext.createMarshaller();
             // Читабельное форматирование
@@ -85,13 +80,13 @@ public class FileRepository {
 
             try {
                 Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-                rec = (Persons) unmarshaller.unmarshal(file);
+                rec = (Records) unmarshaller.unmarshal(file);
                 long size = file.length();
                 if (!genericNeedWrite && size > 0) //TODO true для рабочего(не фейкового файла)
                     return;
 
                 for (var ps : timeRecords) {
-                    var recxml = new Role(ps.getName(), ps.getDate().toString(), ps.getHours().toString(), ps.getMessage());//TODO
+                    var recxml = new UserRecord(ps.getName(), ps.getDate().toString(), ps.getHours().toString(), ps.getMessage());//TODO
 
                     rec.add(recxml);
                 }
@@ -115,7 +110,7 @@ public class FileRepository {
     private static String ConvertRoleToPath(int roles) {
         String newPath = "";
 
-        newPath = ".\\src\\Persons.xml";
+        newPath = ".\\src\\Records.xml";
 
         return newPath;
     }
@@ -145,7 +140,7 @@ public class FileRepository {
         ArrayList<User> xmlList = new ArrayList<>();
 
         for (var psu : pers.getUsr()) {
-            var userxml = new User(psu.getName(), UserRole.valueOf(psu.getUserRole()));
+            var userxml = new User(psu.getName(), psu.getUserRole());
             xmlList.add(userxml);
         }
         return xmlList;
@@ -155,12 +150,12 @@ public class FileRepository {
 
     // Считывает все строки файла согласно роли
     public List<TimeRecord> readXmlRecord(int roles) throws FileNotFoundException, JAXBException {
-        Persons pers = new Persons();
+        Records pers = new Records();
 
         // Создаем файл
-        File xmlFile = new File(".\\src\\Persons.xml");
+        File xmlFile = new File(".\\src\\Records.xml");
         // Вызываем статический метод JAXBContext
-        JAXBContext jaxbContext = JAXBContext.newInstance(Persons.class);
+        JAXBContext jaxbContext = JAXBContext.newInstance(Records.class);
         // Возвращает объект класса Marshaller, для того чтобы трансформировать объект
         Marshaller marshaller = jaxbContext.createMarshaller();
         // Читабельное форматирование
@@ -168,7 +163,7 @@ public class FileRepository {
         //   try {
         Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 
-        pers = (Persons) unmarshaller.unmarshal(xmlFile);
+        pers = (Records) unmarshaller.unmarshal(xmlFile);
 
         ArrayList<TimeRecord> listRec = new ArrayList<>();
 

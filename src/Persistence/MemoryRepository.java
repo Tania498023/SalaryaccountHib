@@ -1,5 +1,6 @@
 package Persistence;
 
+import Persistence.UsersClassXml.UserXML;
 import SoftwareDevelopDomain.Helpers;
 import SoftwareDevelopDomain.Person.User;
 import SoftwareDevelopDomain.Person.UserRole;
@@ -62,10 +63,10 @@ public class MemoryRepository  implements IRepository {
         manager.add(new TimeRecord(LocalDate.now().minusDays(2),"Береговой",10,"test message 2"));
     }
 
-    private ArrayList<User> users = new ArrayList<User>();
+    private ArrayList<UserXML> users = new ArrayList<UserXML>();
 public void addFakeDataUser(){
 
-       users.add(new User("ЯЯ", MANAGER));
+       users.add(new UserXML("ЯЯ", MANAGER));
 }
     public ArrayList<TimeRecord> employees()
     {
@@ -147,8 +148,8 @@ ArrayList<TimeRecord> getRep = new ArrayList<TimeRecord>();
     }
     public boolean userCreate(UserRole userRole, String name)
     {
-        var newUser = new User(name, userRole);
-        User existedUser = userGet(name);
+        var newUser = new UserXML(name, userRole);
+        UserXML existedUser = userGet(name);
         if (existedUser == null)
         {
             users.add(newUser);
@@ -159,7 +160,7 @@ ArrayList<TimeRecord> getRep = new ArrayList<TimeRecord>();
             return false;
         }
     }
-    public User userGet(String name)
+    public UserXML userGet(String name)
     {
         for(var record:Users())
         {
@@ -168,7 +169,7 @@ ArrayList<TimeRecord> getRep = new ArrayList<TimeRecord>();
         }
         return null;
     }
-    public ArrayList<User> Users()//возвращаем  List<User>
+    public ArrayList<UserXML> Users()//возвращаем  List<User>
     {
         return users;
     }

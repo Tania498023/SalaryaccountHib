@@ -1,4 +1,5 @@
-package Persistence.PeopleXML;
+package Persistence.UsersClassXml;
+
 
 
 import jakarta.xml.bind.annotation.XmlElement;
@@ -16,7 +17,9 @@ public class UsersXML {
     public void add(UserXML user) {
         usr.add(user);
     }
-
+    public void addList(ArrayList<UserXML> users){
+        usr.addAll(users);
+}
     public List<UserXML> getUsr() {
         return usr;
     }

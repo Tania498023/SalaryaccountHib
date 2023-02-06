@@ -1,7 +1,8 @@
-package Persistence.PersonsJava;
+package Persistence.RecordsClassXml;
 
 
-import Persistence.PeopleXML.UserXML;
+
+
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 
@@ -9,16 +10,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@XmlRootElement(name = "persons")
-public class Persons {
-    @XmlElement(name = "users")
-    private List<Role> usrs = new ArrayList<>();
+@XmlRootElement(name = "records")
+public class Records {
+    @XmlElement(name = "userRecord")
+    private List<UserRecord> usrs = new ArrayList<>();
 
-    public void add(Role user) {
+    public void add(UserRecord user) {
         usrs.add(user);
     }
 
-    public List<Role> getUsrRec() {
+    public List<UserRecord> getUsrRec() {
         return usrs;
     }
 

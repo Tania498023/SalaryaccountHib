@@ -2,6 +2,7 @@ package SoftwareDevelopConsole;
 
 import Persistence.FileRepository;
 import Persistence.MemoryRepository;
+import Persistence.UsersClassXml.UserXML;
 import SoftwareDevelopDomain.Helpers;
 import SoftwareDevelopDomain.Person.Employee;
 import SoftwareDevelopDomain.Person.Freelancer;
@@ -476,8 +477,8 @@ public class Program {
         }
         System.out.println("Введите роль пользователя");
         var IR = inputRole();
-        var user = new User(enterName, IR);
-        ArrayList<User> users = new ArrayList<User>();
+        var user = new UserXML(enterName, IR);
+        ArrayList<UserXML> users = new ArrayList<UserXML>();
         users.add(user);
         fill.fillXmlUser(users, true);//режим true- введенный пользователь добавляется в файл
 
@@ -513,7 +514,8 @@ public class Program {
         }
 
         System.out.println("-------------------------");
-        menuUp();
+
+    menuUp();
 
     }
 

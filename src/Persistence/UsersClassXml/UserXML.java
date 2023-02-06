@@ -1,18 +1,20 @@
-package Persistence.PeopleXML;
+package Persistence.UsersClassXml;
 
 
+import SoftwareDevelopDomain.Person.UserRole;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
+
 
 @XmlRootElement(name = "user")
 public class UserXML {
     private String name;
-    private String userRole;
+    private UserRole userRole;
 
     public UserXML() {
     }
 
-    public UserXML(String name, String userRole) {
+    public UserXML(String name, UserRole userRole) {
         this.name = name;
         this.userRole = userRole;
     }
@@ -28,12 +30,12 @@ public class UserXML {
         this.name = name;
     }
 
-    public String getUserRole() {
+    public UserRole getUserRole() {
         return userRole;
     }
 
     @XmlElement
-    public void setUserRole(String userRole) {
+    public void setUserRole(UserRole userRole) {
         this.userRole = userRole;
     }
 }

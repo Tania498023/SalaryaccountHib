@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:element name="users" type="usersType"/>
-  <xs:complexType name="userType">
+  <xs:element name="records" type="recordsType"/>
+  <xs:complexType name="userRecordType">
     <xs:sequence>
+      <xs:element type="xs:string" name="date"/>
+      <xs:element type="xs:string" name="hour"/>
+      <xs:element name="message">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="рол"/>
+            <xs:enumeration value="ддд"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
       <xs:element name="name">
         <xs:simpleType>
           <xs:restriction base="xs:string">
-            <xs:enumeration value="ваку"/>
-            <xs:enumeration value="ап"/>
             <xs:enumeration value="р"/>
             <xs:enumeration value="рр"/>
           </xs:restriction>
         </xs:simpleType>
       </xs:element>
-      <xs:element name="userRole">
-        <xs:simpleType>
-          <xs:restriction base="xs:string">
-            <xs:enumeration value="MANAGER"/>
-            <xs:enumeration value="EMPLOYEE"/>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:element>
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="usersType">
+  <xs:complexType name="recordsType">
     <xs:sequence>
-      <xs:element type="userType" name="user" maxOccurs="unbounded" minOccurs="0"/>
+      <xs:element type="userRecordType" name="userRecord" maxOccurs="unbounded" minOccurs="0"/>
     </xs:sequence>
   </xs:complexType>
 </xs:schema>

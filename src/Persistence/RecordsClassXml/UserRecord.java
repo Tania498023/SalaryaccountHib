@@ -1,19 +1,20 @@
-package Persistence.PersonsJava;
+package Persistence.RecordsClassXml;
+
 
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "users")
-public class Role {
+@XmlRootElement(name = "userRecord")
+public class UserRecord {
     private String name;
     private String date;
     private String hour;
     private String message;
 
-    public Role() {
+    public UserRecord() {
     }
 
-    public Role(String name, String date, String hour, String message) {
+    public UserRecord(String name, String date, String hour, String message) {
 
         this.name = name;
         this.date = date;

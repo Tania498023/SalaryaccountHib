@@ -16,4 +16,8 @@
         <name>рр</name>
         <userRole>EMPLOYEE</userRole>
     </user>
+    <user>
+        <name>бю</name>
+        <userRole>EMPLOYEE</userRole>
+    </user>
 </users>

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<persons>
-    <users>
+<records>
+    <userRecord>
         <date>2023-01-02</date>
         <hour>8</hour>
         <message>рол</message>
         <name>р</name>
-    </users>
-    <users>
+    </userRecord>
+    <userRecord>
         <date>2023-01-02</date>
         <hour>8</hour>
         <message>ддд</message>
         <name>рр</name>
-    </users>
-</persons>
+    </userRecord>
+</records>
