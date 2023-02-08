@@ -53,20 +53,22 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "userRecordType", propOrder = {
     "date",
+        "name",
     "hour",
     "message",
-    "name"
+
 })
 public class UserRecordType {
 
     @XmlElement(required = true)
     protected String date;
     @XmlElement(required = true)
+    protected String name;
+    @XmlElement(required = true)
     protected String hour;
     @XmlElement(required = true)
     protected String message;
-    @XmlElement(required = true)
-    protected String name;
+
 
     /**
      * Gets the value of the date property.
@@ -90,6 +92,28 @@ public class UserRecordType {
      */
     public void setDate(String value) {
         this.date = value;
+    }
+    /**
+     * Gets the value of the name property.
+     *
+     * @return
+     *     possible object is
+     *     {@link String }
+     *
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Sets the value of the name property.
+     *
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *
+     */
+    public void setName(String value) {
+        this.name = value;
     }
 
     /**
@@ -140,28 +164,6 @@ public class UserRecordType {
         this.message = value;
     }
 
-    /**
-     * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getName() {
-        return name;
-    }
 
-    /**
-     * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setName(String value) {
-        this.name = value;
-    }
 
 }

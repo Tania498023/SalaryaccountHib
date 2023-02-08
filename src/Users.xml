@@ -20,4 +20,12 @@
         <name>бю</name>
         <userRole>EMPLOYEE</userRole>
     </user>
+    <user>
+        <name>пол</name>
+        <userRole>MANAGER</userRole>
+    </user>
+    <user>
+        <name>пе</name>
+        <userRole>FREELANCER</userRole>
+    </user>
 </users>

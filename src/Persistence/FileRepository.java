@@ -86,7 +86,7 @@ public class FileRepository {
                     return;
 
                 for (var ps : timeRecords) {
-                    var recxml = new UserRecord(ps.getName(), ps.getDate().toString(), ps.getHours().toString(), ps.getMessage());//TODO
+                    var recxml = new UserRecord(ps.getDate(),ps.getName(),  ps.getHours(), ps.getMessage());//TODO
 
                     rec.add(recxml);
                 }
@@ -168,7 +168,7 @@ public class FileRepository {
         ArrayList<TimeRecord> listRec = new ArrayList<>();
 
         for (var ps : pers.getUsrRec()) {
-            var recxml = new TimeRecord(LocalDate.parse(ps.getDate()),ps.getName(), Integer.parseInt(ps.getHour()), ps.getMessage());//TODO
+            var recxml = new TimeRecord(ps.getDate(),ps.getName(),(ps.getHour()), ps.getMessage());//TODO
 
             listRec.add(recxml);
         }
