@@ -573,7 +573,8 @@ public class Program {
         while (true);
 
         ArrayList<TimeRecord> allWorkRep = new ArrayList<TimeRecord>();//создали новую общую коллекцию (пустая)
-        for (int indexRole = 0; indexRole < 3; indexRole++) {
+     for (int indexRole = 0; indexRole < 3; indexRole++)
+       {
             List<TimeRecord> allWork = fill.readXmlRecord(indexRole);//вычитываем все файлы в коллекцию allWork
             allWorkRep.addAll(allWork);//добавляем группу элементов коллекции allWork в общую коллекцию allWorkRep
         }
