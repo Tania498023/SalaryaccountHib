@@ -26,9 +26,7 @@ import static SoftwareDevelopDomain.Person.UserRole.MANAGER;
 public class FileRepository {
 
     public static void fillXmlUser(ArrayList<UserXML> users, boolean userNeedWrite) throws IOException, SAXException {
-
         UsersXML pers = new UsersXML();
-
 
         try {
             // Создаем файл
@@ -40,7 +38,6 @@ public class FileRepository {
             // Читабельное форматирование
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
-
             try {
                 Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
                 pers = (UsersXML) unmarshaller.unmarshal(file);
@@ -48,14 +45,12 @@ public class FileRepository {
                 if (!userNeedWrite && size > 0) //TODO true для рабочего(не фейкового файла)
                     return;
 
-
             } catch (Exception e) {
             }
             pers.addList(users);
 
             // Записываем в файл, marshal(из памяти, в файл)
             marshaller.marshal(pers, file);
-            //  marshaller.marshal(pers, System.out);
 
         } catch (JAXBException e) {
             e.printStackTrace();

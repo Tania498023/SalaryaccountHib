@@ -45,6 +45,8 @@ public class Program {
      do {
             try {
                 System.out.println("Введите ваше имя");
+
+
                 inpt = new Scanner(System.in);
                 String name = inpt.nextLine();
 
@@ -302,7 +304,7 @@ public class Program {
         while (true);
 
         for (var item : HH) {
-            if (Helpers.getMilliSecFromDate(item.getDate()) >= Helpers.getMilliSecFromDate(startDate) && Helpers.getMilliSecFromDate(item.getDate()) >= Helpers.getMilliSecFromDate(endDate)) {
+          if (Helpers.getMilliSecFromDate(item.getDate()) >= Helpers.getMilliSecFromDate(startDate) && Helpers.getMilliSecFromDate(item.getDate()) <= Helpers.getMilliSecFromDate(endDate)) {
                 if (item.getName().equals(polzovatel.getName())) {
                     System.out.println(item.getDate().toString() + "\t" + item.getName() + "\t" + item.getHours() + "\t" + item.getMessage());
                 }
