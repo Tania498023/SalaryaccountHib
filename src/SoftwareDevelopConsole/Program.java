@@ -573,16 +573,17 @@ public class Program {
         while (true);
 
         ArrayList<TimeRecord> allWorkRep = new ArrayList<TimeRecord>();//создали новую общую коллекцию (пустая)
-     for (int indexRole = 0; indexRole < 3; indexRole++)
-       {
-            List<TimeRecord> allWork = fill.readXmlRecord(indexRole);//вычитываем все файлы в коллекцию allWork
-            allWorkRep.addAll(allWork);//добавляем группу элементов коллекции allWork в общую коллекцию allWorkRep
-        }
+  //   for (int indexRole = 0; indexRole < 1;indexRole++) {//КОСТЫЛЬ
+        {
+             List<TimeRecord> allWork = fill.readXmlRecord(-1);//вычитываем все файлы в коллекцию allWork
+
+             allWorkRep.addAll(allWork);//добавляем группу элементов коллекции allWork в общую коллекцию allWorkRep
+
+     }
 
 
         Map<String, List<TimeRecord>> workMap = new HashMap<String, List<TimeRecord>>();//создаем новый словарь (пока пустой), в котором тип
-        //Ключа строка(фильтруем по имени, так как
-        // в нашем приложении оно уникально), тип Значения Список(List<>)
+        //Ключа строка(фильтруем по имени, так как в нашем приложении оно уникально), тип Значения Список(List<>)
 
         for (var workItem : allWorkRep)//перебираем общую коллекцию и каждый ее элемент кладем в переменную workItem
         {
