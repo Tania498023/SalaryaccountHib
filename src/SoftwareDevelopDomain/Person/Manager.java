@@ -1,5 +1,6 @@
 package SoftwareDevelopDomain.Person;
 
+import Persistence.UsersClassXml.UserXML;
 import SoftwareDevelopDomain.TimeRecord;
 
 import java.time.LocalDate;
@@ -12,7 +13,7 @@ public class Manager extends Staff {
 
 
 
-    public Manager( User user, List<TimeRecord> timeRecord, LocalDate startDate, LocalDate endDate) {
+    public Manager(UserXML user, List<TimeRecord> timeRecord, LocalDate startDate, LocalDate endDate) {
         super(stavka, user, timeRecord, startDate, endDate,monthBonuses);
 
     }

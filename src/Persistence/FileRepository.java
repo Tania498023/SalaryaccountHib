@@ -16,12 +16,8 @@ import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.Unmarshaller;
-
 import org.xml.sax.SAXException;
-
-
 import static SoftwareDevelopDomain.Person.UserRole.MANAGER;
-
 
 public class FileRepository {
 
@@ -93,12 +89,10 @@ public class FileRepository {
 
             // Записываем в файл, marshal(из памяти, в файл)
             marshaller.marshal(rec, file);
-            //  marshaller.marshal(pers, System.out);
 
         } catch (JAXBException e) {
             e.printStackTrace();
         }
-
     }
 
     /// Конвертируем тип int(роль) в string(путь к файлу)
@@ -112,9 +106,9 @@ public class FileRepository {
     }
 
 
-    public static ArrayList<User> readXmlUser() throws JAXBException {
-        var defaultUser = new User("Я", MANAGER);
-        var tmpList = new ArrayList<User>();
+    public static ArrayList<UserXML> readXmlUser() throws JAXBException {
+        var defaultUser = new UserXML("Я", MANAGER);
+        var tmpList = new ArrayList<UserXML>();
         tmpList.add(defaultUser);
 
         UsersXML pers = new UsersXML();
@@ -133,12 +127,10 @@ public class FileRepository {
         if (pers.getSize() == 0) {
             return tmpList;
         }
-        ArrayList<User> xmlList = new ArrayList<>();
+        ArrayList<UserXML> xmlList = new ArrayList<>();
 
-        for (var psu : pers.getUsr()) {
-            var userxml = new User(psu.getName(), psu.getUserRole());
-            xmlList.add(userxml);
-        }
+            xmlList.addAll(pers.getUsr());
+
         return xmlList;
 
     }
@@ -156,9 +148,7 @@ public class FileRepository {
         Marshaller marshaller = jaxbContext.createMarshaller();
         // Читабельное форматирование
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        //   try {
         Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-
         pers = (Records) unmarshaller.unmarshal(xmlFile);
 
         ArrayList<TimeRecord> listRec = new ArrayList<>();
@@ -173,8 +163,7 @@ public class FileRepository {
     }
 
     // Получаем имя пользователя и возвращаем коллекцию User
-
-    public User userGet(String name) throws IOException, JAXBException {
+    public UserXML userGet(String name) throws IOException, JAXBException {
         for (var record : readXmlUser()) {
             if (record.getName().equals(name))
 
@@ -185,7 +174,6 @@ public class FileRepository {
     }
 
     // Получаем отчет по сотрудникам с учетом роли
-
     public List<TimeRecord> reportGet(UserRole userRole, LocalDate startDate, LocalDate endDate) throws FileNotFoundException, JAXBException {
         var records = readXmlRecord(userRole.ordinal());
 

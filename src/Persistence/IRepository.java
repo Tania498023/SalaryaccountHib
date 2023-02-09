@@ -16,7 +16,6 @@ public interface IRepository {
     void timeRecordAdd(UserRole userRole, TimeRecord timeRecord);
     ArrayList<TimeRecord> reportGet (UserRole userRole, LocalDate from, LocalDate to);
     ArrayList<TimeRecord> reportGetByUser(String userName, UserRole userRole, LocalDate from, LocalDate to);
-
     ArrayList<TimeRecord> employees();
     ArrayList<TimeRecord> manager();
     ArrayList<TimeRecord> freelancer();

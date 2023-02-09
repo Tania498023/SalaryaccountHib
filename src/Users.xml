@@ -28,4 +28,12 @@
         <name>пе</name>
         <userRole>FREELANCER</userRole>
     </user>
+    <user>
+        <name>лодырь</name>
+        <userRole>EMPLOYEE</userRole>
+    </user>
+    <user>
+        <name>гор</name>
+        <userRole>FREELANCER</userRole>
+    </user>
 </users>

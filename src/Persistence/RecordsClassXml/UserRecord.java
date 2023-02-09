@@ -22,7 +22,6 @@ public class UserRecord {
         this.hour = hour;
         this.message = message;
     }
-
     @Override
     public String toString() {
         return "RecUser{" +
@@ -32,14 +31,12 @@ public class UserRecord {
                 ", message='" + message + '\'' +
                 '}';
     }
-
     public LocalDate getDate() {
         return date;
     }
     public String getName() {
         return name;
     }
-
 
     public Integer getHour() {
         return hour;

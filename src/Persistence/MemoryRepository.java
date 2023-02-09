@@ -2,13 +2,10 @@ package Persistence;
 
 import Persistence.UsersClassXml.UserXML;
 import SoftwareDevelopDomain.Helpers;
-import SoftwareDevelopDomain.Person.User;
 import SoftwareDevelopDomain.Person.UserRole;
 import SoftwareDevelopDomain.TimeRecord;
-
 import java.time.LocalDate;
 import java.util.*;
-
 import static SoftwareDevelopDomain.Person.UserRole.*;
 
 public class MemoryRepository  implements IRepository {
@@ -231,6 +228,5 @@ ArrayList<TimeRecord> getRep = new ArrayList<TimeRecord>();
     {
         generic.add(new TimeRecord(LocalDate.now().minusDays(3),"Перехвал",8,"test message 1"));
         return generic;
-
     }
 }

@@ -1,5 +1,6 @@
 package SoftwareDevelopDomain.Person;
 
+import Persistence.UsersClassXml.UserXML;
 import SoftwareDevelopDomain.Helpers;
 import SoftwareDevelopDomain.Settings;
 
@@ -18,7 +19,7 @@ public class Staff extends Person {
     }
 
 
-    public Staff(double monthSalary, User user, List<TimeRecord> timeRecord, LocalDate startDate, LocalDate endDate,double bonus) {
+    public Staff(double monthSalary, UserXML user, List<TimeRecord> timeRecord, LocalDate startDate, LocalDate endDate, double bonus) {
         super(user, timeRecord, startDate, endDate);
         bonuses = bonus;
         monthSalarys = monthSalary;

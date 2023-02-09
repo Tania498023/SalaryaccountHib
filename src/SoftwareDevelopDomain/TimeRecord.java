@@ -40,8 +40,4 @@ public class TimeRecord {
     public String getMessage() {
         return messages;
     }
-
-
-
-
 }

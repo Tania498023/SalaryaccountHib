@@ -1,5 +1,4 @@
 package SoftwareDevelopConsole;
-
 import Persistence.FileRepository;
 import Persistence.MemoryRepository;
 import Persistence.UsersClassXml.UserXML;
@@ -7,23 +6,19 @@ import SoftwareDevelopDomain.Helpers;
 import SoftwareDevelopDomain.Person.Employee;
 import SoftwareDevelopDomain.Person.Freelancer;
 import SoftwareDevelopDomain.Person.Manager;
-import SoftwareDevelopDomain.Person.User;
 import SoftwareDevelopDomain.Person.UserRole;
 import SoftwareDevelopDomain.TimeRecord;
 import jakarta.xml.bind.JAXBException;
 import org.xml.sax.SAXException;
-
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.*;
 import java.io.IOException;
 
 public class Program {
     public static FileRepository fill;
-    public static User polzovatel;
+    public static UserXML polzovatel;
 
-    public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException, JAXBException {
+    public static void main(String[] args) throws IOException, SAXException, JAXBException {
         int userRole = 0;
 
         fill = new FileRepository();//создаем экземпляры для возможности вызова метода FillFileUser
@@ -33,9 +28,6 @@ public class Program {
 
         var genericReturn = new MemoryRepository();
       fill.fillXmlRecord( genericReturn.Generic(), userRole, false);
-//
-       //var text = fill.readXmlUser();
-//
         controlRole(fill);
     }
 
@@ -45,8 +37,6 @@ public class Program {
      do {
             try {
                 System.out.println("Введите ваше имя");
-
-
                 inpt = new Scanner(System.in);
                 String name = inpt.nextLine();
 
@@ -55,7 +45,6 @@ public class Program {
               System.out.println("Пользователь с таким именем не существует");
             } catch (Exception e) {
 
-                var tt = e;
             }
     }
        while (polzovatel == null);
@@ -69,7 +58,6 @@ public class Program {
             System.out.println("\n Введите 0, если менеджер \n Введите 1, если сотрудник \n Введите 2, если фрилансер");
             inp = new Scanner(System.in);
             String inputRole = inp.nextLine();
-
             {
 
                 if (inputRole.equals("0")) {
@@ -147,7 +135,6 @@ public class Program {
 
                 break;
             }
-
         }
 
         while (true);
@@ -181,7 +168,7 @@ public class Program {
 
     private static void showFreelancerMenu() throws IOException, SAXException, JAXBException {
         int actionFreelancer = 0;
-        Scanner inp = null;
+        Scanner inp;
         do {
             System.out.println("Выберите действие  \n " +
                     "Введите 1, если вы хотите ввести часы \n " +
@@ -208,10 +195,10 @@ public class Program {
     }
 
     private static void menuUp() throws IOException, SAXException, JAXBException {
-        int choice = 0;
+        int choice;
 
 
-        Scanner inp = null;
+        Scanner inp;
         System.out.println("Выберите действие  \n " +
                 "Введите 1, если вы хотите продолжить \n " +
                 "Введите любое значение, если вы хотите выйти из меню");
@@ -238,14 +225,12 @@ public class Program {
                     showEmployeeMenu();
                 }
 
-                //  System.exit(0);
             } else
                 System.out.println("Работа завершена");
 
             System.exit(0);
         }
         while (true);
-
     }
 
     private static void watchStaffHour() throws IOException, SAXException, JAXBException {
@@ -256,9 +241,9 @@ public class Program {
     private static void watchHour() throws IOException, JAXBException {
         List<TimeRecord> HH = fill.readXmlRecord(polzovatel.getUserRole().ordinal());//!!!метод вернул коллекцию, сохранили в переменную
 
-        LocalDate startDate = null;
+        LocalDate startDate;
         LocalDate endDate;
-        Scanner inp = null;
+        Scanner inp;
 
         do {
             try {
@@ -276,11 +261,9 @@ public class Program {
                     System.out.println("Введенная дата неверная!");
                     continue;//пропускаем все условия ниже и переходим в конец цикла
                 }
-
                 System.out.println("Введите дату окончания отчета");
                 inp = new Scanner(System.in);
                 String inpEndDate = inp.nextLine();
-
 
                 if (inpEndDate == null && inpEndDate.isEmpty()) {
                     System.out.println("Дата должна быть введена!");
@@ -310,7 +293,6 @@ public class Program {
                 }
             }
         }
-
     }
 
     private static void addStaffHour() throws IOException, SAXException, JAXBException {
@@ -319,18 +301,16 @@ public class Program {
     }
 
     private static void addHour() throws IOException {
-        int hour = 0;
+        int hour;
         LocalDate date;
-        Scanner inp = null;
+        Scanner inp;
         do {
             try {
 
                 System.out.println("Введите отработанное время");
                 inp = new Scanner(System.in);
                 String enterH = inp.nextLine();
-
                 hour = Integer.parseInt(enterH);
-
 
                 if (hour <= 0 || hour >= 24) {
                     System.out.println("Вы вводите некорректные данные");
@@ -339,9 +319,7 @@ public class Program {
                 System.out.println("Введите дату");
                 inp = new Scanner(System.in);
                 String enterDate = inp.nextLine();
-
                 date = LocalDate.parse(enterDate);
-
 
                 if (date != LocalDate.MIN && Helpers.getMilliSecFromDate(date) <= Helpers.getMilliSecFromDate(LocalDate.now()) && polzovatel.getUserRole() == UserRole.EMPLOYEE) {
                     addHourWithControlDate(polzovatel, hour, date);
@@ -362,18 +340,16 @@ public class Program {
     }
 
     private static void addWorkerHour() throws IOException, JAXBException {
-        User worker;
-        LocalDate date = null;
-        int hour = 0;
+        UserXML worker;
+        LocalDate date;
+        int hour;
         Scanner inn;
         do {
             System.out.println("*************************************************");
             System.out.println("Введите пользователя");
             inn = new Scanner(System.in);
             String name = inn.nextLine();
-
             worker = fill.userGet(name);
-
 
             if (worker == null) {
                 System.out.println("Пользователь не существует");
@@ -394,72 +370,55 @@ public class Program {
                     System.out.println("Введенная дата неверная!");
                     continue;
                 }
-
                 System.out.println("Введите отработанное время");
                 inn = new Scanner(System.in);
                 String enterHour = inn.nextLine();
                 hour = Integer.parseInt(enterHour);
-
 
                 if (hour == 0 || hour >= 24) {
                     System.out.println("Введено неверное количество часов!");
                     continue;
                 }
                 addHourWithControlDate(worker, hour, date);
-
                 menuUp();
             } catch (Exception e) {
                 System.out.println("Введен неверный формат!");
-
             }
         }
-
         while (true);
-
     }
 
-
-    private static void addHourWithControlDate(User Us, int H, LocalDate date) throws IOException {
-        Scanner inn = null;
+    private static void addHourWithControlDate(UserXML Us, int H, LocalDate date) throws IOException {
+        Scanner inn;
         do {
-
-
             System.out.println("Введите сообщение");
-
             inn = new Scanner(System.in);
             String mas = inn.nextLine();
 
             if (mas == null || mas.isEmpty()) {
                 System.out.println("Поле должно быть заполнено!");
 
-
             } else {
                 var time = new TimeRecord(date, Us.getName(), H, mas);
-                List<TimeRecord> times = new ArrayList<TimeRecord>();
+                List<TimeRecord> times = new ArrayList<>();
                 times.add(time);
                 fill.fillXmlRecord((ArrayList<TimeRecord>) times, Us.getUserRole().ordinal(), true);
                 break;
             }
         }
         while (true);
-
-
     }
-
 
     private static void addWorker() throws IOException, SAXException, JAXBException {
         Scanner inn;
-        String enterName = null;
+        String enterName;
         do {
             System.out.println("Введите имя пользователя");
-
             try {
-
                 inn = new Scanner(System.in);
                 enterName = inn.nextLine();
                 if (enterName.length() == 0) {
                     System.out.println("Поле не может быть пустым");
-                    continue;
                 } else {
                     break;
                 }
@@ -480,11 +439,11 @@ public class Program {
         System.out.println("Введите роль пользователя");
         var IR = inputRole();
         var user = new UserXML(enterName, IR);
-        ArrayList<UserXML> users = new ArrayList<UserXML>();
+        ArrayList<UserXML> users = new ArrayList<>();
         users.add(user);
         fill.fillXmlUser(users, true);//режим true- введенный пользователь добавляется в файл
 
-        Map<UserRole, ArrayList<String>> groupWorkRep = new HashMap<UserRole, ArrayList<String>>();
+        Map<UserRole, ArrayList<String>> groupWorkRep = new HashMap<>();
 
         var groupUser = fill.readXmlUser();
         for (var groupItem : groupUser) {
@@ -500,7 +459,6 @@ public class Program {
                     itemsList.add(groupItem.getName());
             }
         }
-
         for (var groupWork : groupWorkRep.entrySet()) {
             if (groupWork.getKey() == user.getUserRole()) {
                 System.out.println("-------------------------");
@@ -511,14 +469,10 @@ public class Program {
                 for (var item : groupWork.getValue()) {
 
                     System.out.println(item);
-
                 }
         }
-
         System.out.println("-------------------------");
-
     menuUp();
-
     }
 
     private static void watchWorkerReport() throws IOException, SAXException, JAXBException {
@@ -526,15 +480,12 @@ public class Program {
         LocalDate endDate;
         int itogHour = 0;
         double itogTotalPay = 0;
-        Scanner inn = null;
+        Scanner inn;
         do {
             try {
-
-
                 System.out.println("Введите дату начала отчета");
                 inn = new Scanner(System.in);
                 String enterStartDate = inn.nextLine();
-
 
                 if (enterStartDate == null && enterStartDate.isEmpty()) {
                     System.out.println("Дата должна быть введена!");
@@ -549,7 +500,6 @@ public class Program {
                 System.out.println("Введите дату окончания отчета");
                 inn = new Scanner(System.in);
                 String enterEndtDate = inn.nextLine();
-
 
                 if (enterEndtDate == null && enterEndtDate.isEmpty()) {
                     System.out.println("Дата должна быть введена!");
@@ -569,22 +519,14 @@ public class Program {
             } catch (Exception e) {
 
             }
-
         }
-
         while (true);
 
-        ArrayList<TimeRecord> allWorkRep = new ArrayList<TimeRecord>();//создали новую общую коллекцию (пустая)
-  //   for (int indexRole = 0; indexRole < 1;indexRole++) {//КОСТЫЛЬ
-        {
-             List<TimeRecord> allWork = fill.readXmlRecord(-1);//вычитываем все файлы в коллекцию allWork
+        ArrayList<TimeRecord> allWorkRep = new ArrayList<>();//создали новую общую коллекцию (пустая)
+        List<TimeRecord> allWork = fill.readXmlRecord(-1);//вычитываем все файлы в коллекцию allWork
+        allWorkRep.addAll(allWork);//добавляем группу элементов коллекции allWork в общую коллекцию allWorkRep
 
-             allWorkRep.addAll(allWork);//добавляем группу элементов коллекции allWork в общую коллекцию allWorkRep
-
-     }
-
-
-        Map<String, List<TimeRecord>> workMap = new HashMap<String, List<TimeRecord>>();//создаем новый словарь (пока пустой), в котором тип
+        Map<String, List<TimeRecord>> workMap = new HashMap<>();//создаем новый словарь (пока пустой), в котором тип
         //Ключа строка(фильтруем по имени, так как в нашем приложении оно уникально), тип Значения Список(List<>)
 
         for (var workItem : allWorkRep)//перебираем общую коллекцию и каждый ее элемент кладем в переменную workItem
@@ -595,7 +537,6 @@ public class Program {
                     var itemList = new ArrayList<TimeRecord>();
                     itemList.add((workItem));
                     workMap.put(workItem.getName(), itemList);
-
                 } else//иначе ключ есть
                 {
                     List<TimeRecord> items = workMap.get(workItem.getName());
@@ -607,10 +548,7 @@ public class Program {
 
         for (var sortWork : workMap.entrySet()) {
             var repHour = fill.userGet(sortWork.getKey());//получаем имя-ключ из словаря и значение кладем в переменную rephour
-
             var HH = sortWork.getValue();//значение из словаря положили в переменную HH
-
-
             double bonus = 0;
 
             if (repHour.getUserRole() == UserRole.MANAGER)//проверяем роль через имя
@@ -621,8 +559,8 @@ public class Program {
                 System.out.println("Сотрудник \t" + sortWork.getKey());
                 totp.printRepPerson();
 
-                System.out.println("Всего отработано \t" + totp.sumHours);//итоговое время по конкретному сотруднику
-                System.out.println("Всего заработано \t" + totp.getTotalPay());//итоговая зп по конкретному сотруднику
+                System.out.println("Всего отработано часов\t" + totp.sumHours);//итоговое время по конкретному сотруднику
+                System.out.println("Всего заработано рублей\t" + totp.getTotalPay());//итоговая зп по конкретному сотруднику
                 itogHour += totp.sumHours;//итоговое время по всем независимо от роли
                 itogTotalPay += totp.getTotalPay();//итоговая з/п по всем независимо от роли
 
@@ -634,8 +572,8 @@ public class Program {
                 System.out.println("Сотрудник \t" + sortWork.getKey());
                 totp.printRepPerson();
 
-                System.out.println("Всего отработано \t" + totp.sumHours);
-                System.out.println("Всего заработано \t" + totp.getTotalPay());
+                System.out.println("Всего отработано часов\t" + totp.sumHours);
+                System.out.println("Всего заработано рублей\t" + totp.getTotalPay());
                 itogHour += totp.sumHours;
                 itogTotalPay += totp.getTotalPay();
 
@@ -646,18 +584,16 @@ public class Program {
                 System.out.println("Сотрудник \t" + sortWork.getKey());
                 totp.printRepPerson();
 
-                System.out.println("Всего отработано \t" + totp.sumHours);
-                System.out.println("Всего заработано \t" + totp.getTotalPay());
+                System.out.println("Всего отработано часов\t" + totp.sumHours);
+                System.out.println("Всего заработано рублей\t" + totp.getTotalPay());
                 itogHour += totp.sumHours;
                 itogTotalPay += totp.getTotalPay();
-
             }
-
         }
         System.out.println("");
         System.out.println("--------------------------------------");
-        System.out.println("Всего отработано \t" + itogHour);
-        System.out.println("Всего заработано \t" + itogTotalPay);
+        System.out.println("Всего отработано часов\t" + itogHour);
+        System.out.println("Всего заработано рублей\t" + itogTotalPay);
 
         menuUp();
     }
@@ -665,19 +601,15 @@ public class Program {
     private static void watchWorkerHour() throws IOException, SAXException, JAXBException {
         LocalDate startDate;
         LocalDate endDate;
-        Scanner inn = null;
+        Scanner inn;
         do {
             try {
-
-
                 System.out.println("Введите дату начала отчета");
                 inn = new Scanner(System.in);
                 String enterStartDate = inn.nextLine();
 
-
                 if ((enterStartDate == null && enterStartDate.isEmpty())) {
                     System.out.println("Дата должна быть введена!");
-
                 }
                 if (!(enterStartDate == null && enterStartDate.isEmpty())) {
                     startDate = LocalDate.parse(enterStartDate);
@@ -689,7 +621,6 @@ public class Program {
                 inn = new Scanner(System.in);
                 String enterEndDate = inn.nextLine();
 
-
                 if ((enterEndDate == null && enterEndDate.isEmpty())) {
                     System.out.println("Дата должна быть введена!");
                 }
@@ -699,7 +630,6 @@ public class Program {
                     System.out.println("Вы вводите некорректные данные");
                     continue;
                 }
-
                 if (Helpers.getMilliSecFromDate(endDate) < Helpers.getMilliSecFromDate(startDate)) {
                     System.out.println("Вы  вводите некорректную дату");
                 } else
@@ -710,13 +640,11 @@ public class Program {
         }
         while (true);
 
-
-        User repHour;
+        UserXML repHour;
         double bonus = 0;
-        Scanner inp = null;
+        Scanner inp;
         do {
             try {
-
                 System.out.println("---------------------");
                 System.out.println("Введите пользователя");
 
@@ -728,9 +656,7 @@ public class Program {
                 } else {
                     System.out.println("---------------------");
                     repHour = fill.userGet(inputString);
-
                 }
-
                 if (repHour == null) {
                     System.out.println("Пользователь не существует");
                 } else {
@@ -740,7 +666,6 @@ public class Program {
 
             }
         }
-
         while (true);
 
         var HH = fill.readXmlRecord(repHour.getUserRole().ordinal());
@@ -748,25 +673,21 @@ public class Program {
 
             var totp = new Manager(repHour, HH, startDate, endDate);
             totp.printRepPerson();
-            System.out.println("Всего отработано \t" + totp.sumHours);
-            System.out.println("Всего заработано \t" + totp.getTotalPay());
+            System.out.println("Всего отработано часов\t" + totp.sumHours);
+            System.out.println("Всего заработано рублей\t" + totp.getTotalPay());
 
         } else if (repHour.getUserRole() == UserRole.EMPLOYEE) {
             var totp = new Employee(repHour, HH, startDate, endDate, bonus);
             totp.printRepPerson();
-            System.out.println("Всего отработано \t" + totp.sumHours);
-            System.out.println("Всего заработано \t" + totp.getTotalPay());
+            System.out.println("Всего отработано часов\t" + totp.sumHours);
+            System.out.println("Всего заработано рублей\t" + totp.getTotalPay());
 
         } else if (repHour.getUserRole() == UserRole.FREELANCER) {
             var totp = new Freelancer(repHour, HH, startDate, endDate);
             totp.printRepPerson();
-            System.out.println("Всего отработано \t" + totp.sumHours);
-            System.out.println("Всего заработано \t" + totp.getTotalPay());
-
-
+            System.out.println("Всего отработано часов\t" + totp.sumHours);
+            System.out.println("Всего заработано рублей\t" + totp.getTotalPay());
         }
         menuUp();
-
     }
-
 }

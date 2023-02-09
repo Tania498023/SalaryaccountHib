@@ -1,11 +1,7 @@
 package Persistence.RecordsClassXml;
 
-
-
-
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

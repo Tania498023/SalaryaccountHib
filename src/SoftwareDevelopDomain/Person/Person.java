@@ -1,5 +1,6 @@
 package SoftwareDevelopDomain.Person;
 
+import Persistence.UsersClassXml.UserXML;
 import SoftwareDevelopDomain.Helpers;
 import SoftwareDevelopDomain.TimeRecord;
 
@@ -11,22 +12,22 @@ public class Person {
     public LocalDate startDates;
     public LocalDate endDates;
     public int sumHours;
-    private static User users;
+    private static UserXML users;
     protected static double totalPays;
     private List<TimeRecord> timeRecords;
 
-    public Person(User user, List<TimeRecord> timeRecord, LocalDate startDate, LocalDate endDate) {
+    public Person(UserXML user, List<TimeRecord> timeRecord, LocalDate startDate, LocalDate endDate) {
         this.users = user;
         this.timeRecords = timeRecord;
         this.startDates = startDate;
         this.endDates = endDate;
     }
 
-    public User getUser() {
+    public UserXML getUser() {
         return users;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserXML user) {
         this.users = user;
     }
 
@@ -57,7 +58,7 @@ public class Person {
 
            }
     if(users.getName().equals(item.getName())){
-    System.out.println(item.getDate().toString() + item.getHours() + item.getMessage());
+    System.out.println(item.getDate().toString() + "\t" + item.getHours() + "\t" + item.getMessage());
     sumHours += item.getHours();
 }
         }

@@ -1,15 +1,11 @@
 package SoftwareDevelopDomain;
-
 public class TimeRecordComparer
     {
 
 public boolean Equals(Object x, Object y)
         {
-
         if(x == null && y == null)
         return true;
-
-
         else if(x == null || y == null)
         return false;
         else if (((TimeRecord)x).getDate() == ((TimeRecord)y).getDate() && ((TimeRecord)x).getName() == ((TimeRecord)y).getName()
@@ -18,7 +14,6 @@ public boolean Equals(Object x, Object y)
         else
         return false;
         }
-
 public int GetHashCode(Object obj)
         {
         int hCode;

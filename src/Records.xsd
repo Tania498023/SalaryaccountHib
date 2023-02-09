@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="records" type="recordsType"/>
+  <xs:complexType name="userRecordType">
+    <xs:sequence>
+      <xs:element type="xs:string" name="date"/>
+      <xs:element type="xs:string" name="name"/>
+      <xs:element type="xs:string" name="hour"/>
+      <xs:element type="xs:string" name="message"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="recordsType">
+    <xs:sequence>
+      <xs:element type="userRecordType" name="userRecord"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
