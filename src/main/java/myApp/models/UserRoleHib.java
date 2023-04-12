@@ -1,6 +1,8 @@
-package SoftwareDevelopDomain.Person;
+package myApp.models;
 
-public enum UserRole {
+
+public enum UserRoleHib {
+
     MANAGER("Manager"),
     EMPLOYEE("Employee"),
     FREELANCER("Freelancer"),
@@ -11,7 +13,7 @@ public enum UserRole {
 
     private String value;
 
-    private UserRole(String value) {
+    private UserRoleHib(String value) {
         this.value = value;
 
 

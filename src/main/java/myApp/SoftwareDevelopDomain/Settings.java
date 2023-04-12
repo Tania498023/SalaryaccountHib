@@ -1,4 +1,4 @@
-package SoftwareDevelopDomain;
+package myApp.SoftwareDevelopDomain;
 
 public class  Settings {
 
