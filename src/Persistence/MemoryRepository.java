@@ -17,7 +17,6 @@ public class MemoryRepository  implements IRepository {
         addFakeDataEmployee();
         addFakeDataFreelancer();
 
-
         addFakeDataManager();
        //fillGeneric();
     }
