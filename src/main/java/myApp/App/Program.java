@@ -4,6 +4,7 @@ package myApp.App;
 import myApp.Persistence.Repository;
 import myApp.models.RecordHib;
 import myApp.models.UserHib;
+import myApp.models.UserRoleHib;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -16,7 +17,8 @@ public class Program {
 
     public static Repository mem;
 
-    public static void main(String[] args) throws IOException, SAXException  {
+
+    public static void main(String[] args) throws IOException, SAXException {
         int userRole = 0;
 
         Configuration configuration = new Configuration();
@@ -34,9 +36,11 @@ public class Program {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         mem = new Repository();
-        session.save((mem.addFakeDataUser()));
+
         UserHib userHib = session.createQuery("from UserHib user where user.id = 1", UserHib.class).getSingleResult();
-        if(userHib==null) {
+        if (userHib == null) {
+            session.save((mem.addFakeDataUser()));
+            userHib = session.createQuery("from UserHib user where user.id = 1", UserHib.class).getSingleResult();
             session.save(mem.addFakeDataRecord(userHib));
             session.getTransaction().commit();
             System.out.println(userHib);
@@ -45,210 +49,214 @@ public class Program {
         }
 
 
-//        controlRole(fill);
-//    }
+        controlRole(session);
+    }
 
-//    public static void controlRole(FileRepository userReturn) throws IOException, SAXException, JAXBException//контроль вводимой роли при входе в программу
-//    {
-//        Scanner inpt;
-//     do {
-//            try {
-//                System.out.println("Введите ваше имя");
-//                inpt = new Scanner(System.in);
-//                String name = inpt.nextLine();
-//
-//               polzovatel = userReturn.userGet(name);
-//                if (polzovatel == null)
-//              System.out.println("Пользователь с таким именем не существует");
-//            } catch (Exception e) {
-//
-//            }
-//    }
-//       while (polzovatel == null);
-//        displayMenu(polzovatel.getUserRole());
-//    }
+    public  static void controlRole(Session session) {
+        //вводим имя пользователя, по имени пользователя получили объект
+        //по роли объекта через метод displayMenu входим в программу
+//      контроль вводимой роли при входе в программу
+        UserHib userHib1 =null;
+        Scanner inpt;
+     do {
+            try {
+                System.out.println("Введите ваше имя");
+                inpt = new Scanner(System.in);
+                String name = inpt.nextLine();
 
-//    private static UserRole inputRole() {
-//        UserRole enterUser = UserRole.DEFAULT;
-//        Scanner inp;
-//        do {
-//            System.out.println("\n Введите 0, если менеджер \n Введите 1, если сотрудник \n Введите 2, если фрилансер");
-//            inp = new Scanner(System.in);
-//            String inputRole = inp.nextLine();
-//            {
-//
-//                if (inputRole.equals("0")) {
-//                    enterUser = UserRole.MANAGER;
-//                    break;
-//                } else if (inputRole.equals("1")) {
-//                    enterUser = UserRole.EMPLOYEE;
-//                    break;
-//                } else if (inputRole.equals("2")) {
-//                    enterUser = UserRole.FREELANCER;
-//                    break;
-//                } else
-//                    System.out.println("Вы ввели несуществующую роль");
-//            }
-//        } while (true);
-//
-//        return enterUser;
-//    }
 
-//    private static void displayMenu(UserRole userRole) throws IOException, SAXException, JAXBException {
-//        do {
-//            if (userRole == UserRole.MANAGER) {
-//                System.out.println("Меню Руководитель");
-//                showManagerMenu();
-//                break;
-//            }
-//            if (userRole == UserRole.EMPLOYEE) {
-//                System.out.println("Меню Сотрудник");
-//                showEmployeeMenu();
-//                break;
-//            }
-//            if (userRole == UserRole.FREELANCER) {
-//                System.out.println("Меню Фрилансер");
-//                showFreelancerMenu();
-//                break;
-//            }
-//        }
-//        while (true);
-//    }
+                 userHib1 = session.createQuery("from UserHib userHib1 where userHib1.lastName =:name", UserHib.class).getSingleResult();
+                if (userHib1 == null)
+              System.out.println("Пользователь с таким именем не существует");
+            } catch (Exception e) {
 
-//    private static void showManagerMenu() throws IOException, SAXException, JAXBException {
-//        int actionManager = 0;
-//        Scanner inp;
-//        do {
-//            System.out.println("Выберите действие  \n " +
-//                    "Введите 1, если вы хотите добавить сотрудника \n " +
-//                    "Введите 2, если вы хотите добавить время сотруднику \n " +
-//                    "Введите 3, если вы хотите посмотреть отчет по всем сотрудникам (возможность выбрать период) \n " +
-//                    "Введите 4, если вы хотите посмотреть часы работы сотрудника \n " +
-//                    "Введите 5, если вы хотите выйти из программы");
-//            try {
-//
-//                inp = new Scanner(System.in);
-//                String enterManager = inp.nextLine();
-//                actionManager = Integer.parseInt(enterManager);
-//            } catch (Exception e) {
-//                System.out.println("Неверный формат данных");
-//
-//            }
-//            if (actionManager == 1) {
-//                addWorker();
-//                break;
-//            } else if (actionManager == 2) {
-//                addWorkerHour();
-//                break;
-//            } else if (actionManager == 3) {
-//                watchWorkerReport();
-//                break;
-//            } else if (actionManager == 4) {
-//                watchWorkerHour();
-//                break;
-//            } else if (actionManager == 5) {
-//                System.out.println("Вы вышли из приложения!");
-//                System.exit(0);
-//
-//                break;
-//            }
-//        }
-//
-//        while (true);
-//    }
+            }
+    }
+       while (userHib1 == null);
+   //     displayMenu(userHib1.getUserRoleHib());
 
-//    private static void showEmployeeMenu() throws IOException, SAXException, JAXBException {
-//        int actionEmployee = 0;
-//        Scanner inp;
-//        do {
-//            System.out.println("Выберите действие  \n " +
-//                    "Введите 1, если вы хотите ввести часы \n " +
-//                    "Введите 2, если вы хотите просмотреть часы");
-//            try {
-//
-//                inp = new Scanner(System.in);
-//                String enterEmployee = inp.nextLine();
-//                actionEmployee = Integer.parseInt(enterEmployee);
-//            } catch (Exception e) {
-//                System.out.println("Вы ввели неверный формат!");
-//            }
-//            if (actionEmployee == 1) {
-//                addStaffHour();
-//                break;
-//            } else if (actionEmployee == 2) {
-//                watchStaffHour();
-//                break;
-//            }
-//        }
-//        while (true);
-//    }
+    }
 
-//    private static void showFreelancerMenu() throws IOException, SAXException, JAXBException {
-//        int actionFreelancer = 0;
-//        Scanner inp;
-//        do {
-//            System.out.println("Выберите действие  \n " +
-//                    "Введите 1, если вы хотите ввести часы \n " +
-//                    "Введите 2, если вы хотите просмотреть часы");
-//            try {
-//
-//                inp = new Scanner(System.in);
-//                String enterFreelancer = inp.nextLine();
-//                actionFreelancer = Integer.parseInt(enterFreelancer);
-//            } catch (Exception e) {
-//                System.out.println("Вы ввели неверный формат!");
-//            }
-//
-//            if (actionFreelancer == 1) {
-//                addStaffHour();
-//                break;
-//            } else if (actionFreelancer == 2) {
-//                watchStaffHour();
-//                break;
-//            }
-//
-//        }
-//        while (true);
-//    }
+    private static UserRoleHib inputRole() {
+        UserRoleHib enterUser = UserRoleHib.DEFAULT;
+        Scanner inp;
+        do {
+            System.out.println("\n Введите 0, если менеджер \n Введите 1, если сотрудник \n Введите 2, если фрилансер");
+            inp = new Scanner(System.in);
+            String inputRole = inp.nextLine();
+            {
 
-//    private static void menuUp() throws IOException, SAXException, JAXBException {
-//        int choice;
-//
-//
-//        Scanner inp;
-//        System.out.println("Выберите действие  \n " +
-//                "Введите 1, если вы хотите продолжить \n " +
-//                "Введите любое значение, если вы хотите выйти из меню");
-//        do {
-//            try {
-//                inp = new Scanner(System.in);
-//                String enterChoice = inp.nextLine();
-//                choice = Integer.parseInt(enterChoice);
-//            } catch (Exception e) {
-//                System.out.println("Неверный формат данных");
-//                System.out.println("Попробуйте ввести другое значение!");
-//                //  System.exit(0);
-//                continue;
-//
-//            }
-//            if (choice == 1) {
-//                if (polzovatel.getUserRole() == UserRole.MANAGER) {
-//                    showManagerMenu();
-//                }
-//                if (polzovatel.getUserRole() == UserRole.FREELANCER) {
-//                    showFreelancerMenu();
-//                }
-//                if (polzovatel.getUserRole() == UserRole.EMPLOYEE) {
-//                    showEmployeeMenu();
-//                }
-//
-//            } else
-//                System.out.println("Работа завершена");
-//
-//            System.exit(0);
-//        }
-//        while (true);
-//    }
+                if (inputRole.equals("0")) {
+                    enterUser = UserRoleHib.MANAGER;
+                    break;
+                } else if (inputRole.equals("1")) {
+                    enterUser = UserRoleHib.EMPLOYEE;
+                    break;
+                } else if (inputRole.equals("2")) {
+                    enterUser = UserRoleHib.FREELANCER;
+                    break;
+                } else
+                    System.out.println("Вы ввели несуществующую роль");
+            }
+        } while (true);
+
+        return enterUser;
+    }
+
+    private static void displayMenu(UserRoleHib userRole) throws IOException {
+        do {
+            if (userRole == UserRoleHib.MANAGER) {
+                System.out.println("Меню Руководитель");
+                showManagerMenu();
+                break;
+            }
+            if (userRole == UserRoleHib.EMPLOYEE) {
+                System.out.println("Меню Сотрудник");
+                showEmployeeMenu();
+                break;
+            }
+            if (userRole == UserRoleHib.FREELANCER) {
+                System.out.println("Меню Фрилансер");
+                showFreelancerMenu();
+                break;
+            }
+        }
+        while (true);
+    }
+
+    private static void showManagerMenu() throws IOException {
+        int actionManager = 0;
+        Scanner inp;
+        do {
+            System.out.println("Выберите действие  \n " +
+                    "Введите 1, если вы хотите добавить сотрудника \n " +
+                    "Введите 2, если вы хотите добавить время сотруднику \n " +
+                    "Введите 3, если вы хотите посмотреть отчет по всем сотрудникам (возможность выбрать период) \n " +
+                    "Введите 4, если вы хотите посмотреть часы работы сотрудника \n " +
+                    "Введите 5, если вы хотите выйти из программы");
+            try {
+
+                inp = new Scanner(System.in);
+                String enterManager = inp.nextLine();
+                actionManager = Integer.parseInt(enterManager);
+            } catch (Exception e) {
+                System.out.println("Неверный формат данных");
+
+            }
+            if (actionManager == 1) {
+                addWorker();
+                break;
+            } else if (actionManager == 2) {
+                addWorkerHour();
+                break;
+            } else if (actionManager == 3) {
+                watchWorkerReport();
+                break;
+            } else if (actionManager == 4) {
+                watchWorkerHour();
+                break;
+            } else if (actionManager == 5) {
+                System.out.println("Вы вышли из приложения!");
+                System.exit(0);
+
+                break;
+            }
+        }
+
+        while (true);
+    }
+
+    private static void showEmployeeMenu() throws IOException{
+        int actionEmployee = 0;
+        Scanner inp;
+        do {
+            System.out.println("Выберите действие  \n " +
+                    "Введите 1, если вы хотите ввести часы \n " +
+                    "Введите 2, если вы хотите просмотреть часы");
+            try {
+
+                inp = new Scanner(System.in);
+                String enterEmployee = inp.nextLine();
+                actionEmployee = Integer.parseInt(enterEmployee);
+            } catch (Exception e) {
+                System.out.println("Вы ввели неверный формат!");
+            }
+            if (actionEmployee == 1) {
+                addStaffHour();
+                break;
+            } else if (actionEmployee == 2) {
+                watchStaffHour();
+                break;
+            }
+        }
+        while (true);
+    }
+
+    private static void showFreelancerMenu() throws IOException {
+        int actionFreelancer = 0;
+        Scanner inp;
+        do {
+            System.out.println("Выберите действие  \n " +
+                    "Введите 1, если вы хотите ввести часы \n " +
+                    "Введите 2, если вы хотите просмотреть часы");
+            try {
+
+                inp = new Scanner(System.in);
+                String enterFreelancer = inp.nextLine();
+                actionFreelancer = Integer.parseInt(enterFreelancer);
+            } catch (Exception e) {
+                System.out.println("Вы ввели неверный формат!");
+            }
+
+            if (actionFreelancer == 1) {
+                addStaffHour();
+                break;
+            } else if (actionFreelancer == 2) {
+                watchStaffHour();
+                break;
+            }
+
+        }
+        while (true);
+    }
+
+    private static void menuUp() throws IOException {
+        int choice;
+
+
+        Scanner inp;
+        System.out.println("Выберите действие  \n " +
+                "Введите 1, если вы хотите продолжить \n " +
+                "Введите любое значение, если вы хотите выйти из меню");
+        do {
+            try {
+                inp = new Scanner(System.in);
+                String enterChoice = inp.nextLine();
+                choice = Integer.parseInt(enterChoice);
+            } catch (Exception e) {
+                System.out.println("Неверный формат данных");
+                System.out.println("Попробуйте ввести другое значение!");
+                continue;
+
+            }
+            if (choice == 1) {
+                if (polzovatel.getUserRole() == UserRole.MANAGER) {
+                    showManagerMenu();
+                }
+                if (polzovatel.getUserRole() == UserRole.FREELANCER) {
+                    showFreelancerMenu();
+                }
+                if (polzovatel.getUserRole() == UserRole.EMPLOYEE) {
+                    showEmployeeMenu();
+                }
+
+            } else
+                System.out.println("Работа завершена");
+
+            System.exit(0);
+        }
+        while (true);
+    }
 //
 //    private static void watchStaffHour() throws IOException, SAXException, JAXBException {
 //        watchHour();
@@ -707,4 +715,3 @@ public class Program {
 //        }
 //        menuUp();
     }
-}
