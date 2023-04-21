@@ -18,7 +18,7 @@ import java.io.IOException;
 public class Program {
 
     public static Repository mem;
-    public static  UserHib userHib1;
+    public static  UserHib globalUserHib;
 
     public static void main(String[] args) throws IOException, SAXException {
         int userRole = 0;
@@ -39,22 +39,22 @@ public class Program {
         session.beginTransaction();
         mem = new Repository();
 
-        UserHib userHib = session.createQuery("from UserHib user where user.id = 1", UserHib.class).getSingleResult();
-        if (userHib == null) {
+         List<UserHib> userHibList = session.createQuery("from UserHib user ", UserHib.class).getResultList();//список объектов user из таблицы(БД)
+        if (userHibList == null) {
             session.save((mem.addFakeDataUser()));
-            userHib = session.createQuery("from UserHib user where user.id = 1", UserHib.class).getSingleResult();
-            session.save(mem.addFakeDataRecord(userHib));
+            globalUserHib = session.createQuery("from UserHib user ", UserHib.class).getSingleResult();
+            session.save(mem.addFakeDataRecord(globalUserHib));
             session.getTransaction().commit();
-            System.out.println(userHib);
+            System.out.println(globalUserHib);
             List<RecordHib> records = session.createQuery("from RecordHib rec", RecordHib.class).getResultList();
             System.out.println(records.get(0));
         }
 
 
-        controlRole(session);
+        controlRole(session, userHibList);
     }
 
-    public  static void controlRole(Session session) throws IOException {
+    public  static void controlRole(Session session, List<UserHib> usHib) throws IOException {
         //вводим имя пользователя, по имени пользователя получили объект
         //по роли объекта через метод displayMenu входим в программу
 //      контроль вводимой роли при входе в программу
@@ -66,16 +66,21 @@ public class Program {
                 inpt = new Scanner(System.in);
                 String name = inpt.nextLine();
 
-
-                 userHib1 = session.createQuery("from UserHib us where us.lastName =lastName", UserHib.class).getSingleResult();
-                if (userHib1 == null)
-              System.out.println("Пользователь с таким именем не существует");
+                for (UserHib item:usHib) {
+                    if (item.getLastName().equals(name)){
+                      globalUserHib = item;
+                      break;
+                    }
+                  }
+               if (globalUserHib == null) {
+                   System.out.println("Пользователь с таким именем не существует");
+               }
             } catch (Exception e) {
 
             }
     }
-       while (userHib1 == null);
-        displayMenu(userHib1.getUserRoleHib(),session);
+       while (globalUserHib == null);
+        displayMenu(globalUserHib.getUserRoleHib(),session);//TODO???
 
     }
 
@@ -242,13 +247,13 @@ public class Program {
 
             }
             if (choice == 1) {
-                if (userHib1.getUserRoleHib() == UserRoleHib.MANAGER) {
+                if (globalUserHib.getUserRoleHib() == UserRoleHib.MANAGER) {
                     showManagerMenu(session);
                 }
-                if (userHib1.getUserRoleHib() == UserRoleHib.FREELANCER) {
+                if (globalUserHib.getUserRoleHib() == UserRoleHib.FREELANCER) {
                     showFreelancerMenu(session);
                 }
-                if (userHib1.getUserRoleHib() == UserRoleHib.EMPLOYEE) {
+                if (globalUserHib.getUserRoleHib() == UserRoleHib.EMPLOYEE) {
                     showEmployeeMenu(session);
                 }
 
@@ -314,7 +319,7 @@ public class Program {
 
         for (RecordHib item : recordHib_rec) {
           if (Helpers.getMilliSecFromDate(item.getDate()) >= Helpers.getMilliSecFromDate(startDate) && Helpers.getMilliSecFromDate(item.getDate()) <= Helpers.getMilliSecFromDate(endDate)) {
-                if (item.getLastName().equals(userHib1.getLastName())) {
+                if (item.getLastName().equals(globalUserHib.getLastName())) {
                     System.out.println(item.getDate().toString() + "\t" + item.getLastName() + "\t" + item.getHour() + "\t" + item.getMessage());
                 }
             }
@@ -348,11 +353,11 @@ public class Program {
                 String enterDate = inp.nextLine();
                 date = LocalDate.parse(enterDate);
 
-                if (date != LocalDate.MIN && Helpers.getMilliSecFromDate(date) <= Helpers.getMilliSecFromDate(LocalDate.now()) && userHib1.getUserRoleHib() == UserRoleHib.EMPLOYEE) {
-                    addHourWithControlDate(session,date,hour,mas,userHib1);
+                if (date != LocalDate.MIN && Helpers.getMilliSecFromDate(date) <= Helpers.getMilliSecFromDate(LocalDate.now()) && globalUserHib.getUserRoleHib() == UserRoleHib.EMPLOYEE) {
+                    addHourWithControlDate(session,date,hour,mas, globalUserHib);
                     break;
-                } else if (date != LocalDate.MAX && Helpers.getMilliSecFromDate(date) <= Helpers.getMilliSecFromDate(LocalDate.now()) && Helpers.getMilliSecFromDate(date) >= Helpers.getMilliSecFromDate(LocalDate.now().minusDays(2)) && userHib1.getUserRoleHib() == UserRoleHib.FREELANCER) {
-                    addHourWithControlDate(session,date,hour,mas,userHib1);
+                } else if (date != LocalDate.MAX && Helpers.getMilliSecFromDate(date) <= Helpers.getMilliSecFromDate(LocalDate.now()) && Helpers.getMilliSecFromDate(date) >= Helpers.getMilliSecFromDate(LocalDate.now().minusDays(2)) && globalUserHib.getUserRoleHib() == UserRoleHib.FREELANCER) {
+                    addHourWithControlDate(session,date,hour,mas, globalUserHib);
                     break;
                 } else {
                     System.out.println("Дата введена некорректно!");
@@ -408,7 +413,7 @@ public class Program {
                     System.out.println("Введено неверное количество часов!");
                     continue;
                 }
-                addHourWithControlDate(session,date,hour,mas,userHib1);
+                addHourWithControlDate(session,date,hour,mas, globalUserHib);
                 menuUp(session);
             } catch (Exception e) {
                 System.out.println("Введен неверный формат!");
