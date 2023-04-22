@@ -18,7 +18,7 @@ import java.io.IOException;
 public class Program {
 
     public static Repository mem;
-    public static  UserHib globalUserHib;
+    public static UserHib globalUserHib;
 
     public static void main(String[] args) throws IOException, SAXException {
         int userRole = 0;
@@ -39,7 +39,7 @@ public class Program {
         session.beginTransaction();
         mem = new Repository();
 
-         List<UserHib> userHibList = session.createQuery("from UserHib user ", UserHib.class).getResultList();//список объектов user из таблицы(БД)
+        List<UserHib> userHibList = session.createQuery("from UserHib user ", UserHib.class).getResultList();//список объектов user из таблицы(БД)
         if (userHibList == null) {
             session.save((mem.addFakeDataUser()));
             globalUserHib = session.createQuery("from UserHib user ", UserHib.class).getSingleResult();
@@ -54,33 +54,33 @@ public class Program {
         controlRole(session, userHibList);
     }
 
-    public  static void controlRole(Session session, List<UserHib> usHib) throws IOException {
+    public static void controlRole(Session session, List<UserHib> usHib) throws IOException {
         //вводим имя пользователя, по имени пользователя получили объект
         //по роли объекта через метод displayMenu входим в программу
 //      контроль вводимой роли при входе в программу
 
         Scanner inpt;
-     do {
+        do {
             try {
                 System.out.println("Введите ваше имя");
                 inpt = new Scanner(System.in);
                 String name = inpt.nextLine();
 
-                for (UserHib item:usHib) {
-                    if (item.getLastName().equals(name)){
-                      globalUserHib = item;
-                      break;
+                for (UserHib item : usHib) {
+                    if (item.getLastName().equals(name)) {
+                        globalUserHib = item;
+                        break;
                     }
-                  }
-               if (globalUserHib == null) {
-                   System.out.println("Пользователь с таким именем не существует");
-               }
+                }
+                if (globalUserHib == null) {
+                    System.out.println("Пользователь с таким именем не существует");
+                }
             } catch (Exception e) {
 
             }
-    }
-       while (globalUserHib == null);
-        displayMenu(globalUserHib.getUserRoleHib(),session);//TODO???
+        }
+        while (globalUserHib == null);
+        displayMenu(globalUserHib.getUserRoleHib(), session, usHib);
 
     }
 
@@ -110,28 +110,28 @@ public class Program {
         return enterUser;
     }
 
-    private static void displayMenu(UserRoleHib userRole,Session session) throws IOException {
+    private static void displayMenu(UserRoleHib userRole, Session session, List<UserHib> dispMenu) throws IOException {
         do {
             if (userRole == UserRoleHib.MANAGER) {
                 System.out.println("Меню Руководитель");
-                showManagerMenu(session);
+                showManagerMenu(session, dispMenu);
                 break;
             }
             if (userRole == UserRoleHib.EMPLOYEE) {
                 System.out.println("Меню Сотрудник");
-                showEmployeeMenu(session);
+                showEmployeeMenu(session, dispMenu);
                 break;
             }
             if (userRole == UserRoleHib.FREELANCER) {
                 System.out.println("Меню Фрилансер");
-                showFreelancerMenu(session);
+                showFreelancerMenu(session, dispMenu);
                 break;
             }
         }
         while (true);
     }
 
-    private static void showManagerMenu(Session session) throws IOException {
+    private static void showManagerMenu(Session session, List<UserHib> managMenu) throws IOException {
         int actionManager = 0;
         Scanner inp;
         do {
@@ -151,16 +151,16 @@ public class Program {
 
             }
             if (actionManager == 1) {
-                //addWorker();
+                addWorker(session, managMenu);
                 break;
             } else if (actionManager == 2) {
-                addWorkerHour(session);
+                addWorkerHour(session, managMenu);
                 break;
             } else if (actionManager == 3) {
-              //  watchWorkerReport();
+                //  watchWorkerReport();
                 break;
             } else if (actionManager == 4) {
-           //     watchWorkerHour();
+                //     watchWorkerHour();
                 break;
             } else if (actionManager == 5) {
                 System.out.println("Вы вышли из приложения!");
@@ -173,7 +173,7 @@ public class Program {
         while (true);
     }
 
-    private static void showEmployeeMenu(Session session) throws IOException{
+    private static void showEmployeeMenu(Session session, List<UserHib> hEm) throws IOException {
         int actionEmployee = 0;
         Scanner inp;
         do {
@@ -189,17 +189,17 @@ public class Program {
                 System.out.println("Вы ввели неверный формат!");
             }
             if (actionEmployee == 1) {
-                addStaffHour(session);
+                addStaffHour(session, hEm);
                 break;
             } else if (actionEmployee == 2) {
-                watchStaffHour(session);
+                watchStaffHour(session, hEm);
                 break;
             }
         }
         while (true);
     }
 
-    private static void showFreelancerMenu(Session session) throws IOException {
+    private static void showFreelancerMenu(Session session, List<UserHib> sFm) throws IOException {
         int actionFreelancer = 0;
         Scanner inp;
         do {
@@ -216,10 +216,10 @@ public class Program {
             }
 
             if (actionFreelancer == 1) {
-                addStaffHour(session);
+                addStaffHour(session, sFm);
                 break;
             } else if (actionFreelancer == 2) {
-                watchStaffHour(session);
+                watchStaffHour(session, sFm);
                 break;
             }
 
@@ -227,7 +227,7 @@ public class Program {
         while (true);
     }
 
-    private static void menuUp(Session session) throws IOException {
+    private static void menuUp(Session session, List<UserHib> menuUp) throws IOException {
         int choice;
 
 
@@ -248,13 +248,13 @@ public class Program {
             }
             if (choice == 1) {
                 if (globalUserHib.getUserRoleHib() == UserRoleHib.MANAGER) {
-                    showManagerMenu(session);
+                    showManagerMenu(session, menuUp);
                 }
                 if (globalUserHib.getUserRoleHib() == UserRoleHib.FREELANCER) {
-                    showFreelancerMenu(session);
+                    showFreelancerMenu(session, menuUp);
                 }
                 if (globalUserHib.getUserRoleHib() == UserRoleHib.EMPLOYEE) {
-                    showEmployeeMenu(session);
+                    showEmployeeMenu(session, menuUp);
                 }
 
             } else
@@ -265,9 +265,9 @@ public class Program {
         while (true);
     }
 
-    private static void watchStaffHour(Session session) throws IOException{
+    private static void watchStaffHour(Session session, List<UserHib> wSh) throws IOException {
         watchHour(session);
-        menuUp(session);
+        menuUp(session, wSh);
     }
 
     private static void watchHour(Session session) throws IOException {
@@ -318,7 +318,7 @@ public class Program {
         while (true);
 
         for (RecordHib item : recordHib_rec) {
-          if (Helpers.getMilliSecFromDate(item.getDate()) >= Helpers.getMilliSecFromDate(startDate) && Helpers.getMilliSecFromDate(item.getDate()) <= Helpers.getMilliSecFromDate(endDate)) {
+            if (Helpers.getMilliSecFromDate(item.getDate()) >= Helpers.getMilliSecFromDate(startDate) && Helpers.getMilliSecFromDate(item.getDate()) <= Helpers.getMilliSecFromDate(endDate)) {
                 if (item.getLastName().equals(globalUserHib.getLastName())) {
                     System.out.println(item.getDate().toString() + "\t" + item.getLastName() + "\t" + item.getHour() + "\t" + item.getMessage());
                 }
@@ -326,15 +326,15 @@ public class Program {
         }
     }
 
-    private static void addStaffHour(Session session) throws IOException{
+    private static void addStaffHour(Session session, List<UserHib> aSh) throws IOException {
         addHour(session);
-        menuUp(session);
+        menuUp(session, aSh);
     }
 
     private static void addHour(Session session) throws IOException {
         int hour;
         LocalDate date;
-        String mas="";
+        String mas = "";
         Scanner inp;
         do {
             try {
@@ -354,10 +354,10 @@ public class Program {
                 date = LocalDate.parse(enterDate);
 
                 if (date != LocalDate.MIN && Helpers.getMilliSecFromDate(date) <= Helpers.getMilliSecFromDate(LocalDate.now()) && globalUserHib.getUserRoleHib() == UserRoleHib.EMPLOYEE) {
-                    addHourWithControlDate(session,date,hour,mas, globalUserHib);
+                    addHourWithControlDate(session, date, hour, mas, globalUserHib);
                     break;
                 } else if (date != LocalDate.MAX && Helpers.getMilliSecFromDate(date) <= Helpers.getMilliSecFromDate(LocalDate.now()) && Helpers.getMilliSecFromDate(date) >= Helpers.getMilliSecFromDate(LocalDate.now().minusDays(2)) && globalUserHib.getUserRoleHib() == UserRoleHib.FREELANCER) {
-                    addHourWithControlDate(session,date,hour,mas, globalUserHib);
+                    addHourWithControlDate(session, date, hour, mas, globalUserHib);
                     break;
                 } else {
                     System.out.println("Дата введена некорректно!");
@@ -371,21 +371,27 @@ public class Program {
         while (true);
     }
 
-    private static void addWorkerHour(Session session) throws IOException{
+    private static void addWorkerHour(Session session, List<UserHib> workerHour) throws IOException {
 
         UserHib worker;
         LocalDate date;
         int hour;
-        String mas= "";
+        String mas = "";
         Scanner inn;
         do {
             System.out.println("*************************************************");
             System.out.println("Введите пользователя");
             inn = new Scanner(System.in);
             String _name = inn.nextLine();
-            worker = session.createQuery("from UserHib userHib1 where userHib1.lastName =:_name", UserHib.class).getSingleResult();
 
-            if (worker == null) {
+            for (UserHib item : workerHour) {
+                if (item.getLastName().equals(_name)) {
+                    globalUserHib = item;
+                    break;
+                }
+            }
+
+            if (globalUserHib == null) {
                 System.out.println("Пользователь не существует");
                 return;
             }
@@ -413,8 +419,8 @@ public class Program {
                     System.out.println("Введено неверное количество часов!");
                     continue;
                 }
-                addHourWithControlDate(session,date,hour,mas, globalUserHib);
-                menuUp(session);
+                addHourWithControlDate(session, date, hour, mas, globalUserHib);
+                menuUp(session, workerHour);
             } catch (Exception e) {
                 System.out.println("Введен неверный формат!");
             }
@@ -422,12 +428,12 @@ public class Program {
         while (true);
     }
 
-    private static void addHourWithControlDate(Session session,LocalDate date, int H, String mas,UserHib Us) throws IOException {
+    private static void addHourWithControlDate(Session session, LocalDate date, int H, String mas, UserHib Us) throws IOException {
         Scanner inn;
         do {
             System.out.println("Введите сообщение");
             inn = new Scanner(System.in);
-             mas = inn.nextLine();
+            mas = inn.nextLine();
 
             if (mas == null || mas.isEmpty()) {
 
@@ -437,78 +443,65 @@ public class Program {
                 RecordHib time = new RecordHib(date, H, mas);
                 List<RecordHib> times = new ArrayList<>();
                 times.add(time);
-            //    fill.fillRecordHib((ArrayList<TimeRecord>) times, Us.getUserRole().ordinal(), true);
+                //    fill.fillRecordHib((ArrayList<TimeRecord>) times, Us.getUserRole().ordinal(), true);
                 break;
             }
         }
         while (true);
     }
 
-//    private static void addWorker() throws IOException, SAXException, JAXBException {
-//        Scanner inn;
-//        String enterName;
-//        do {
-//            System.out.println("Введите имя пользователя");
-//            try {
-//                inn = new Scanner(System.in);
-//                enterName = inn.nextLine();
-//                if (enterName.length() == 0) {
-//                    System.out.println("Поле не может быть пустым");
-//                } else {
-//                    break;
-//                }
-//            } catch (Exception e) {
-//
-//            }
-//        }
-//        while (true);
-//
-//        var currentUser = fill.userGet(enterName);
-//
-//        if (currentUser == null) {
-//
-//        } else {
-//            System.out.println("Такой пользователь существует!");
-//            menuUp();
-//        }
-//        System.out.println("Введите роль пользователя");
-//        var IR = inputRole();
-//        var user = new UserXML(enterName, IR);
-//        ArrayList<UserXML> users = new ArrayList<>();
-//        users.add(user);
-//        fill.fillXmlUser(users, true);//режим true- введенный пользователь добавляется в файл
-//
-//        Map<UserRole, ArrayList<String>> groupWorkRep = new HashMap<>();
-//
-//        var groupUser = fill.readXmlUser();
-//        for (var groupItem : groupUser) {
-//            //проверяем наличие Ключа, если его нет, добавляем и ключ, и значение
-//            if (!groupWorkRep.containsKey(groupItem.getUserRole())) {
-//                var itemsList = new ArrayList<String>();
-//                itemsList.add(groupItem.getName());
-//                groupWorkRep.put(groupItem.getUserRole(), itemsList);
-//            } else//иначе ключ есть, просто обновляем значение
-//            {
-//                var itemsList = groupWorkRep.get(groupItem.getUserRole());
-//                if (!itemsList.contains(groupItem.getName()))
-//                    itemsList.add(groupItem.getName());
-//            }
-//        }
-//        for (var groupWork : groupWorkRep.entrySet()) {
-//            if (groupWork.getKey() == user.getUserRole()) {
-//                System.out.println("-------------------------");
-//                System.out.println(groupWork.getKey());
-//                System.out.println("-------------------------");
-//            }
-//            if (groupWork.getKey() == user.getUserRole())
-//                for (var item : groupWork.getValue()) {
-//
-//                    System.out.println(item);
-//                }
-//        }
-//        System.out.println("-------------------------");
-//    menuUp();
-//    }
+    private static void addWorker(Session session, List<UserHib> aW) throws IOException {
+        Scanner inn;
+        String enterName;
+        String addW = "";
+        do {
+            System.out.println("Введите имя пользователя");
+            try {
+                inn = new Scanner(System.in);
+                enterName = inn.nextLine();
+                if (enterName.length() == 0) {
+                    System.out.println("Поле не может быть пустым");
+                } else {
+                    break;
+                }
+            } catch (Exception e) {
+
+            }
+        }
+        while (true);
+        for (UserHib item : aW) {
+            if (!enterName.equals(item.getLastName())) {
+                addW = enterName;
+            }
+        }
+
+        if (addW == null) {
+            System.out.println("Такой пользователь существует!");
+            menuUp(session, aW);
+        }
+
+        System.out.println("Введите роль пользователя");
+        UserRoleHib IR = inputRole();
+        UserHib user = new UserHib(enterName, IR);
+        aW.add(user);
+        session.save(user);
+        session.getTransaction().commit();
+
+        System.out.println("-------------------------");
+        System.out.println(user.getUserRoleHib());
+        System.out.println("-------------------------");
+        for (UserHib groupWork : aW) {
+            if (groupWork.getUserRoleHib() == user.getUserRoleHib()) {
+                System.out.println(groupWork.getLastName());
+
+            }
+        }
+            System.out.println("-------------------------");
+            menuUp(session, aW);
+        }
+    }
+
+
 
 //    private static void watchWorkerReport() throws IOException, SAXException, JAXBException {
 //        LocalDate startDate;
@@ -724,4 +717,4 @@ public class Program {
 //            System.out.println("Всего заработано рублей\t" + totp.getTotalPay());
 //        }
 //        menuUp();
-    }
+
