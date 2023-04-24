@@ -3,7 +3,6 @@ package myApp.App;
 
 import myApp.Persistence.Repository;
 import myApp.SoftwareDevelopDomain.Helpers;
-import myApp.SoftwareDevelopDomain.Person;
 import myApp.models.RecordHib;
 import myApp.models.UserHib;
 import myApp.models.UserRoleHib;
@@ -54,6 +53,7 @@ public class Program {
 
 
         controlRole(session, userHibList,recHibList);
+
     }
 
     public static void controlRole(Session session, List<UserHib> usHib,List<RecordHib> cRole) throws IOException {
@@ -82,7 +82,7 @@ public class Program {
             }
         }
         while (globalUserHib == null);
-        displayMenu(globalUserHib.getUserRoleHib(), session, usHib,cRole);
+        displayMenu(session,globalUserHib.getUserRoleHib(), usHib,cRole);
 
     }
 
@@ -112,8 +112,9 @@ public class Program {
         return enterUser;
     }
 
-    private static void displayMenu(UserRoleHib userRole, Session session, List<UserHib> dispMenu,List<RecordHib> dM) throws IOException {
+    private static void displayMenu(Session session,UserRoleHib userRole,  List<UserHib> dispMenu,List<RecordHib> dM) throws IOException {
         do {
+
             if (userRole == UserRoleHib.MANAGER) {
                 System.out.println("Меню Руководитель");
                 showManagerMenu(session, dispMenu,dM);
@@ -683,14 +684,15 @@ public class Program {
         {
             if (Helpers.getMilliSecFromDate(workItem.getDate()) >= Helpers.getMilliSecFromDate(startDate) && Helpers.getMilliSecFromDate(workItem.getDate()) <= Helpers.getMilliSecFromDate(endDate))//фильтруем дату отчета
             {
-            }
-                if(enterLastName.getLastName().equals(workItem.getLastName().getLastName())) {
 
-                 System.out.println(workItem.getDate().toString() + "\t" + workItem.getHour() + "\t" + workItem.getMessage());
-                 sumHours += workItem.getHour();
-}
-            }
 
+                if (enterLastName.getLastName().equals(workItem.getLastName().getLastName())) {
+
+                    System.out.println(workItem.getDate().toString() + "\t" + workItem.getHour() + "\t" + workItem.getMessage());
+                    sumHours += workItem.getHour();
+                }
+            }
+        }
         System.out.println("Всего отработано часов\t" + sumHours);
         System.out.println("Всего заработано рублей\t" );
         menuUp(session,watchWorkerHour,workerHour);
