@@ -11,6 +11,7 @@ public class UserHib {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String lastName;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "userrole")
     private UserRoleHib userRole;
