@@ -9,7 +9,7 @@ public class Repository implements IRepository{
 
     public Repository() {
 
-       // addFakeDataUser();
+        addFakeDataUser();
         addFakeDataRecord();
     }
 

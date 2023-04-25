@@ -8,7 +8,9 @@ import myApp.models.UserHib;
 import myApp.models.UserRoleHib;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.resource.transaction.spi.TransactionStatus;
 import org.xml.sax.SAXException;
 
 import java.time.LocalDate;
@@ -36,24 +38,24 @@ public class Program {
         configuration.setProperty("hibernate.show_sql", "true");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
-        session.beginTransaction();
+        Transaction tx = session.beginTransaction();
         mem = new Repository();
 
         List<UserHib> userHibList = session.createQuery("from UserHib user ", UserHib.class).getResultList();//список объектов user из таблицы(БД)
         List<RecordHib> recHibList = session.createQuery("from RecordHib rec", RecordHib.class).getResultList();
-        if (userHibList == null) {
+        if (userHibList.isEmpty()) {
             session.save((mem.addFakeDataUser()));
-            globalUserHib = session.createQuery("from UserHib user ", UserHib.class).getSingleResult();
-            session.save(mem.addFakeDataRecord(globalUserHib));
             session.getTransaction().commit();
+            globalUserHib = session.createQuery("from UserHib user ", UserHib.class).getSingleResult();
             System.out.println(globalUserHib);
-            List<RecordHib> records = session.createQuery("from RecordHib rec", RecordHib.class).getResultList();
-            System.out.println(records.get(0));
         }
+        //код ниже закомментирован,так как при первом входе нет необходимости заполнять фейковую запись,только фейкового Usera.
 
+       //     session.save(mem.addFakeDataRecord(globalUserHib));
+       //     List<RecordHib> records = session.createQuery("from RecordHib rec", RecordHib.class).getResultList();
+       //     System.out.println(records.get(0));
 
         controlRole(session, userHibList,recHibList);
-
     }
 
     public static void controlRole(Session session, List<UserHib> usHib,List<RecordHib> cRole) throws IOException {
@@ -269,11 +271,11 @@ public class Program {
     }
 
     private static void watchStaffHour(Session session, List<UserHib> wSh,List<RecordHib> watchStaffHour) throws IOException {
-        watchHour(session);
+        watchHour(session,wSh,watchStaffHour);
         menuUp(session, wSh,watchStaffHour);
     }
 
-    private static void watchHour(Session session) throws IOException {
+    private static void watchHour(Session session,List<UserHib> wHus,List<RecordHib> wHrec) throws IOException {
         List<RecordHib> recordHib_rec = session.createQuery("from RecordHib rec", RecordHib.class).getResultList();
         LocalDate startDate;
         LocalDate endDate;
@@ -322,8 +324,8 @@ public class Program {
 
         for (RecordHib item : recordHib_rec) {
             if (Helpers.getMilliSecFromDate(item.getDate()) >= Helpers.getMilliSecFromDate(startDate) && Helpers.getMilliSecFromDate(item.getDate()) <= Helpers.getMilliSecFromDate(endDate)) {
-                if (item.getLastName().equals(globalUserHib.getLastName())) {
-                    System.out.println(item.getDate().toString() + "\t" + item.getLastName() + "\t" + item.getHour() + "\t" + item.getMessage());
+                if (item.getLastName().getLastName().equals(globalUserHib.getLastName())) {
+                    System.out.println(item.getDate().toString() + "\t" + item.getLastName().getLastName() + "\t" + item.getHour() + "\t" + item.getMessage());
                 }
             }
         }
@@ -376,7 +378,7 @@ public class Program {
 
     private static void addWorkerHour(Session session, List<UserHib> workerHour,List<RecordHib>addWorkerHour) throws IOException {
 
-        UserHib worker;
+        UserHib worker = null;
         LocalDate date;
         int hour;
         String mas = "";
@@ -389,12 +391,12 @@ public class Program {
 
             for (UserHib item : workerHour) {
                 if (item.getLastName().equals(_name)) {
-                    globalUserHib = item;
+                    worker = item;
                     break;
                 }
             }
 
-            if (globalUserHib == null) {
+            if (worker == null) {
                 System.out.println("Пользователь не существует");
                 return;
             }
@@ -422,7 +424,7 @@ public class Program {
                     System.out.println("Введено неверное количество часов!");
                     continue;
                 }
-                addHourWithControlDate(session, date, hour, mas, globalUserHib);
+                addHourWithControlDate(session, date, hour, mas, worker);
                 menuUp(session, workerHour,addWorkerHour);
             } catch (Exception e) {
                 System.out.println("Введен неверный формат!");
@@ -433,6 +435,7 @@ public class Program {
 
     private static void addHourWithControlDate(Session session, LocalDate date, int H, String mas, UserHib Us) throws IOException {
         Scanner inn;
+        Transaction tx;
         do {
             System.out.println("Введите сообщение");
             inn = new Scanner(System.in);
@@ -443,11 +446,18 @@ public class Program {
                 System.out.println("Поле должно быть заполнено!");
 
             } else {
-                RecordHib time = new RecordHib(date, H, mas,globalUserHib);
+                RecordHib time = new RecordHib(date, H, mas,Us);
                 List<RecordHib> times = new ArrayList<>();
                 times.add(time);
                 session.save(time);
-                session.getTransaction().commit();
+               tx=session.getTransaction();
+               if(tx.getStatus().equals(TransactionStatus.ACTIVE)){
+                   tx.commit();
+               }
+               else if (tx.getStatus().equals(TransactionStatus.COMMITTED)){
+                   session.beginTransaction();
+                   tx.commit();
+               }
 
                 break;
             }
@@ -475,13 +485,17 @@ public class Program {
         }
         while (true);
         for (UserHib item : aW) {
-            if (!enterName.equals(item.getLastName())) {
-                addW = enterName;
+            if (enterName==(item.getLastName())) {
+
+                System.out.println("Такой пользователь существует!");
+            }
+            else {
+                 addW = enterName;
             }
         }
 
         if (addW == null) {
-            System.out.println("Такой пользователь существует!");
+
             menuUp(session, aW,addWorker);
         }
 
@@ -489,8 +503,17 @@ public class Program {
         UserRoleHib IR = inputRole();
         UserHib user = new UserHib(enterName, IR);
         aW.add(user);
-        session.save(user);
-        session.getTransaction().commit();
+        Transaction tx = null;
+
+            session.save(user);
+            tx = session.getTransaction();
+            if (tx.getStatus().equals(TransactionStatus.ACTIVE)){
+                tx.commit();
+            }
+            else if (tx.getStatus().equals(TransactionStatus.COMMITTED)){
+            session.beginTransaction();
+            tx.commit();
+            }
 
         System.out.println("-------------------------");
         System.out.println(user.getUserRoleHib());
@@ -503,6 +526,7 @@ public class Program {
         }
         System.out.println("-------------------------");
         menuUp(session, aW,addWorker);
+
     }
 
 
