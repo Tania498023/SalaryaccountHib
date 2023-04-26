@@ -379,7 +379,7 @@ public class Program {
     private static void addWorkerHour(Session session, List<UserHib> workerHour,List<RecordHib>addWorkerHour) throws IOException {
 
         UserHib worker = null;
-        LocalDate date;
+        LocalDate date = null;
         int hour;
         String mas = "";
         Scanner inn;
@@ -389,32 +389,39 @@ public class Program {
             inn = new Scanner(System.in);
             String _name = inn.nextLine();
 
+            if (_name.length() == 0) {
+                System.out.println("Пользователь должен быть заполнен!");
+                continue;
+            }
             for (UserHib item : workerHour) {
                 if (item.getLastName().equals(_name)) {
                     worker = item;
-                    break;
                 }
             }
+            if (worker==null) {
+                    System.out.println("Пользователь не существует");
+                    menuUp(session, workerHour, addWorkerHour);
 
-            if (worker == null) {
-                System.out.println("Пользователь не существует");
-                return;
+
             }
+
             try {
 
                 System.out.println("Введите дату");
                 inn = new Scanner(System.in);
                 String inputDateString = inn.nextLine();
-                date = LocalDate.parse(inputDateString);
-
-                if (inputDateString == null && inputDateString.isEmpty()) {
-
-                    System.out.println("Дата должна быть введена");
+                if ((inputDateString == null || inputDateString.isEmpty())) {
+                    System.out.println("Дата должна быть введена!");
                     continue;
-                } else if (Helpers.getMilliSecFromDate(date) > Helpers.getMilliSecFromDate(LocalDate.now())) {
+                }
+
+                    date = LocalDate.parse(inputDateString);
+
+             if (Helpers.getMilliSecFromDate(date) > Helpers.getMilliSecFromDate(LocalDate.now())) {
                     System.out.println("Введенная дата неверная!");
                     continue;
                 }
+
                 System.out.println("Введите отработанное время");
                 inn = new Scanner(System.in);
                 String enterHour = inn.nextLine();
@@ -468,7 +475,7 @@ public class Program {
     private static void addWorker(Session session, List<UserHib> aW,List<RecordHib>addWorker) throws IOException {
         Scanner inn;
         String enterName;
-        String addW = "";
+        String addW = " ";
         do {
             System.out.println("Введите имя пользователя");
             try {
@@ -485,20 +492,12 @@ public class Program {
         }
         while (true);
         for (UserHib item : aW) {
-            if (enterName==(item.getLastName())) {
-
+            if (item.getLastName().equals(enterName)) {
                 System.out.println("Такой пользователь существует!");
-            }
-            else {
-                 addW = enterName;
-            }
+                menuUp(session, aW,addWorker);
+              }
+
         }
-
-        if (addW == null) {
-
-            menuUp(session, aW,addWorker);
-        }
-
         System.out.println("Введите роль пользователя");
         UserRoleHib IR = inputRole();
         UserHib user = new UserHib(enterName, IR);
@@ -627,8 +626,8 @@ public class Program {
 
 
     private static void watchWorkerHour(Session session,List<UserHib>watchWorkerHour,List<RecordHib> workerHour ) throws IOException{
-        LocalDate startDate;
-        LocalDate endDate;
+        LocalDate startDate=null;
+        LocalDate endDate=null;
         Scanner inn;
         do {
             try {
@@ -636,34 +635,37 @@ public class Program {
                 inn = new Scanner(System.in);
                 String enterStartDate = inn.nextLine();
 
-                if ((enterStartDate == null && enterStartDate.isEmpty())) {
+                if ((enterStartDate == null || enterStartDate.isEmpty())) {
                     System.out.println("Дата должна быть введена!");
+                    continue;
                 }
                 if (!(enterStartDate == null && enterStartDate.isEmpty())) {
                     startDate = LocalDate.parse(enterStartDate);
-                } else {
-                    System.out.println("Вы вводите некорректные данные");
+                }
+
+                if (Helpers.getMilliSecFromDate(startDate) > Helpers.getMilliSecFromDate(LocalDate.now())) {
+                    System.out.println("Введенная дата неверная!");
                     continue;
                 }
                 System.out.println("Введите дату окончания отчета");
                 inn = new Scanner(System.in);
                 String enterEndDate = inn.nextLine();
 
-                if ((enterEndDate == null && enterEndDate.isEmpty())) {
+                if ((enterEndDate == null || enterEndDate.isEmpty())) {
                     System.out.println("Дата должна быть введена!");
+                    continue;
                 }
                 if (!(enterEndDate == null && enterEndDate.isEmpty())) {
                     endDate = LocalDate.parse(enterEndDate);
-                } else {
-                    System.out.println("Вы вводите некорректные данные");
-                    continue;
                 }
+
                 if (Helpers.getMilliSecFromDate(endDate) < Helpers.getMilliSecFromDate(startDate)) {
                     System.out.println("Вы  вводите некорректную дату");
+
                 } else
                     break;
             } catch (Exception e) {
-
+                System.out.println("Введен неверный формат!");
             }
         }
         while (true);
