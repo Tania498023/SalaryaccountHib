@@ -277,8 +277,8 @@ public class Program {
 
     private static void watchHour(Session session,List<UserHib> wHus,List<RecordHib> wHrec) throws IOException {
         List<RecordHib> recordHib_rec = session.createQuery("from RecordHib rec", RecordHib.class).getResultList();
-        LocalDate startDate;
-        LocalDate endDate;
+        LocalDate startDate=null;
+        LocalDate endDate=null;
         Scanner inp;
 
         do {
@@ -288,12 +288,13 @@ public class Program {
                 inp = new Scanner(System.in);
                 String inpStartDate = inp.nextLine();
 
-                if (inpStartDate == null && inpStartDate.isEmpty()) {
+                if (inpStartDate == null || inpStartDate.isEmpty()) {
                     System.out.println("Дата должна быть введена!");
+                    continue;
                 }
                 if (!(inpStartDate == null && inpStartDate.isEmpty())) {
                     startDate = LocalDate.parse(inpStartDate);
-                } else {
+                } if (Helpers.getMilliSecFromDate(startDate)>Helpers.getMilliSecFromDate(LocalDate.now())){
                     System.out.println("Введенная дата неверная!");
                     continue;//пропускаем все условия ниже и переходим в конец цикла
                 }
@@ -301,16 +302,15 @@ public class Program {
                 inp = new Scanner(System.in);
                 String inpEndDate = inp.nextLine();
 
-                if (inpEndDate == null && inpEndDate.isEmpty()) {
+                if (inpEndDate == null || inpEndDate.isEmpty()) {
                     System.out.println("Дата должна быть введена!");
+                    continue;
                 }
                 if (!(inpEndDate == null && inpEndDate.isEmpty())) {
                     endDate = LocalDate.parse(inpEndDate);
 
-                } else {
-                    System.out.println("Введенная дата неверная!");
-                    continue;
                 }
+
                 if (Helpers.getMilliSecFromDate(endDate) < Helpers.getMilliSecFromDate(startDate)) {
                     System.out.println("Вы  вводите некорректную дату");
                 } else
