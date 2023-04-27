@@ -1,5 +1,6 @@
 package myApp.Persistence;
 
+
 import myApp.models.*;
 
 
@@ -15,7 +16,7 @@ public class Repository implements IRepository{
 
         public UserHib addFakeDataUser () {
 
-            UserHib users = new UserHib("ЯЯ",UserRoleHib.MANAGER);
+            UserHib users = new UserHib("ЯЯ", UserRoleHib.MANAGER);
             return users;
         }
     public  RecordHib addFakeDataRecord () {
