@@ -6,6 +6,7 @@ import myApp.SoftwareDevelopDomain.Helpers;
 import myApp.SoftwareDevelopDomain.Salary.Employee;
 import myApp.SoftwareDevelopDomain.Salary.Freelancer;
 import myApp.SoftwareDevelopDomain.Salary.Manager;
+import myApp.SoftwareDevelopDomain.Salary.Person;
 import myApp.models.RecordHib;
 import myApp.models.UserHib;
 
@@ -280,11 +281,11 @@ public class Program {
     }
 
     private static void watchHour(Session session, List<UserHib> wHus, List<RecordHib> wHrec) throws IOException {
-        List<RecordHib> recordHib_rec = session.createQuery("from RecordHib rec", RecordHib.class).getResultList();
+
         LocalDate startDate = null;
         LocalDate endDate = null;
         Scanner inp;
-
+UserHib work=null;
         do {
             try {
                 System.out.println("Введите дату начала отчета");
@@ -327,13 +328,16 @@ public class Program {
         }
         while (true);
 
-        for (RecordHib item : recordHib_rec) {
-            if (Helpers.getMilliSecFromDate(item.getDate()) >= Helpers.getMilliSecFromDate(startDate) && Helpers.getMilliSecFromDate(item.getDate()) <= Helpers.getMilliSecFromDate(endDate)) {
-                if (item.getLastName().getLastName().equals(globalUserHib.getLastName())) {
-                    System.out.println(item.getDate().toString() + "\t" + item.getLastName().getLastName() + "\t" + item.getHour() + "\t" + item.getMessage());
-                }
+            if (wHrec.stream().anyMatch(x -> x.getLastName().getLastName() == globalUserHib.getLastName())) {//если в списке рекордов есть введенное имя globalUserHib, то печатаем шапку к отчету
+                System.out.println("");
+                System.out.println("--------------------------------------");
+                System.out.println("Отчет \t за период с \t " + startDate.toString() + "\t по" + "\t" + endDate.toString());
+                System.out.println("--------------------------------------");
             }
-        }
+
+            Person person = new Person(globalUserHib,wHrec,startDate,endDate);
+            person.printHourPerson();
+            System.out.println("Всего отработано часов\t" + person.sumHours);
     }
 
     private static void addStaffHour(Session session, List<UserHib> aSh, List<RecordHib> addStaffHour) throws IOException {
@@ -538,6 +542,7 @@ public class Program {
         int sumHours = 0;
         int itogHour = 0;
         double itogTotalPay = 0;
+        double bonus = 0;
         Scanner inn;
         do {
             try {
@@ -580,52 +585,53 @@ public class Program {
         }
         while (true);
 
-        for (RecordHib workItem : rec)//перебираем общую коллекцию и каждый ее элемент кладем в переменную workItem
-        {
-            if (Helpers.getMilliSecFromDate(workItem.getDate()) >= Helpers.getMilliSecFromDate(startDate) && Helpers.getMilliSecFromDate(workItem.getDate()) <= Helpers.getMilliSecFromDate(endDate))//фильтруем дату отчета
-            {
-
+        for (UserHib usList : watchWorkerReport) {
+            globalUserHib = usList;
+            if (rec.stream().anyMatch(x -> x.getLastName().getLastName() == usList.getLastName())) {
                 System.out.println("");
                 System.out.println("--------------------------------------");
-                System.out.println("Сотрудник \t" + workItem.getLastName().getLastName());
-                System.out.println("Отчет по сотруднику \t" + workItem.getLastName().getLastName() + "\t" + workItem.getLastName().getUserRoleHib() + "\t за период с \t " + startDate.toString()
+                System.out.println("Сотрудник \t" + usList.getLastName());
+                System.out.println("Отчет по сотруднику \t" + globalUserHib.getLastName() + "\t" + globalUserHib.getUserRoleHib() + "\t за период с \t " + startDate.toString()
                         + "\t по" + "\t" + endDate.toString());
 
-                System.out.println(workItem.getDate().toString() + "\t" + workItem.getHour() + "\t" + workItem.getMessage());
-                sumHours += workItem.getHour();
-                System.out.println("Всего отработано часов\t" + sumHours);
+                if (globalUserHib.getUserRoleHib() == UserRoleHib.MANAGER){
+                    Manager totp = new Manager(globalUserHib, rec, startDate, endDate);
+                    totp.printHourPerson();
+                    System.out.println("Всего отработано часов\t" + totp.sumHours);//итоговое время по конкретному сотруднику
+                    System.out.println("Всего заработано рублей\t" + totp.getTotalPays());//итоговая зп по конкретному сотруднику
+                    itogHour += totp.sumHours;//итоговое время по всем независимо от роли
+                    itogTotalPay += totp.getTotalPays();//итоговая з/п по всем независимо от роли
+
+                }
+                if (globalUserHib.getUserRoleHib() == UserRoleHib.EMPLOYEE){
+                    Employee totp = new Employee(globalUserHib, rec, startDate, endDate,bonus);
+                    totp.printHourPerson();
+                    System.out.println("Всего отработано часов\t" + totp.sumHours);//итоговое время по конкретному сотруднику
+                    System.out.println("Всего заработано рублей\t" + totp.getTotalPays());//итоговая зп по конкретному сотруднику
+                    itogHour += totp.sumHours;//итоговое время по всем независимо от роли
+                    itogTotalPay += totp.getTotalPays();//итоговая з/п по всем независимо от роли
+
+                }
+                if (globalUserHib.getUserRoleHib() == UserRoleHib.FREELANCER){
+                    Freelancer totp = new Freelancer(globalUserHib, rec, startDate, endDate);
+                    totp.printHourPerson();
+                    System.out.println("Всего отработано часов\t" + totp.sumHours);//итоговое время по конкретному сотруднику
+                    System.out.println("Всего заработано рублей\t" + totp.getTotalPays());//итоговая зп по конкретному сотруднику
+                    itogHour += totp.sumHours;//итоговое время по всем независимо от роли
+                    itogTotalPay += totp.getTotalPays();//итоговая з/п по всем независимо от роли
+
+                }
 
             }
         }
 
-//        for (var sortWork : workMap.entrySet()) {
-//            var repHour = fill.userGet(sortWork.getKey());//получаем имя-ключ из словаря и значение кладем в переменную rephour
-//            var HH = sortWork.getValue();//значение из словаря положили в переменную HH
-//            double bonus = 0;
-//
-//            if (repHour.getUserRole() == UserRole.MANAGER)//проверяем роль через имя
-//            {
-//                var totp = new Manager(repHour, HH, startDate, endDate);//создаем новый экземпляр типа Manager
-//                System.out.println("");
-//                System.out.println("--------------------------------------");
-//                System.out.println("Сотрудник \t" + sortWork.getKey());
-//                totp.printRepPerson();
-//
-//                System.out.println("Всего отработано часов\t" + totp.sumHours);//итоговое время по конкретному сотруднику
-//                System.out.println("Всего заработано рублей\t" + totp.getTotalPay());//итоговая зп по конкретному сотруднику
-//                itogHour += totp.sumHours;//итоговое время по всем независимо от роли
-//                itogTotalPay += totp.getTotalPay();//итоговая з/п по всем независимо от роли
-//
-//
-//            }
+            System.out.println("");
+            System.out.println("--------------------------------------");
+            System.out.println("Всего отработано часов\t" + itogHour);
+            System.out.println("Всего заработано рублей\t" + itogTotalPay);
 
-        System.out.println("");
-        System.out.println("--------------------------------------");
-        System.out.println("Всего отработано часов\t" + itogHour);
-        System.out.println("Всего заработано рублей\t" + itogTotalPay);
-
-        menuUp(session, watchWorkerReport, rec);
-    }
+            menuUp(session, watchWorkerReport, rec);
+        }
 
 
     private static void watchWorkerHour(Session session, List<UserHib> watchWorkerHour, List<RecordHib> workerHour) throws IOException {

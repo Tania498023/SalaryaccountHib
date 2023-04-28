@@ -79,12 +79,23 @@ public class Person {
         for (RecordHib item:workRecords) {
            if((Helpers.getMilliSecFromDate(item.getDate()) >= Helpers.getMilliSecFromDate(startDates)) && (Helpers.getMilliSecFromDate(item.getDate()) <= Helpers.getMilliSecFromDate(endDates))){
 
+    if(worker.getLastName().equals(item.getLastName().getLastName())) {
+        System.out.println(item.getDate().toString() + "\t" + item.getHour() + "\t" + item.getMessage());
+        sumHours += item.getHour();
+                 }
+            }
+        }
+    }
+    public void printHourPerson(){
 
-           }
-    if(worker.getLastName().equals(item.getLastName().getLastName())){
-    System.out.println(item.getDate().toString() + "\t" + item.getHour() + "\t" + item.getMessage());
-    sumHours += item.getHour();
-}
+        for (RecordHib itemS :workRecords) {
+            if((Helpers.getMilliSecFromDate(itemS.getDate()) >= Helpers.getMilliSecFromDate(startDates)) && (Helpers.getMilliSecFromDate(itemS.getDate()) <= Helpers.getMilliSecFromDate(endDates))){
+
+                if(worker.getLastName().equals(itemS.getLastName().getLastName())) {
+                    System.out.println(itemS.getDate().toString() + "\t" + itemS.getHour() + "\t" + itemS.getMessage());
+                    sumHours += itemS.getHour();
+                }
+            }
         }
     }
 }
