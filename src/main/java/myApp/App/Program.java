@@ -10,9 +10,6 @@ import myApp.models.RecordHib;
 import myApp.models.UserHib;
 
 import myApp.models.UserRoleHib;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.resource.transaction.spi.TransactionStatus;
 import org.xml.sax.SAXException;
 
 import java.time.LocalDate;
@@ -26,7 +23,6 @@ public class Program {
 
     public static void main(String[] args) throws IOException, SAXException {
       myDbWork = new MyDbWork();
-
 
         controlRole();
     }
@@ -208,7 +204,6 @@ public class Program {
     private static void menuUp(List<UserHib> menuUp, List<RecordHib> mUp) throws IOException {
         int choice;
 
-
         Scanner inp;
         System.out.println("Выберите действие  \n " +
                 "Введите 1, если вы хотите продолжить \n " +
@@ -249,11 +244,10 @@ public class Program {
     }
 
     private static void watchHour(List<UserHib> wHus, List<RecordHib> wHrec) throws IOException {
-
         LocalDate startDate = null;
         LocalDate endDate = null;
         Scanner inp;
-UserHib work=null;
+
         do {
             try {
                 System.out.println("Введите дату начала отчета");
@@ -356,7 +350,7 @@ UserHib work=null;
     private static void addWorkerHour(List<UserHib> workerHour, List<RecordHib> addWorkerHour) throws IOException {
 
         UserHib worker = null;
-        LocalDate date = null;
+        LocalDate date;
         int hour;
         String mas = "";
         Scanner inn;
@@ -378,7 +372,6 @@ UserHib work=null;
             if (worker == null) {
                 System.out.println("Пользователь не существует");
                 menuUp( workerHour, addWorkerHour);
-
 
             }
 
@@ -441,11 +434,10 @@ UserHib work=null;
         while (true);
     }
 
-    private static void addWorker(List<UserHib> aW, List<RecordHib> addWorker) throws IOException {
+    private static void addWorker(List<UserHib> addWorkUser, List<RecordHib> addWorkerRec) throws IOException {
         Scanner inn;
         String enterName;
-        String addW = " ";
-        do {
+         do {
             System.out.println("Введите имя пользователя");
             try {
                 inn = new Scanner(System.in);
@@ -460,37 +452,33 @@ UserHib work=null;
             }
         }
         while (true);
-        for (UserHib item : aW) {
+        for (UserHib item : addWorkUser) {
             if (item.getLastName().equals(enterName)) {
                 System.out.println("Такой пользователь существует!");
-                menuUp(aW, addWorker);
+                menuUp(addWorkUser, addWorkerRec);
             }
-
         }
         System.out.println("Введите роль пользователя");
         UserRoleHib IR = inputRole();
         UserHib user = new UserHib(enterName, IR);
-        aW.add(user);
-     myDbWork.SaveSessionUser(user);
+        addWorkUser.add(user);
+        myDbWork.SaveSessionUser(user);
 
         System.out.println("-------------------------");
         System.out.println(user.getUserRoleHib());
         System.out.println("-------------------------");
-        for (UserHib groupWork : aW) {
+        for (UserHib groupWork : addWorkUser) {
             if (groupWork.getUserRoleHib() == user.getUserRoleHib()) {
                 System.out.println(groupWork.getLastName());
             }
         }
         System.out.println("-------------------------");
-        menuUp(aW, addWorker);
-
+        menuUp(addWorkUser, addWorkerRec);
     }
-
 
     private static void watchWorkerReport(List<UserHib> watchWorkerReport, List<RecordHib> rec) throws IOException {
         LocalDate startDate;
         LocalDate endDate;
-        int sumHours = 0;
         int itogHour = 0;
         double itogTotalPay = 0;
         double bonus = 0;
