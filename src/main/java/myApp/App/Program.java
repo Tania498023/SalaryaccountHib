@@ -6,6 +6,7 @@ import myApp.SoftwareDevelopDomain.Salary.Employee;
 import myApp.SoftwareDevelopDomain.Salary.Freelancer;
 import myApp.SoftwareDevelopDomain.Salary.Manager;
 import myApp.SoftwareDevelopDomain.Salary.Person;
+import myApp.models.DateContener;
 import myApp.models.RecordHib;
 import myApp.models.UserHib;
 
@@ -149,28 +150,28 @@ public class Program {
 
     private static void showEmployeeMenu(List<UserHib> hEm, List<RecordHib> showEmployeeMenu) throws IOException {
         int actionEmployee = 0;
-        Scanner inp;
-        do {
-            System.out.println("Выберите действие  \n " +
-                    "Введите 1, если вы хотите ввести часы \n " +
-                    "Введите 2, если вы хотите просмотреть часы");
-            try {
-
-                inp = new Scanner(System.in);
-                String enterEmployee = inp.nextLine();
-                actionEmployee = Integer.parseInt(enterEmployee);
-            } catch (Exception e) {
-                System.out.println("Вы ввели неверный формат!");
-            }
+//        Scanner inp;
+//        do {
+//            System.out.println("Выберите действие  \n " +
+//                    "Введите 1, если вы хотите ввести часы \n " +
+//                    "Введите 2, если вы хотите просмотреть часы");
+//            try {
+//
+//                inp = new Scanner(System.in);
+//                String enterEmployee = inp.nextLine();
+//                actionEmployee = Integer.parseInt(enterEmployee);
+//            } catch (Exception e) {
+//                System.out.println("Вы ввели неверный формат!");
+//            }
             if (actionEmployee == 1) {
                 addStaffHour(hEm, showEmployeeMenu);
-                break;
+               // break;
             } else if (actionEmployee == 2) {
                 watchStaffHour(hEm, showEmployeeMenu);
-                break;
+               // break;
             }
-        }
-        while (true);
+//        }
+//        while (true);
     }
 
     private static void showFreelancerMenu(List<UserHib> sFm, List<RecordHib> showFreelancerMenu) throws IOException {
@@ -244,60 +245,20 @@ public class Program {
     }
 
     private static void watchHour(List<UserHib> wHus, List<RecordHib> wHrec) throws IOException {
-        LocalDate startDate = null;
-        LocalDate endDate = null;
-        Scanner inp;
+        LocalDate startDate ;
+        LocalDate endDate ;
+        InputOutput inputOutput = new InputOutput();
+        DateContener inputDate = inputOutput.InputDateReport();
 
-        do {
-            try {
-                System.out.println("Введите дату начала отчета");
-
-                inp = new Scanner(System.in);
-                String inpStartDate = inp.nextLine();
-
-                if (inpStartDate == null || inpStartDate.isEmpty()) {
-                    System.out.println("Дата должна быть введена!");
-                    continue;
-                }
-                if (!(inpStartDate == null && inpStartDate.isEmpty())) {
-                    startDate = LocalDate.parse(inpStartDate);
-                }
-                if (Helpers.getMilliSecFromDate(startDate) > Helpers.getMilliSecFromDate(LocalDate.now())) {
-                    System.out.println("Введенная дата неверная!");
-                    continue;//пропускаем все условия ниже и переходим в конец цикла
-                }
-                System.out.println("Введите дату окончания отчета");
-                inp = new Scanner(System.in);
-                String inpEndDate = inp.nextLine();
-
-                if (inpEndDate == null || inpEndDate.isEmpty()) {
-                    System.out.println("Дата должна быть введена!");
-                    continue;
-                }
-                if (!(inpEndDate == null && inpEndDate.isEmpty())) {
-                    endDate = LocalDate.parse(inpEndDate);
-
-                }
-
-                if (Helpers.getMilliSecFromDate(endDate) < Helpers.getMilliSecFromDate(startDate)) {
-                    System.out.println("Вы  вводите некорректную дату");
-                } else
-                    break;
-
-            } catch (Exception e) {
-                System.out.println("Введен неверный формат!");
-            }
-        }
-        while (true);
 
             if (wHrec.stream().anyMatch(x -> x.getLastName().getLastName() == globalUserHib.getLastName())) {//если в списке рекордов есть введенное имя globalUserHib, то печатаем шапку к отчету
                 System.out.println("");
                 System.out.println("--------------------------------------");
-                System.out.println("Отчет \t за период с \t " + startDate.toString() + "\t по" + "\t" + endDate.toString());
+                System.out.println("Отчет \t за период с \t " + inputDate.getStartDate().toString() + "\t по" + "\t" + inputDate.getEndDate().toString());
                 System.out.println("--------------------------------------");
             }
 
-            Person person = new Person(globalUserHib,wHrec,startDate,endDate);
+            Person person = new Person(globalUserHib,wHrec,inputDate.getStartDate(),inputDate.getEndDate());
             person.printHourPerson();
             System.out.println("Всего отработано часов\t" + person.sumHours);
     }
@@ -477,52 +438,11 @@ public class Program {
     }
 
     private static void watchWorkerReport(List<UserHib> watchWorkerReport, List<RecordHib> rec) throws IOException {
-        LocalDate startDate;
-        LocalDate endDate;
         int itogHour = 0;
         double itogTotalPay = 0;
         double bonus = 0;
-        Scanner inn;
-        do {
-            try {
-                System.out.println("Введите дату начала отчета");
-                inn = new Scanner(System.in);
-                String enterStartDate = inn.nextLine();
-
-                if (enterStartDate == null && enterStartDate.isEmpty()) {
-                    System.out.println("Дата должна быть введена!");
-                }
-                if (!(enterStartDate == null && enterStartDate.isEmpty())) {
-
-                    startDate = LocalDate.parse(enterStartDate);
-                } else {
-                    System.out.println("Вы вводите некорректные данные");
-                    continue;
-                }
-                System.out.println("Введите дату окончания отчета");
-                inn = new Scanner(System.in);
-                String enterEndtDate = inn.nextLine();
-
-                if (enterEndtDate == null && enterEndtDate.isEmpty()) {
-                    System.out.println("Дата должна быть введена!");
-                }
-                if (!(enterEndtDate == null && enterEndtDate.isEmpty())) {
-
-                    endDate = LocalDate.parse(enterEndtDate);
-                } else {
-                    System.out.println("Вы вводите некорректные данные");
-                    continue;
-                }
-                if (Helpers.getMilliSecFromDate(endDate) < Helpers.getMilliSecFromDate(startDate)) {
-                    System.out.println("Вы  вводите некорректную дату");
-
-                } else
-                    break;
-            } catch (Exception e) {
-
-            }
-        }
-        while (true);
+        InputOutput inputOutput = new InputOutput();
+        DateContener inputDate = inputOutput.InputDateReport();
 
         for (UserHib usList : watchWorkerReport) {
             globalUserHib = usList;
@@ -530,11 +450,11 @@ public class Program {
                 System.out.println("");
                 System.out.println("--------------------------------------");
                 System.out.println("Сотрудник \t" + usList.getLastName());
-                System.out.println("Отчет по сотруднику \t" + globalUserHib.getLastName() + "\t" + globalUserHib.getUserRoleHib() + "\t за период с \t " + startDate.toString()
-                        + "\t по" + "\t" + endDate.toString());
+                System.out.println("Отчет по сотруднику \t" + globalUserHib.getLastName() + "\t" + globalUserHib.getUserRoleHib() + "\t за период с \t " + inputDate.getStartDate().toString()
+                        + "\t по" + "\t" + inputDate.getEndDate().toString());
 
                 if (globalUserHib.getUserRoleHib() == UserRoleHib.MANAGER){
-                    Manager totp = new Manager(globalUserHib, rec, startDate, endDate);
+                    Manager totp = new Manager(globalUserHib, rec, inputDate.getStartDate(), inputDate.getEndDate());
                     totp.printHourPerson();
                     System.out.println("Всего отработано часов\t" + totp.sumHours);//итоговое время по конкретному сотруднику
                     System.out.println("Всего заработано рублей\t" + totp.getTotalPays());//итоговая зп по конкретному сотруднику
@@ -543,7 +463,7 @@ public class Program {
 
                 }
                 if (globalUserHib.getUserRoleHib() == UserRoleHib.EMPLOYEE){
-                    Employee totp = new Employee(globalUserHib, rec, startDate, endDate,bonus);
+                    Employee totp = new Employee(globalUserHib, rec, inputDate.getStartDate(), inputDate.getEndDate(),bonus);
                     totp.printHourPerson();
                     System.out.println("Всего отработано часов\t" + totp.sumHours);//итоговое время по конкретному сотруднику
                     System.out.println("Всего заработано рублей\t" + totp.getTotalPays());//итоговая зп по конкретному сотруднику
@@ -552,7 +472,7 @@ public class Program {
 
                 }
                 if (globalUserHib.getUserRoleHib() == UserRoleHib.FREELANCER){
-                    Freelancer totp = new Freelancer(globalUserHib, rec, startDate, endDate);
+                    Freelancer totp = new Freelancer(globalUserHib, rec, inputDate.getStartDate(), inputDate.getEndDate());
                     totp.printHourPerson();
                     System.out.println("Всего отработано часов\t" + totp.sumHours);//итоговое время по конкретному сотруднику
                     System.out.println("Всего заработано рублей\t" + totp.getTotalPays());//итоговая зп по конкретному сотруднику
@@ -576,48 +496,9 @@ public class Program {
     private static void watchWorkerHour(List<UserHib> watchWorkerHour, List<RecordHib> workerHour) throws IOException {
         LocalDate startDate = null;
         LocalDate endDate = null;
-        Scanner inn;
-        do {
-            try {
-                System.out.println("Введите дату начала отчета");
-                inn = new Scanner(System.in);
-                String enterStartDate = inn.nextLine();
-
-                if ((enterStartDate == null || enterStartDate.isEmpty())) {
-                    System.out.println("Дата должна быть введена!");
-                    continue;
-                }
-                if (!(enterStartDate == null && enterStartDate.isEmpty())) {
-                    startDate = LocalDate.parse(enterStartDate);
-                }
-
-                if (Helpers.getMilliSecFromDate(startDate) > Helpers.getMilliSecFromDate(LocalDate.now())) {
-                    System.out.println("Введенная дата неверная!");
-                    continue;
-                }
-                System.out.println("Введите дату окончания отчета");
-                inn = new Scanner(System.in);
-                String enterEndDate = inn.nextLine();
-
-                if ((enterEndDate == null || enterEndDate.isEmpty())) {
-                    System.out.println("Дата должна быть введена!");
-                    continue;
-                }
-                if (!(enterEndDate == null && enterEndDate.isEmpty())) {
-                    endDate = LocalDate.parse(enterEndDate);
-                }
-
-                if (Helpers.getMilliSecFromDate(endDate) < Helpers.getMilliSecFromDate(startDate)) {
-                    System.out.println("Вы  вводите некорректную дату");
-
-                } else
-                    break;
-            } catch (Exception e) {
-                System.out.println("Введен неверный формат!");
-            }
-        }
-        while (true);
-
+        InputOutput inputOutput = new InputOutput();
+        DateContener inputDate = inputOutput.InputDateReport();
+//
         int sumHours = 0;
         double bonus = 0;
         Scanner inp;
@@ -653,7 +534,7 @@ public class Program {
         while (true);
 
         if (enterLastName.getUserRoleHib() == UserRoleHib.MANAGER) {
-            Manager totp = new Manager(enterLastName, workerHour, startDate, endDate);
+            Manager totp = new Manager(enterLastName, workerHour, inputDate.getStartDate(), inputDate.getEndDate());
             System.out.println("----------------------------------------------------");
             totp.printRepPerson();
             System.out.println("----------------------------------------------------");
@@ -661,7 +542,7 @@ public class Program {
             System.out.println("Всего заработано рублей\t" + totp.getTotalPays());
         }
         if (enterLastName.getUserRoleHib() == UserRoleHib.EMPLOYEE) {
-            Employee totp = new Employee(enterLastName, workerHour, startDate, endDate,bonus);
+            Employee totp = new Employee(enterLastName, workerHour, inputDate.getStartDate(), inputDate.getEndDate(),bonus);
             System.out.println("----------------------------------------------------");
             totp.printRepPerson();
             System.out.println("----------------------------------------------------");
@@ -669,7 +550,7 @@ public class Program {
             System.out.println("Всего заработано рублей\t" + totp.getTotalPays());
         }
         if (enterLastName.getUserRoleHib() == UserRoleHib.FREELANCER) {
-            Freelancer totp = new Freelancer(enterLastName, workerHour, startDate, endDate);
+            Freelancer totp = new Freelancer(enterLastName, workerHour, inputDate.getStartDate(), inputDate.getEndDate());
             System.out.println("----------------------------------------------------");
             totp.printRepPerson();
             System.out.println("----------------------------------------------------");
