@@ -12,7 +12,7 @@ public class InputOutput {
 
     }
 
-    public DateContener InputDateReport() {
+    public DateContener inputDateReport() {
         LocalDate startDate = null;
         LocalDate endDate = null;
 
@@ -68,4 +68,23 @@ public class InputOutput {
         DateContener dateContener = new DateContener(startDate,endDate);
         return dateContener;
     }
+//    public Integer inputWorkerMenu(){
+//        int actionWorker = 0;
+//        Scanner inp;
+//
+//            System.out.println("Выберите действие  \n " +
+//                    "Введите 1, если вы хотите ввести часы \n " +
+//                    "Введите 2, если вы хотите просмотреть часы");
+//            try {
+//
+//                inp = new Scanner(System.in);
+//                String enterEmployee = inp.nextLine();
+//                 actionWorker = Integer.parseInt(enterEmployee);
+//            } catch (Exception e) {
+//                System.out.println("Вы ввели неверный формат!");
+//            }
+//
+//
+//        return actionWorker;
+//    }
 }

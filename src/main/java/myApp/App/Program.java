@@ -92,16 +92,12 @@ public class Program {
                 showManagerMenu(dispMenu, dM);
                 break;
             }
-            if (userRole == UserRoleHib.EMPLOYEE) {
+            if (userRole == UserRoleHib.EMPLOYEE||userRole == UserRoleHib.FREELANCER) {
                 System.out.println("Меню Сотрудник");
-                showEmployeeMenu(dispMenu, dM);
+                showWorkerMenu(dispMenu, dM);
                 break;
             }
-            if (userRole == UserRoleHib.FREELANCER) {
-                System.out.println("Меню Фрилансер");
-                showFreelancerMenu(dispMenu, dM);
-                break;
-            }
+
         }
         while (true);
     }
@@ -148,59 +144,35 @@ public class Program {
         while (true);
     }
 
-    private static void showEmployeeMenu(List<UserHib> hEm, List<RecordHib> showEmployeeMenu) throws IOException {
-        int actionEmployee = 0;
-//        Scanner inp;
-//        do {
-//            System.out.println("Выберите действие  \n " +
-//                    "Введите 1, если вы хотите ввести часы \n " +
-//                    "Введите 2, если вы хотите просмотреть часы");
-//            try {
-//
-//                inp = new Scanner(System.in);
-//                String enterEmployee = inp.nextLine();
-//                actionEmployee = Integer.parseInt(enterEmployee);
-//            } catch (Exception e) {
-//                System.out.println("Вы ввели неверный формат!");
-//            }
-            if (actionEmployee == 1) {
-                addStaffHour(hEm, showEmployeeMenu);
-               // break;
-            } else if (actionEmployee == 2) {
-                watchStaffHour(hEm, showEmployeeMenu);
-               // break;
-            }
-//        }
-//        while (true);
-    }
-
-    private static void showFreelancerMenu(List<UserHib> sFm, List<RecordHib> showFreelancerMenu) throws IOException {
-        int actionFreelancer = 0;
-        Scanner inp;
+    private static void showWorkerMenu(List<UserHib> hEm, List<RecordHib> showEmployeeMenu) throws IOException {
+        int actionWorker = 0;
+//        InputOutput inputOutput = new InputOutput();
+//        inputOutput.inputWorkerMenu();
+       Scanner inp;
         do {
+
             System.out.println("Выберите действие  \n " +
                     "Введите 1, если вы хотите ввести часы \n " +
                     "Введите 2, если вы хотите просмотреть часы");
             try {
 
                 inp = new Scanner(System.in);
-                String enterFreelancer = inp.nextLine();
-                actionFreelancer = Integer.parseInt(enterFreelancer);
+                String enterEmployee = inp.nextLine();
+                actionWorker = Integer.parseInt(enterEmployee);
             } catch (Exception e) {
                 System.out.println("Вы ввели неверный формат!");
             }
-
-            if (actionFreelancer == 1) {
-                addStaffHour(sFm, showFreelancerMenu);
+            if (actionWorker == 1) {
+                addStaffHour(hEm, showEmployeeMenu);
                 break;
-            } else if (actionFreelancer == 2) {
-                watchStaffHour(sFm, showFreelancerMenu);
+            } else if (actionWorker == 2) {
+                watchStaffHour(hEm, showEmployeeMenu);
                 break;
             }
-
-        }
+       }
         while (true);
     }
+
 
     private static void menuUp(List<UserHib> menuUp, List<RecordHib> mUp) throws IOException {
         int choice;
@@ -224,11 +196,9 @@ public class Program {
                 if (globalUserHib.getUserRoleHib() == UserRoleHib.MANAGER) {
                     showManagerMenu(menuUp, mUp);
                 }
-                if (globalUserHib.getUserRoleHib() == UserRoleHib.FREELANCER) {
-                    showFreelancerMenu(menuUp, mUp);
-                }
-                if (globalUserHib.getUserRoleHib() == UserRoleHib.EMPLOYEE) {
-                    showEmployeeMenu(menuUp, mUp);
+
+                if (globalUserHib.getUserRoleHib() == UserRoleHib.EMPLOYEE||globalUserHib.getUserRoleHib() == UserRoleHib.FREELANCER) {
+                    showWorkerMenu(menuUp, mUp);
                 }
 
             } else
@@ -248,7 +218,7 @@ public class Program {
         LocalDate startDate ;
         LocalDate endDate ;
         InputOutput inputOutput = new InputOutput();
-        DateContener inputDate = inputOutput.InputDateReport();
+        DateContener inputDate = inputOutput.inputDateReport();
 
 
             if (wHrec.stream().anyMatch(x -> x.getLastName().getLastName() == globalUserHib.getLastName())) {//если в списке рекордов есть введенное имя globalUserHib, то печатаем шапку к отчету
@@ -442,7 +412,7 @@ public class Program {
         double itogTotalPay = 0;
         double bonus = 0;
         InputOutput inputOutput = new InputOutput();
-        DateContener inputDate = inputOutput.InputDateReport();
+        DateContener inputDate = inputOutput.inputDateReport();
 
         for (UserHib usList : watchWorkerReport) {
             globalUserHib = usList;
@@ -497,7 +467,7 @@ public class Program {
         LocalDate startDate = null;
         LocalDate endDate = null;
         InputOutput inputOutput = new InputOutput();
-        DateContener inputDate = inputOutput.InputDateReport();
+        DateContener inputDate = inputOutput.inputDateReport();
 //
         int sumHours = 0;
         double bonus = 0;
